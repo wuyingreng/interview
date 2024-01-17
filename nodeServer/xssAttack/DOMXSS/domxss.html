@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<!-- url :http://localhost:8000/domxss.html?<img src=0 onerror="alert('XSS')"/>-->
+
+<head>
+</head>
+
+<style>
+
+</style>
+<div>
+  <div id="URL">ddd</div>
+  <div>hahha, i am domxss</div>
+</div>
+<script>
+  /**
+   * 
+  */
+  console.log('location.href==>', location.href)//http://localhost:8000/domxss.html?%3Cimg%20src=0%20onerror=%22alert(%27XSS%27)%22/%3E
+  document.getElementById('URL').innerHTML = decodeURI(location.href)
+</script>
+
+</html>

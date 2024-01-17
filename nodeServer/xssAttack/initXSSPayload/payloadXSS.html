@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<!-- url :http://localhost:8000/payloadXSS.html?<script src='evil.js'/>-->
+
+<head>
+</head>
+
+<style>
+
+</style>
+<div>
+  <div id="URL">ddd</div>
+  <div>hahha, i am domxss</div>
+</div>
+<script>
+  console.log('evil.js==>', location.href)
+  document.getElementById('URL').innerHTML = decodeURI(location.href)
+</script>
+
+</html>
