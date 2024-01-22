@@ -1,0 +1,51 @@
+const Root = () => {
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        <div>
+          <form id="search-form" role="search">
+            <input
+              id="q"
+              aria-label="Search contacts"
+              placeholder="Search"
+              type="search"
+              name="q"
+            />
+            <div
+              id="search-spinner"
+              aria-hidden
+              hidden={true}
+            />
+            <div
+              className="sr-only"
+              aria-live="polite"
+            ></div>
+          </form>
+          <form method="post">
+            <button type="submit">New</button>
+          </form>
+        </div>
+        <nav>
+          <ul>
+            <li>
+              <a href={`/reactGrammer/componentClaim`}>React Grammer</a>
+            </li>
+            <li>
+              <a href={`/importExportGrammer`}>Import Export</a>
+            </li>
+            <li>
+              <a href={`/reactGrammer/reactChildren`}>React Children</a>
+            </li>
+            <li>
+              <a href={`/reactGrammer/usePrevious`}>Use Previous</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div id="detail"></div>
+    </>
+  );
+}
+
+export default Root;
