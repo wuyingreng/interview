@@ -28,17 +28,12 @@ const Root = () => {
         </div>
         <nav>
           <ul>
-            <li>
-              <a href={`/reactGrammer/componentClaim`}>React Grammer</a>
-            </li>
+
             <li>
               <a href={`/importExportGrammer`}>Import Export</a>
             </li>
             <li>
-              <a href={`/reactGrammer/reactChildren`}>React Children</a>
-            </li>
-            <li>
-              <a href={`/reactGrammer/usePrevious`}>Use Previous</a>
+              <a href={`/reactGrammer`}>React Grammer</a>
             </li>
           </ul>
         </nav>

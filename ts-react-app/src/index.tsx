@@ -1,10 +1,12 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import Root from "./routes/root";
-import ComponentClaim from './routes/ReactGrammer/ComponentClaim'
-import ImportExport from './routes/ImportExport'
+
+import ImportExport from './routes/ImportExport';
+import ReactGrammer from './routes/ReactGrammer';
+import ComponentClaim from './routes/ReactGrammer/ComponentClaim';
 import ReactChildren from './routes/ReactGrammer/ReactChildren';
-import CounterUseHooks from './routes/ReactGrammer/UsePrevious'
+import CounterUseHooks from './routes/ReactGrammer/UsePrevious';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -19,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: '/importExportGrammer',
     element: <ImportExport />,
+  },
+  {
+    path: "/reactGrammer",
+    element: <ReactGrammer />,
   },
   {
     path: "/reactGrammer/componentClaim",
