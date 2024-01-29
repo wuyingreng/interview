@@ -11,6 +11,9 @@ const ReactGrammer = () => {
     <li>
       <a href={`/reactGrammer/usePrevious`}>Use Previous</a>
     </li>
+    <li>
+      <a href={`/reactGrammer/useLayoutEffect`}>Use Layout Effect</a>
+    </li>
   </ul>
 }
 
