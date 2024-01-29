@@ -1,0 +1,29 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Untitled Document</title>
+<style>
+  #box{
+    width: 200px;
+    border:1px solid red;
+  /* 只会拆分一行都放不下的单词 */
+    /* word-wrap:break-word;  浏览器的支持性不好*/
+    word-wrap:normal;
+  }
+</style>
+</head>
+<!-- word-wrap:这个属性也是控制单词如何被拆分换行的，实际上是作为word-break的互补，它只有两个值：normal | break-word，那我们看下break-word： -->
+
+<body>
+  <div id="box">
+    Hi&nbsp;&nbsp;,
+    This   is a incomprehensibilitieslongword.
+    <br>
+    <!-- &nbsp;&nbsp;是不会被css属性合并的 -->
+    你好&nbsp;&nbsp;,aa
+     The.
+    这是一个不可思议的长单词啊啊啊啊啊啊啊啊啊啊啊啊.
+  </div>
+  
+</body>
+</html>

@@ -1,0 +1,32 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Untitled Document</title>
+<style>
+  #box{
+    width: 200px;
+    border:1px solid red;
+    /* 空白字符被合并并且除了用<br/>永不换行 */
+    /* white-space:nowrap; */
+    /* 保留空白字符和换行。因为你打了换行符所以换行。, . 是没有换行的效果的 pre保留空白字符的意思 （preserve+wrap）*/
+    /* white-space:pre-wrap; */
+    /* 合并空白符。保留换行符(按下的enter键) */
+    white-space: pre-line;
+  }
+</style>
+</head>
+<!-- white space:控制换行和空白字符 -->
+
+<body>
+  <div id="box">
+    Hi&nbsp;&nbsp;,
+    This   is a incomprehensibilitieslongword.
+    <br>
+    <!-- &nbsp;&nbsp;是不会被css属性合并的 -->
+    你好&nbsp;&nbsp;,aa
+     The.
+    这   是一个不可思议的长单词啊啊啊.
+  </div>
+  
+</body>
+</html>

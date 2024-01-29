@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <title>Fetch </title>
+  <style type="text/css">
+
+  </style>
+</head>
+
+<body>
+  <img class="my-image" src="https://wikipedia.org/static/images/project-logos/frwiki-1.5x.png">
+</body>
+<script>
+  const myImage = document.querySelector('.my-image');
+  fetch('https://upload.wikimedia.org/wikipedia/commons/7/77/Delete_key1.jpg')
+    .then(res => res.blob())
+    .then(res => {
+      const objectURL = URL.createObjectURL(res);
+      myImage.src = objectURL;
+    });
+</script>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Untitled Document</title>
+    <style>
+      .vip-control-header {
+        width: 600px;
+        height: auto;
+        background: #f8f8f8;
+        border: 1px solid #e2e2e2;
+        padding: 10px 0 10px 10px;
+        position: relative;
+        border-radius: 5px;
+      }
+      .vip-control-header:before,
+      .vip-control-header:after {
+        position: absolute;
+        content: " ";
+        top: 16px;
+        left: -16px;
+        display: block;
+        width: 0;
+        height: 0;
+        border: 8px solid #f8f8f8;
+        border-color: transparent #f8f8f8 transparent transparent;
+        z-index: 111;
+      }
+      .vip-control-header:after {
+        left: -17px;
+        border-color: transparent #e2e2e2 transparent transparent;
+        z-index: 11;
+      }
+      a{
+        /* pointer-events: none; */
+      }
+    </style>
+  </head>
+  <body scroll="no" class="hashover" style="overflow: hidden;">
+    <div class="vip-control-header">
+      <span>页面标题: </span>
+      <input class="headerChange" type="text" οnchange="headerChange()" />
+      <a href= 'index.html'>333</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+  <meta http-equiv="Content-Language" content="gb2312" />
+  <title>z-index</title>
+  <style type="text/css">
+    html {
+      box-sizing: border-box;
+      font-size: 100%;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      position: relative;
+      background-color: #dfdfdf;
+      color: #ffffff;
+      font-family: "Roboto", sans-serif;
+      line-height: 1.3;
+    }
+
+    h1,
+    h2 {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    header {
+      padding: 30px;
+      background-color: #1a28b3;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+      position: relative;
+      z-index: 10;
+    }
+
+    header a {
+      color: #ffffff;
+      font-size: 18px;
+      text-transform: uppercase;
+      text-decoration: none;
+      letter-spacing: 1px;
+      display: inline-block;
+      margin: 0 10px;
+    }
+
+    .hero {
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+    }
+
+    .hero__background {
+      position: absolute;
+      background-image: url("https://placekitten.com/800/560");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.8;
+      z-index: 0;
+      width: 100%;
+      height: 600px;
+    }
+
+    .hero__text {
+      position: relative;
+      text-align: center;
+      z-index: 100;
+      margin: 3rem 0;
+      padding: 1.5rem;
+    }
+
+    .content {
+      color: #030018;
+      padding: 1rem;
+    }
+
+    .content__block {
+      background-color: #ffffff;
+      margin: 50px 0;
+      padding: 30px;
+      min-height: 180px;
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .content .cat-top,
+    .content .cat-bottom {
+      width: 120px;
+      height: 120px;
+      background-image: url("https://www.dropbox.com/s/mqapcs2hsf7k4yp/cat-expressions_03.png?dl=1");
+      background-size: cover;
+      background-position: center center;
+    }
+
+    .content .cat-top {
+      margin-bottom: -100px;
+    }
+
+    .content .cat-bottom {
+      float: right;
+      margin-top: -100px;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="content">
+
+    <!-- Top Cat -->
+    <div class="cat-top"></div>
+
+    <!-- White Block -->
+    <div class="content__block">
+      Meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow
+      meow meow meow meow meow meow meow meow meow meow meow meow meow meowmeow meow meow meow meow meow meow meow meow
+      meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow meow
+    </div>
+
+    <!-- Bottom Cat -->
+    <div class="cat-bottom"></div>
+
+  </section>
+
+
+
+</body>
+
+</html>

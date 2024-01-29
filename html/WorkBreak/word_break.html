@@ -1,0 +1,30 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Untitled Document</title>
+<style>
+  #box{
+    width: 200px;
+    border:1px solid red;
+    /* 所有“单词”一律不拆分换行，注意，我这里的“单词”包括连续的中文字符（还有日文、韩文等），中文一个个字是一个单词或者可以理解为只有空格可以触发自动换行 */
+    /* word-break:keep-all： */
+    /* 会把一个很长的单词切开。慎用 */
+    word-break:break-all;
+  }
+</style>
+</head>
+<!-- word-break:这个属性是控制单词如何被拆分换行的 -->
+
+<body>
+  <div id="box">
+    Hi&nbsp;&nbsp;,
+    This   is a incomprehensibilitieslongword.
+    <br>
+    <!-- &nbsp;&nbsp;是不会被css属性合并的 -->
+    你好&nbsp;&nbsp;,aa
+     The.
+    这是一个不可思议的长单词啊啊啊啊啊啊啊啊啊啊啊啊.
+  </div>
+  
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <title>getBoundClientReact content box </title>
+  <style>
+    #test {
+      border: 10px solid red;
+      padding: 20px;
+      padding-bottom: 50px;
+      width: 100px;
+      box-sizing: content-box;
+      top: 300px;
+      position: fixed;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      color: #999;
+      background-color: #fff;
+      border: 1px solid red;
+
+    }
+
+    .testson {
+      height: 90px
+    }
+  </style>
+</head>
+
+<body>
+  <div id='test'>
+    <div class="testson">22222</div>
+  </div>
+</body>
+<script>
+  const a = document.getElementById("test");
+  console.log("a==>", a.getBoundingClientRect());
+
+</script>
+
+</html>
