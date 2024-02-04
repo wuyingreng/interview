@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Float 示例</title>
+	<style>
+		.parent {
+			border: 2px solid black;
+			/* 显示父元素的边界 */
+		}
+
+		.float {
+			float: left;
+			width: 100px;
+			height: 100px;
+			margin: 5px;
+			background: coral;
+		}
+
+		.clear {
+			clear: both;
+		}
+	</style>
+</head>
+<body>
+
+
+	<!-- 使用了清除浮动的父元素 -->
+	<div class="parent clearfix">
+		<div class="float">浮动1</div>
+		<div class="float">浮动2</div>
+		<!-- 用于清除浮动的伪元素 -->
+		<div class="clear"></div>
+	</div>
+</body>
+</html>

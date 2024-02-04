@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Transform 3D 属性示例</title>
+	<style>
+		.parent {
+			background: lightblue;
+			position: relative;
+			/* 为了清晰地显示变换后的位置 */
+		}
+
+		.transformed {
+			width: 100px;
+			height: 100px;
+			background: coral;
+			/* 在视觉上在三维空间内移动元素 */
+			transform: translate3d(50px, 50px, 0);
+		}
+	</style>
+</head>
+<body>
+	<div class="parent">
+		<div class="transformed">3D 变换元素</div>
+	</div>
+</body>
+</html>

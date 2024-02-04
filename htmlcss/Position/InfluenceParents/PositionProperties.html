@@ -3,11 +3,9 @@
 
 <head>
   <meta charset="utf-8">
-  <title>influencePartent</title>
+  <title>Body height</title>
   <style type="text/css">
     body {
-      width: 100%;
-      height: 100%;
       padding: 0;
       margin: 0;
     }
@@ -15,10 +13,7 @@
     .fixed {
       position: fixed;
       top: 0;
-      right: 0;
-      bottom: 0;
       left: 0;
-      width: 100%;
       height: 100px;
       background: red;
     }
@@ -26,10 +21,7 @@
     .absolute {
       position: absolute;
       top: 0;
-      right: 0;
-      bottom: 0;
       left: 0;
-      width: 100%;
       height: 100px;
       background: blue;
     }
@@ -37,10 +29,7 @@
     .relative {
       position: relative;
       top: 0;
-      right: 0;
-      bottom: 0;
       left: 0;
-      width: 100%;
       height: 100px;
       background: yellow;
     }
@@ -49,13 +38,14 @@
 
 <body>
   <div class="fixed">
-    示例fixed
+    just has position fixed element, body height wil be 0
   </div>
   <div class="absolute">
-    示例absolute
+    just has absolute fixed element, body height wil be 0
   </div>
   <div class="relative">
-    示例relative
+    just has relative fixed element, body height wil be position relative height.
+    So Position Relative will not create a new doc context
   </div>
 </body>
 
