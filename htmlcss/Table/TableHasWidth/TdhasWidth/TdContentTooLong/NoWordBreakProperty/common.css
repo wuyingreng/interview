@@ -1,0 +1,17 @@
+table {
+  width: 100px;
+  background-color: red;
+}
+
+th,
+td {
+  border: 1px solid yellow;
+}
+
+.one {
+  width: 50px;
+}
+
+.two {
+  width: 50px;
+}

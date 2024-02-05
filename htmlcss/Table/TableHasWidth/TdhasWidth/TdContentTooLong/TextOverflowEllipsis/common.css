@@ -1,0 +1,31 @@
+table {
+  width: 500px;
+}
+
+.col1 {
+  width: 100px;
+  max-width: 100px;
+}
+
+.col2 {
+  width: 200px;
+  max-width: 200px;
+}
+
+.col3 {
+  width: 200px;
+  max-width: 200px;
+}
+
+th strong {
+  display: block;
+  width: 100%;
+}
+
+tr strong,
+tr td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid red;
+}
