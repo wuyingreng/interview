@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Event Bubbling Example</title>
+</head>
+<body>
+
+</body>
+<script src="./commonHTML.js" type="text/javascript">
+
+</script>
+<script>
+
+	document.getElementById('specialCell').addEventListener('click', function (event) {
+		// 标记事件，表示已经被特殊单元格处理
+		event.isSpecial = true;
+		// 加了这行,myTable的事件不会触发了
+		event.stopPropagation();
+	});
+
+	document.getElementById('myTable').addEventListener('click', function (event) {
+		// 检测事件是否已经被特殊单元格处理
+		if (event.isSpecial) {
+			alert('This is a special cell!');
+		} else {
+			alert('This is a normal cell.');
+		}
+	}, false); // 这里使用冒泡阶段的处理器
+</script>
+</html>

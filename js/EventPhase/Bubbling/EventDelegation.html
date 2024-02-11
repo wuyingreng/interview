@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Event EventDelegation Example</title>
+</head>
+<body>
+	<ul id="myList">
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li>Item 3</li>
+		<!-- 更多列表项 -->
+	</ul>
+</body>
+
+
+<script>
+	document.getElementById('myList').addEventListener('click', function (event) {
+		if (event.target.tagName === 'LI') {
+			console.log('Clicked on item: ' + event.target.textContent);
+		}
+	});
+</script>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event EventDelegation Example</title>
+</head>
+<body>
+  <a href="https://www.example.com" id="myLink">Visit Example.com</a>
+</body>
+
+<script>
+  document.getElementById('myLink').addEventListener('click', function (event) {
+    // 阻止链接的默认导航行为
+    event.preventDefault();
+
+    // 执行其他操作，比如AJAX请求
+    fetch('https://api.example.com/data')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Loaded data:', data);
+        // 在这里用获取到的数据更新页面内容
+      })
+      .catch(error => {
+        console.error('An error occurred:', error);
+      });
+
+    // 或者改变应用的状态，例如，通过改变URL的哈希来进行客户端路由
+    window.location.hash = '#/some-path';
+
+    // 或者打开一个模态对话框
+    // showModalDialogFunction();
+  });
+</script>
+
+</html>
