@@ -9,14 +9,12 @@ function selectionSort(arr) {
         minIndex = j;
       }
     }
-    // 如果当前索引 i 不是最小值索引，交换它们
-    if (minIndex !== i) {
-      let temp = arr[i];
-      arr[i] = arr[minIndex];
-      arr[minIndex] = temp;
-    }
   }
+
   return arr;
+
+
+
 }
 
 // 示例用法
