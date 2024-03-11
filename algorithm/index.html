@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="UTF-8">
 	<title>algorithm Test</title>
 </head>
-
 <body>
 
 	<script id="script-placeholder"></script>
+	<script type="text/javascript" src="./tree/treeNode/index.js"></script>
+	<!-- 在浏览器中使用 ES6 模块 -->
+	<!-- 直接这么写export import 浏览器会报错 Access to script at 'file:///Users/xiangpeifang/Documents/work/usedaily/algorithm/tree/treeNode/index.js' 
+			from origin 'null' has been blocked by CORS policy:
+			 Cross origin requests are only supported for protocol schemes: http, data, isolated-app, chrome-extension, chrome, https, chrome-untrusted. 
+			type="module" 格式不能通过file 开头直接访问
+		-->
+	<!-- <script type="module">
+				import { TreeNode } from './tree/treeNode/index.js';
+			</script> -->
 
 	<script>
 		// 动态加载 JavaScript 文件的函数
@@ -22,10 +30,9 @@
 
 		// 调用函数，加载你想要调试的 JavaScript 文件
 		// 你可以根据需要加载多个文件，只需要多次调用 loadScript 函数
-		loadScript('./list/sort/mergeSort/copy.js');
+								loadScript('./tree/preorderTraversalIterative/index.js');
 
 	</script>
 
 </body>
-
 </html>
