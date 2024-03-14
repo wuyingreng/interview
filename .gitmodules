@@ -1,0 +1,3 @@
+[submodule "newReact"]
+	path = newReact
+	url = https://github.com/wuyingreng/newReact.git
