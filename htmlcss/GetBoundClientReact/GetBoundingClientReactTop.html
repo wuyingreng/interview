@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>getBoundingClientRect().top with Scrolling Demo</title>
+  <style>
+    #scrollableDiv {
+      width: 100%;
+      height: 300px;
+      overflow-y: auto;
+      background-color: lightblue;
+      padding: 10px;
+    }
+
+    #innerDiv {
+      margin-top: 500px;
+      /* 大于外部div的高度，确保需要滚动 */
+      width: 100px;
+      height: 100px;
+      background-color: tomato;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="scrollableDiv">
+    <div id="innerDiv"></div>
+  </div>
+
+  <button id="getPositionButton">Get Box Position</button>
+
+  <script>
+    document.getElementById("getPositionButton").addEventListener("click", function () {
+      var elem = document.getElementById("innerDiv");
+      // 打印元素相对于视口顶部的距离
+      console.log("Element's top position relative to the viewport: ", elem.getBoundingClientRect().top);
+    });
+
+    // 还可以监听滚动事件来实时打印位置变化（如有需要）
+    // document.getElementById("scrollableDiv").addEventListener("scroll", function() {
+    //   var elem = document.getElementById("innerDiv");
+    //   console.log("Element's top position while scrolling: ", elem.getBoundingClientRect().top);
+    // });
+  </script>
+
+</body>
+
+</html>

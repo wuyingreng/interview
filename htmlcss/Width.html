@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Div with Styles</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .scrollable-div {
+      width: 100px;
+      /* 设置 div 的宽度 */
+      height: 100px;
+      /* 设置 div 的高度 */
+      padding: 18.11px;
+      /* 设置 div 内部的填充 */
+      border: 5px solid #333;
+      /* 设置 div 的边框 */
+      margin: 30px;
+      /* 设置 div 周围的外边距 */
+      overflow: auto;
+      /* 添加滚动条 */
+      background: #ddd;
+      /* 设置 div 的背景颜色 */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="scrollable-div" class="scrollable-div">
+    This div has a fixed width and height with content long enough to require a scrollbar
+    to be able to read all the content inside the div. Here's more and more content so that
+    you can see how it scrolls within the div.
+  </div>
+</body>
+<script>
+  console.log('client Height', document.getElementById("scrollable-div").clientHeight)
+  console.log('client width', document.getElementById("scrollable-div").clientWidth)
+  console.log('offsetH Height', document.getElementById("scrollable-div").offsetHeight)
+  console.log('getBoundingRect Height', document.getElementById("scrollable-div").getBoundingClientRect().height)
+  console.log('scroll Height', document.getElementById("scrollable-div").scrollHeight)
+</script>
+
+</html>

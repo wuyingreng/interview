@@ -1,0 +1,26 @@
+:
+<!DOCTYPE html>
+<html>
+<head>
+	<title>position absolute元素父元素高度会塌陷</title>
+	<style>
+		.parent {
+			border: 2px solid black;
+			/* 显示父元素的边界 */
+			position: relative;
+		}
+
+		.absolute {
+			position: absolute;
+			width: 100px;
+			height: 30px;
+			top: -30px;
+		}
+	</style>
+</head>
+<body>
+	<div class="parent">
+		<div class="absolute">position absolute elements不会撑开父元素的高度,所以父元素高度会塌陷</div>
+	</div>
+</body>
+</html>
