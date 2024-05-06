@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offset DOM</title>
+</head>
+
+
+</body>
+<script>
+  // 创建一个DocumentFragment实例
+  const fragment = document.createDocumentFragment();
+
+  // 向DocumentFragment中添加多个子元素
+  for (let i = 0; i < 10; i++) {
+    const elem = document.createElement('p');
+    elem.innerText = '这是段落 ' + i;
+    fragment.appendChild(elem); // 添加到DocumentFragment中
+  }
+
+  // 最后一次性将所有内容添加到DOM树中
+  document.body.appendChild(fragment);
+</script>
+
+</html>
