@@ -8,6 +8,7 @@ import ComponentClaim from './routes/ReactGrammer/ComponentClaim';
 import ReactChildren from './routes/ReactGrammer/ReactChildren';
 import CounterUseHooks from './routes/ReactGrammer/UsePrevious';
 import UseLayoutEffect from './routes/ReactGrammer/UseLayoutEffect'
+import UseState from './routes/ReactGrammer/UseState'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: '/reactGrammer/useLayoutEffect',
     element: <UseLayoutEffect />,
+  },
+  {
+    path: '/reactGrammer/useState',
+    element: <UseState />,
   },
 ]);
 
