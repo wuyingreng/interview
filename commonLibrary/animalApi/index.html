@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+
+  </style>
+</head>
+
+<body>
+  <div id="imageSrc">
+
+  </div>
+  <div id="text">
+
+  </div>
+</body>
+<!-- <script type="text/javascript">
+  console.log('5555')
+
+
+</script> -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="./lib/index.js"></script>
+<script>
+  // if (typeof window !== "undefined") {
+  //   window.axios = _axios.default; // 将 axios 暴露到全局
+  // }
+  // 为什么这个代码根本就不执行
+  console.log('999')
+  console.log('AnimalApi.default==>', AnimalApi.default)
+  AnimalApi.default.getDog().then(function (animal) {
+    document.querySelector('#imageSrc').textContent = animal.imageSrc;
+    document.querySelector('#text').textContent = animal.text
+  })
+</script>
+
+</html>
