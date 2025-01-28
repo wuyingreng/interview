@@ -1,3 +1,6 @@
 [submodule "newReact"]
 	path = newReact
 	url = https://github.com/wuyingreng/newReact.git
+[submodule "geek-nodejs"]
+	path = geek-nodejs
+	url = https://github.com/wuyingreng/geek-nodejs.git
