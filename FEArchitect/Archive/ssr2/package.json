@@ -1,0 +1,30 @@
+{
+  "name": "ssr2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "repository": "http://gitlab.alibaba-inc.com/peifang.xiang/usedaily.git",
+  "dependencies": {
+    "@babel/register": "^7.25.9",
+    "express": "^4.21.2",
+    "install": "^0.13.0",
+    "npm": "^11.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "babel-loader": "^9.2.1",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  }
+}
