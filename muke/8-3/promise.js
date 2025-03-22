@@ -11,6 +11,7 @@ Promise.resolve().then(() => {
 Promise.resolve().then(() => {
   console.log(1)
   throw new Error('erro1')
+  console.log('试试报错后会不会答应')
 }).catch(() => {
   console.log(2)
 }).then(() => {
