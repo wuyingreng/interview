@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+
+  </style>
+
+</head>
+
+<body>
+
+  <script src="Mypromise.js"></script>
+  <script>
+    const p1 = new MyPromise((resolve, reject) => {
+      // resolve(100);
+      /**
+       * 同步resolve和异步resolve是不会同时执行的，如果上面resolve(100)执行了，
+       * 下面的setTimeout就不会执行
+      */
+      setTimeout(() => {
+        console.log('setTimeout 100')
+        resolve(100);
+      }, 500)
+    })
+    console.log('p1==>', p1)
+    // 注意下then里面本身接收的就是个函数
+    // const p11 = p1.then((data) => {
+    //   return data + 1
+    // });
+    // const p12 = p1.then((data) => {
+    //   throw new Error()
+    //   return data + 2
+    // });
+    // const p13 = p2.catch((err) => {
+    //   console.log(err)
+
+    // });
+    // // 打印下这个是什么
+    // console.log('p13==>', p13)
+
+    // // ?? p2,p3是什么
+    // const p2 = new myPromise().resolve(200);
+    // const p3 = new myPromise().reject('一个错误信息');
+    // const p4 = new myPromise().all([p1, p2]);
+    // const p5 = new myPromise().race([p1, p2]);
+
+
+  </script>
+</body>
+
+</html>
