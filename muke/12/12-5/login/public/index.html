@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>登录系统</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 50px auto;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    input {
+      padding: 8px;
+      width: 100%;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 登录表单 -->
+    <div v-if="!user">
+      <h2>用户登录</h2>
+      <div class="form-group">
+        <input type="text" v-model="username" placeholder="用户名">
+      </div>
+      <div class="form-group">
+        <input type="password" v-model="password" placeholder="密码">
+      </div>
+      <button @click="login">登录</button>
+      <p v-if="error" style="color: red">{{ error }}</p>
+    </div>
+
+    <!-- 登录后显示 -->
+    <div v-if="user">
+      <h2>欢迎 {{ user.username }}</h2>
+      <button @click="getProfile">获取资料</button>
+      <button @click="logout">退出登录</button>
+      <pre>{{ profile }}</pre>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        username: '',
+        password: '',
+        user: null,
+        profile: null,
+        error: null
+      },
+      methods: {
+        async login() {
+          try {
+            const res = await fetch('/api/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                username: this.username,
+                password: this.password
+              }),
+
+            })
+
+            const data = await res.json()
+            if (!res.ok) throw new Error(data.message)
+
+            this.user = data.user
+            this.error = null
+          } catch (err) {
+            this.error = err.message
+          }
+        },
+
+        async getProfile() {
+          const res = await fetch('/api/profile', {
+            credentials: 'include'
+          })
+          this.profile = await res.json()
+        },
+
+        async logout() {
+          await fetch('/api/logout', {
+            method: 'POST',
+            credentials: 'include'
+          })
+          this.user = null
+          this.profile = null
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

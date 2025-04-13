@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CORS 客户端示例</title>
+</head>
+
+<body>
+  <h1>CORS 测试客户端</h1>
+  <button onclick="sendRequest()">发送请求</button>
+
+  <script>
+    async function sendRequest() {
+      try {
+        // 发送跨域请求
+        const response = await fetch('http://localhost:3000/api/data', {
+          method: 'GET',
+          credentials: 'include', // 携带凭证
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+        const data = await response.json()
+        console.log('响应数据:', data)
+        alert('请求成功: ' + data.message)
+      } catch (error) {
+        console.error('请求失败:', error)
+        alert('请求失败: ' + error.message)
+      }
+    }
+  </script>
+</body>
+
+</html>
