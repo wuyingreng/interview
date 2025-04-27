@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>同步脚本阻塞演示</h2>
+    
+    <!-- 初始可见内容 -->
+    <p style="color:blue">这段内容会在脚本执行前渲染（浏览器预解析机制）</p>
+
+    <!-- 同步阻塞脚本 -->
+    <script>
+        // 插入一个阻塞提示
+        document.body.innerHTML += '<p style="color:red">[同步脚本开始执行]</p>';
+
+        // 阻塞主线程 3 秒（更可靠的方法）
+        const start = Date.now();
+        while (Date.now() - start < 10000) {} 
+
+        // 脚本执行完成后插入内容
+        document.body.innerHTML += '<p style="color:green">[同步脚本执行完成]</p>';
+    </script>
+
+    <!-- 脚本后的内容 -->
+    <p style="color:purple">这段内容会在脚本执行后才被解析和渲染</p>
+    <div style="width:100px; height:100px; background:red;"></div>
+</body>
+</html>

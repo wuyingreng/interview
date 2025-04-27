@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CSS 解析阻塞示例（可观察效果）</title>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 动态生成 1 万条 CSS 规则
+      const style = document.createElement('style');
+      let css = '';
+      for (let i = 0; i < 10000; i++) {
+        css += `
+          .box-${i} {
+            color: hsl(${i % 360}, 100%, 50%);
+            padding: ${i % 10}px;
+            display: inline-block; /* 确保元素可见 */
+          }
+        `;
+      }
+      style.textContent = css;
+      document.head.appendChild(style);
+      console.log('已插入 10000 条 CSS 规则'); // ✅ 控制台验证
+    });
+  </script>
+</head>
+<body>
+  <button onclick="addBoxes()">点击生成 1000 个彩色方块（观察卡顿）</button>
+  <script>
+    function addBoxes() {
+      const start = Date.now();
+      const fragment = document.createDocumentFragment();
+      
+      for (let i = 0; i < 1000; i++) {
+        const div = document.createElement('div');
+        div.className = `box-${Math.floor(Math.random() * 10000)}`; // 随机应用 CSS 类
+        div.textContent = '█'; // 用方块字符模拟效果
+        fragment.appendChild(div);
+      }
+      
+      document.body.appendChild(fragment);
+      console.log(`生成耗时: ${Date.now() - start}ms`);
+    }
+  </script>
+</body>
+</html>

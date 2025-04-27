@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- 模拟慢速 CSS 请求（服务器延迟 3 秒响应） -->
+  <link rel="stylesheet" href="/slow.css?delay=30">
+</head>
+<body>
+  <h1>你会看到 3 秒白屏后，文字和样式同时出现</h1>
+  <p>这说明 CSS 加载阻塞了渲染</p>
+</body>
+</html>

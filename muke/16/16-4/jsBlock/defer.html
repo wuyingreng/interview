@@ -1,0 +1,42 @@
+<!-- 1. 这个demo还是可以看出来defer脚本是按照顺序执行，defer脚本在DOMContentLoaded 完成前触发 -->
+
+
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>defer 脚本演示</h2>
+    
+    <!-- 初始内容 -->
+    <p style="color:blue">这段内容会立即渲染</p>
+
+    <!-- 延迟脚本 1 -->
+    <script defer>
+		console.log('defer 脚本1')
+        document.body.innerHTML += '<p style="color:red">[defer脚本1执行]</p>';
+    </script>
+
+    <!-- 延迟脚本 2 -->
+    <script defer>
+		console.log('defer 脚本2')
+        document.body.innerHTML += '<p style="color:green">[defer脚本2执行]</p>';
+		const start = Date.now();
+
+        // 阻塞主线程 2 秒
+        while (Date.now() - start < 20000) {}
+
+        document.body.innerHTML += '<p style="color:green">[defer脚本2执行完成]</p>';
+    </script>
+
+    <!-- 后续内容 -->
+    <p style="color:orange">这段内容会立即渲染</p>
+    <div style="width:100px; height:100px; background:blue;"></div>
+
+    <script>
+        // 监听 DOMContentLoaded 事件
+        document.addEventListener('DOMContentLoaded', () => {
+			console.log('DOMContentLoaded 脚本')
+            document.body.innerHTML += '<p style="color:purple">[DOMContentLoaded 触发]</p>';
+        });
+    </script>
+</body>
+</html>

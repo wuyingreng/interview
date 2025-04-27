@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>async 脚本演示</h2>
+    
+    <!-- 初始内容 -->
+    <p style="color:blue">这段内容会立即渲染</p>
+
+    <!-- 异步脚本 -->
+    <script async>
+        console.log('async 脚本 1')
+        // 记录脚本开始时间
+        const start = Date.now();
+        document.body.innerHTML += '<p style="color:red">[async脚本开始执行]</p>';
+
+        // 阻塞主线程 2 秒
+        while (Date.now() - start < 20000) {}
+
+        document.body.innerHTML += '<p style="color:green">[async脚本执行完成]</p>';
+    </script>
+
+    <!-- 后续内容 -->
+    <p style="color:orange">这段内容在 async 脚本加载期间会继续渲染，但执行时会被阻塞</p>
+    <div style="width:100px; height:100px; background:blue;"></div>
+</body>
+</html>
