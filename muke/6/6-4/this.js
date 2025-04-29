@@ -39,8 +39,19 @@ console.log(zhangsan.wait())
 const zhangsan2 = {
   name: "张三",
   sayHi: () => {
-    // 箭头函数的this是上级作用域的this
+    /**
+     * 箭头函数的this是上级作用域的this。zhangsan2是对象字面量，不是块级作用域
+     * zhangsan2 定义在全局，所以this是window
+    */
+    // 
     console.log('zhangsan2 箭头函数 sayHi this=>', this)
+  },
+  sayHi2: function () {
+    /**
+     * 普通函数的this是调用方，zhangsan2 调用了sayHi2
+    */
+    // 
+    console.log('zhangsan2 普通函数 sayHi2 this=>', this)
   },
   wait() {
     setTimeout(() => {
@@ -51,6 +62,7 @@ const zhangsan2 = {
 }
 
 console.log(zhangsan2.sayHi());
+console.log(zhangsan2.sayHi2());
 console.log(zhangsan2.wait())
 
 /**------------- 类 -------------*/
@@ -67,3 +79,21 @@ class People {
 
 const zhangsanshili = new People('zhangsan');
 zhangsanshili.sayHi()
+
+
+/** ------------  嵌套箭头函数中的this ------------*/
+/**
+ * 一层层向上绑定到window对象
+*/
+const debounce = (fn, delay = 500) => {  // ① 外层箭头函数
+  let timer = null;
+  return () => {  // ② 返回的箭头函数
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {  // ③ setTimeout 里的箭头函数
+      console.log('this==>', this);  // 这里的 this 是谁？
+      fn();
+    }, delay);
+  };
+};

