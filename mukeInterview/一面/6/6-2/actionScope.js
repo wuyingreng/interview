@@ -15,3 +15,13 @@ function fn1() {
   console.log('a2=>', a2)// 报错a2 is not defined
 }
 fn1()
+
+/** ------------ 块级作用域 ------------*/
+if (true) {
+  let x = 100;
+}
+try {
+  console.log('x==>', x)
+} catch (err) {
+  console.error(err)
+}

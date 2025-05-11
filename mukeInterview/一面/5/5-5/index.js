@@ -15,6 +15,9 @@ class Student extends People {
     // 名字用People的方法，继承父类
     super(name);
     this.number = number
+    this.honest = () => {
+      console.log(`姓名：${this.name} is honest`)
+    }
   }
   sayHi() {
     console.log(`姓名:${this.name}sayHi`)
@@ -45,9 +48,9 @@ console.log([] instanceof Array) // true
 console.log([] instanceof Object) // true
 console.log({} instanceof Object) // true
 
-console.log(Student instanceof Object) // true
-// 为什么这里是false????
-console.log('Student.prototype instanceof People', Student.prototype instanceof People) // false
+console.log(Student instanceof Object) // false
+
+console.log('Student.prototype instanceof People', Student.prototype instanceof People) // true
 
 
 // 隐式原型和显式原型

@@ -4,7 +4,9 @@ class Student {
     // this 当前正在构建的实例
     this.name = name;
     this.number = number;
+    // 属性这里可以用箭头函数
   }
+  // 下面这块不可以用箭头函数。写了也是实例属性，不是原型方法
   sayHi() {
     console.log(`my name is${this.name}-学号${this.number}`,)
   }

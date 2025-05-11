@@ -23,10 +23,10 @@ class JQuery {
    * on方法是调用each方法，pass给this.each方法一个函数，这个方法是让elem
    * 绑定事件监听器
   */
-  on(type, fn) {
-    return this.each(elem => {
-      elem.addEventListener(type, fn, false)
-    })
+  on(fn, type) {
+    // elem是上面each pass过来的实参。这里再调用this.each
+    const fnForEach = (elem) => elem.addEventListener(type, fn)
+    this.each(fnForEach)
   }
   // 扩展很多 DOM API
 }
@@ -55,5 +55,17 @@ console.log('$p==>', $p)
 $p.get(1)
 $p.each((elem) => console.log(elem.nodeName))
 $p.on('click', () => alert('clicked'))
+
+/**
+* 如果要写
+* console.log('$divs.on',$divs.on((elem)=>{
+alert('i am click',elem)
+},'click'));
+上面的得改写为
+on(fn,type){
+  // todo: elem是上面each pass过来的实参。这里再调用this.each
+  this.each((elem)=>elem.addEventListener(type,(elem）=>fn(elem)))
+}
+*/
 
 console.log('$p.diaglog==>', $p.dialog('hello'))
