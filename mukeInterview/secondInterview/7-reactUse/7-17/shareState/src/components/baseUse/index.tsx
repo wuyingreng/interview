@@ -2,11 +2,11 @@ import { useState } from 'react'
 // import JSXBaseDemo from './JSXBaseDemo'
 // import ConditionDemo from './ConditionDemo'
 // import ListDemo from './ListDemo'
-import EventDemo from './EventDemo';
+// import EventDemo from './EventDemo';
 import { NotControlledInput } from './NotControlledInput';
 import { ControlledInput } from './ControlledInput';
 // import FormDemo from './FormDemo'
-// import PropsDemo from './PropsDemo'
+import StateLift from './StateLift'
 // import StateDemo from './StateDemo'
 // import StateDemo1 from './StateDemo1'
 
@@ -20,7 +20,7 @@ const BaseUseDemo = () => {
     return <div>
         {/* <JSXBaseDemo /> */}
         {/* <ConditionDemo />
-            <ListDemo /> */}
+            }
         <EventDemo />
         {/* <FormDemo/> */}
         {/* <PropsDemo /> */}
@@ -32,7 +32,10 @@ const BaseUseDemo = () => {
         <div>
             <ControlledInput label="第二个输入框" text={text} handleChange={handleChange} />
         </div>
-
+        <div>
+            {/* 展示状态提升  */}
+            <StateLift />
+        </div>
     </div>
 
 }
