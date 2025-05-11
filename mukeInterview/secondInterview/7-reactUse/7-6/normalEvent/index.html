@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="myElement">1111</div>
+
+  <script>
+
+    // 获取元素
+    var element = document.getElementById('myElement');
+
+    // 为元素添加click事件监听器
+    element.addEventListener('click', function (e) {
+      console.log('普通元素中的e==>', e);
+    });
+  </script>
+</body>
+
+</html>
