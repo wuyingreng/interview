@@ -7,6 +7,7 @@ import { NotControlledInput } from './NotControlledInput';
 import { ControlledInput } from './ControlledInput';
 // import FormDemo from './FormDemo'
 import StateLift from './StateLift'
+import { StaleClosure } from './StaleClosure'
 // import StateDemo from './StateDemo'
 // import StateDemo1 from './StateDemo1'
 
@@ -35,6 +36,7 @@ const BaseUseDemo = () => {
         <div>
             {/* 展示状态提升  */}
             <StateLift />
+            <StaleClosure />
         </div>
     </div>
 
