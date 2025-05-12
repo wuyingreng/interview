@@ -4,6 +4,7 @@ import Child from './Child';
 
 const Parent = () => {
     const [count, setCount] = useState(0);
+    const [countP, setCountP] = useState(0);
     const [showChild, setShowChild] = useState(true);
 
     useEffect(() => {
@@ -17,6 +18,7 @@ const Parent = () => {
 
     return (
         <div>
+            <button onClick={() => setCountP(c => c + 1)}>Parent Update无关子组件的状态{countP}</button>
             <button onClick={() => setCount(c => c + 1)}>Parent Update</button>
             <button onClick={() => setShowChild(s => !s)}>Toggle Child</button>
             {showChild && <Child count={count} />}
