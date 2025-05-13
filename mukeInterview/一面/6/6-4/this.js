@@ -7,6 +7,13 @@ fn1()// window
 fnarrow = () => {
   console.log('fnarrow==>', this)
 }
+/**
+ * 在全局对象中不能简单的声明匿名函数，要不就要函数自执行
+ * 这个自执行函数就要多包一层
+ *  ((function(){
+ *  console.log('对象方法中普通函数的this',this);   
+  *})())
+*/
 
 fn1()// window
 fnarrow()
@@ -19,12 +26,23 @@ const fn2 = fn1.bind({ x: 200 })
 fn2()//{x:200}
 
 /**------------- 作为对象方法被调用 -------------*/
-
+/**
+ * setTimeout里面放普通函数的话，是window执行setTimeout，this是window
+ * setTimeout里面箭头函数的话，继承外层最近的非箭头函数的this
+*/
 const zhangsan = {
   name: "张三",
   sayHi() {
-    // this 即当前对象
+    // 普通函数的this是调用方，zhangsan 调用了sayHi
     console.log('zhangsan 普通函数 sayHi this=>', this)
+  },
+  sayHi2: () => {
+    /**
+     * 箭头函数的this是上级作用域的this。zhangsan是对象字面量，不是块级作用域
+     * zhangsan 定义在全局，所以this是window
+    */
+    // 
+    console.log('zhangsan 箭头函数 sayHi this=>', this)
   },
   wait() {
     setTimeout(function () {
@@ -32,38 +50,18 @@ const zhangsan = {
       console.log('zhangsan 普通函数 setTimeout 包裹在wait普通函数下面 this=>', this)
 
     })
+  },
+  wait2() {
+    setTimeout(() => {
+      // 箭头函数的this是上级作用域的this,也就是wait的this，就是zhangsan
+      console.log('zhangsan 箭头函数 setTimeout 包裹在wait普通函数下面 this=>', this)
+    })
   }
 }
 console.log(zhangsan.sayHi());
 console.log(zhangsan.wait())
-const zhangsan2 = {
-  name: "张三",
-  sayHi: () => {
-    /**
-     * 箭头函数的this是上级作用域的this。zhangsan2是对象字面量，不是块级作用域
-     * zhangsan2 定义在全局，所以this是window
-    */
-    // 
-    console.log('zhangsan2 箭头函数 sayHi this=>', this)
-  },
-  sayHi2: function () {
-    /**
-     * 普通函数的this是调用方，zhangsan2 调用了sayHi2
-    */
-    // 
-    console.log('zhangsan2 普通函数 sayHi2 this=>', this)
-  },
-  wait() {
-    setTimeout(() => {
-      // 箭头函数的this是上级作用域的this,也就是wait的this，就是zhangsan2
-      console.log('zhangsan2 箭头函数 setTimeout 包裹在wait普通函数下面 this=>', this)
-    })
-  }
-}
-
-console.log(zhangsan2.sayHi());
-console.log(zhangsan2.sayHi2());
-console.log(zhangsan2.wait())
+console.log(zhangsan.sayHi2());
+console.log(zhangsan.wait2())
 
 /**------------- 类 -------------*/
 

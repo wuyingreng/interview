@@ -1,4 +1,3 @@
-// 这块没有弄完
 /**-------------  函数作为返回值      -------------*/
 
 function create() {
@@ -29,3 +28,26 @@ function fnb() {
 }
 
 print(fnb)
+
+
+/** ------------  闭包在异步中的应用 ------------*/
+let x = 1;
+setTimeout(() => {
+  console.log('x==>', x)
+});
+
+
+
+let counter = (() => {
+  let count = 1;
+  const increment = () => {
+
+    count++
+    console.log('count==>', count)
+  }
+  return increment
+})()
+
+console.log('counter()==>', counter());// 这里打印的是返回值，因为increatment没有任何返回，所以打印的是undefined
+console.log('counter()==>', counter());
+console.log('counter()==>', counter());
