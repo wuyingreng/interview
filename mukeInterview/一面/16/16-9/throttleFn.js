@@ -19,6 +19,7 @@ function throttle(fn, delay = 100) {
             console.log('timer')
             return
         }
+        // 定时器一定会在固定的时间内执行，所以不需要clearTimeout
         timer = setTimeout(() => {
             console.log('settimeout')
             console.log('this==>', this, 'arguments==>', arguments)
