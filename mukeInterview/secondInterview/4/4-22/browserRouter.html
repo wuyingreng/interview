@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>history API test</title>
+</head>
+
+<body>
+  <p>history API test</p>
+  <button id="btn1">修改 url</button>
+
+  <script>
+    // 页面初次加载，获取 path
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('load', location.pathname)
+    })
+
+    /**
+     * 打开一个新的路由
+     * 【注意】用 pushState 方式，浏览器不会刷新页面
+     *  document.getElementById('btn1').addEventListener('click' 相当于nav中的ul li
+    */
+
+    document.getElementById('btn1').addEventListener('click', () => {
+      const state = { name: 'page1' }
+      console.log('切换路由到', 'page1')
+      // page1就是跳转到的路由path
+      history.pushState(state, '', 'page1') // 重要！！
+      /**
+       * 这么写是会报错的。因为服务端没有配置/page1的html
+       * window.location.href = '/page1'
+      */
+
+
+    })
+
+    // 监听浏览器前进、后退。这个操作是点击浏览器左上角的前进和后端按钮
+    window.onpopstate = (event) => { // 重要！！
+      /**
+       * event.state 是和pathname绑定的。如果到了pag11 后退，state是undefined，再前进才到page1可以看到
+       * state
+      */
+      console.log('onpopstate', event.state, location.pathname)
+    }
+
+    /**
+     * 在你的服务器上添加一个简单的回退路由。如果 URL 不匹配任何静态资源，它应提供与你的应用程序中的 `index.html` 相同的页面。
+     *让前端自己去接管路由。
+    * 如果不配置的话，用户第一次在页面输入就会报错http://127.0.0.1:8001/page1
+    */
+    // 需要 server 端配合，可参考
+    // https://router.vuejs.org/zh/guide/essentials/history-mode.html#%E5%90%8E%E7%AB%AF%E9%85%8D%E7%BD%AE%E4%BE%8B%E5%AD%90
+  </script>
+</body>
+
+</html>
