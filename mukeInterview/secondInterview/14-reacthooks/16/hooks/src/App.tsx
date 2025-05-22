@@ -13,9 +13,11 @@ import UseStateTrap from './components/UseStateTrap';
 // import Teach from './components/Teach'
 // import UseStateTrap from './components/UseStateTrap'
 // import UseEffectChangeState from './components/UseEffectChangeState';
-
+import { useAxios } from './customHooks/useAxios'
 
 function App() {
+  const [data, loading] = useAxios('http://localhost:5174');
+  if (loading) return <div>loading</div>;
 
   return (
     <div>
