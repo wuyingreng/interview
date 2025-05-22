@@ -1,6 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { srcPath, distPath } = require('./paths')
+const { srcPath } = require('./paths')
 const postcssPresetEnv = require('postcss-preset-env');
 module.exports = {
     entry: path.join(srcPath, 'index'),
@@ -33,7 +33,14 @@ module.exports = {
             {
                 test: /\.less$/,
                 // 增加 'less-loader' ，注意顺序
-                use: ['style-loader', 'css-loader', 'less-loader']
+                use: ['style-loader', 'css-loader', {
+                    loader: 'postcss-loader',
+                    options: {
+                        postcssOptions: {
+                            plugins: [postcssPresetEnv(/* pluginOptions */)]
+                        },
+                    },
+                }, 'less-loader']
             }
         ]
     },

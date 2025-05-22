@@ -25,8 +25,8 @@ function insertImgElem(imgFile) {
     img.src = imgFile
     document.body.appendChild(img)
 }
-import imgFile1 from './img/1.png'
-insertImgElem(imgFile1)
+// import imgFile1 from './img/1.png'
+// insertImgElem(imgFile1)
 // import imgFile2 from './img/2.jpeg'
-insertImgElem(imgFile2)
+// insertImgElem(imgFile2)
 
