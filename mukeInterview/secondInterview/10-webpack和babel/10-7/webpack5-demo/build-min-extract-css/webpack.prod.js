@@ -1,10 +1,11 @@
 const path = require('path')
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const postcssPresetEnv = require('postcss-preset-env');
 const TerserJSPlugin = require('terser-webpack-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const webpackCommonConf = require('./webpack.common.js')
 const { srcPath, distPath } = require('./paths')
 
@@ -40,10 +41,15 @@ module.exports = merge(webpackCommonConf, {
             {
                 test: /\.css$/,
                 use: [
-                    MiniCssExtractPlugin.loader,  // 注意，这里不再用 style-loader
-                    'css-loader',
-                    'postcss-loader'
-                ]
+                    MiniCssExtractPlugin.loader,  // 注意，这里不再用 style-loader, 
+                    'css-loader', {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [postcssPresetEnv(/* pluginOptions */)]
+                            },
+                        },
+                    }] // 加了 postcss 前缀
             },
             // 抽离 less
             {
@@ -52,7 +58,14 @@ module.exports = merge(webpackCommonConf, {
                     MiniCssExtractPlugin.loader,  // 注意，这里不再用 style-loader
                     'css-loader',
                     'less-loader',
-                    'postcss-loader'
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [postcssPresetEnv(/* pluginOptions */)]
+                            },
+                        },
+                    }
                 ]
             }
         ]
@@ -72,6 +85,6 @@ module.exports = merge(webpackCommonConf, {
 
     optimization: {
         // 压缩 css
-        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+        minimizer: [new TerserJSPlugin({}), new CssMinimizerPlugin({})],
     }
 })
