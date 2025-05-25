@@ -1,0 +1,20 @@
+{
+  "name": "inspect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev nodemon --inspect=9229 bin/www",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "koa": "^3.0.0",
+    "koa-router": "^13.0.1"
+  }
+}
