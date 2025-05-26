@@ -11,7 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "../react-source-code/useStateUseEffect/copy.js"
+      "program": "${file}",
     }
   ]
 }
