@@ -11,7 +11,9 @@ const debounce = (fn, delay = 500) => {
 	let timer = null;
 	return () => {
 		if (timer) {
-			clearTimeout(timer)
+			clearTimeout(timer);
+			// 这里写不写 timer=null意义不大，因为后面又重新赋值
+
 		}
 		// 整个函数没有return回去，下面的timer赋值还是会继续执行的，重新赋值为一个定时器
 		timer = setTimeout(() => {

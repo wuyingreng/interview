@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>set和Array的区别</title>
+
+  <style>
+
+  </style>
+</head>
+
+<body>
+
+
+  <script>
+    const set1 = new Set([1, 2, 3])
+    // 因为set是无序的结构，所以没有push,unshift 区别前后添加。
+    set1.add(4)
+    set1.add(3)
+    set1.has(1)
+    set1.size // 类似于arr.length 是属性不是方法
+    // set里面没有index
+    // set支持的函数查看原型链发现有forEach,entries
+    set1.forEach(element => {
+      console.log(element)
+    });
+
+    // set元素是不能重复的。所以经常用这个做数组的去重
+    // set是无序的，数组是有效的。所以set比数组快
+
+    const arr = [];
+    for (let i = 0; i <= 100 * 10000; i++) {
+      arr.push(i)
+    }
+    const set = new Set();
+    for (let i = 0; i <= 100 * 10000; i++) {
+      set.add(i)
+    }
+
+    /** -----------  set和array的操作 快慢的比较   ------------------*/
+    console.time('arr unshift')
+    arr.unshift(1)
+    console.timeEnd('arr unshift')
+
+    console.time('set add')
+    set.add('我是')
+    console.timeEnd('set add')
+
+    console.time('arr push')
+    arr.push(1)
+    console.timeEnd('arr push')
+
+
+    console.time('arr includes')
+    arr.includes(500000)
+    console.timeEnd('arr includes')
+
+    console.time('set has')
+    set.has(500000)
+    console.timeEnd('set has')
+
+  </script>
+</body>
+
+</html>

@@ -41,3 +41,6 @@
 1. 可以打印看到 console.log('timer') 执行了好多次， console.log('settimeout') 和  console.log(e.offsetX, e.offsetY) 才执行了一次
 2. drag事件是不是一直按着不放也触发了drag
 ## 核心难点分析
+
+
+用它的解释去理解你的代码逻辑。

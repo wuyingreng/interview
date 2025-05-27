@@ -1,4 +1,5 @@
 function loadImg(src) {
+  // promise接受一个参数，这个参数是个函数，这个函数有两个参数，resolve,reject。这两个参数都是函数
   const p = new Promise((resolve, reject) => {
     const img = document.createElement('img');
     img.onload = () => {
