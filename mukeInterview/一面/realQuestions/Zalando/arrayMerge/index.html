@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>实现一个数组的 merge </title>
+
+
+</head>
+
+<body>
+  <script>
+    // 简单版本的数组merge
+    const mergeArrays = (...arrays) => {
+      return [].concat(...arrays)
+    }
+    const arr1 = [8, 5];
+    const arr2 = [3, 4];
+    const merged = mergeArrays(arr1, arr2)
+    console.log('merged==>', merged)
+
+    /**
+     * 去重后的数组合并
+     * ...rest用的是剩余参数，剩余参数在函数形参上要写。
+     * arguments在函数形参上不用写
+     * */
+
+    const mergeDepude = (...array) => {
+      return [...new Set([].concat(...array))]
+    }
+    /**
+     * const mergeDepude2 = function () {
+     * console.log('arguments==>', arguments)
+     *  return [...new Set([].concat(...Array.from(arguments)))]
+      * }
+      * const merged2 = mergeDepude2(arr1, arr2);
+      * console.log('merged2==>', merged2)
+    */
+    console.log('mergeDepude==>', mergeDepude(arr1, arr2))
+
+
+    /**
+     * 去重后的数组合并+排序
+     * 为什么要放在二维数组，因为compareFn可以默认不传，用剩余参数无法实现这个效果
+     * 指定2个参数，compareFun作为第二个形参可以不传
+     * */
+    const arrayDepudeSort = (arrays, compareFun = (a, b) => a - b) => {
+      return [...new Set(arrays.flat())].sort(compareFun)
+    }
+    console.log('arrayDepudeSort==>', arrayDepudeSort([arr1, arr2]))
+  </script>
+</body>
+
+</html>
