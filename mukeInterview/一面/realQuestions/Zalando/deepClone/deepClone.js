@@ -29,7 +29,7 @@ const deepClone = (obj, hash = new WeakMap()) => {
   }
 
   if (obj instanceof Map) {
-    let clone = new Map();
+    const clone = new Map();
     /**
      * 将原始Map对象和对应的克隆Map存入WeakMap中，用于解决循环引用问题
      * hash.set(obj, clone);这个不能写在玩，因为clone的类型不一样
@@ -72,7 +72,7 @@ const deepClone = (obj, hash = new WeakMap()) => {
 }
 
 /** ---------------   执行深拷贝循环引用      ---------------*/
-// const clonedWeakMap = deepClone(objA);
+const clonedWeakMap = deepClone(objA);
 
 /** ---------------   执行深拷贝特殊对象      ---------------*/
 const originalDate = new Date('2023-01-01T00:00:00Z');

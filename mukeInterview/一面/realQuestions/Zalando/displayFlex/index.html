@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>实现一个数组的 merge </title>
+
+
+</head>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .flex-container {
+    display: flex;
+    /* 这里要写start不要写两端对齐，不然下面的个数不够的时候就很丑了。想想品商寻源 */
+    justify-content: start;
+    /* 这个只有当每一个子元素的高度不一样的时候才看得到效果 */
+    align-items: center;
+    flex-wrap: wrap;
+    /* 元素和元素直接要加边距还是加载了父容器商 */
+    gap: 10px;
+  }
+
+  .flex-item {
+    background-color: red;
+    flex: 1 1 calc((100% - 20px)/3);
+    /* 这个不加上的话，等下面的元素个数不够的时候，和上一行元素的宽度就不会一样了 */
+    max-width: calc((100% - 20px)/3);
+  }
+
+  @media (max-width: 480px) {
+
+    .flex-item,
+    .solution-1 .flex-item,
+    .solution-2 .flex-item {
+      flex: 0 0 100%;
+    }
+
+    .grid-container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<body>
+  <div class="flex-container">
+    <div class="flex-item">列1</div>
+    <div class="flex-item">列2</div>
+    <div class="flex-item">列3</div>
+    <div class="flex-item">列3</div>
+    <div class="flex-item">列3</div>
+  </div>
+</body>
+
+</html>

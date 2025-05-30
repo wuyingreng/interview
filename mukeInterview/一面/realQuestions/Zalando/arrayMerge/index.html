@@ -50,6 +50,53 @@
       return [...new Set(arrays.flat())].sort(compareFun)
     }
     console.log('arrayDepudeSort==>', arrayDepudeSort([arr1, arr2]))
+
+
+    /**
+    * 数组自定义去重的逻辑
+    * 写错的点：没有把reduce的结果返回
+    * 思路：
+    * 1. 外层reduce,reduce的那一层return acc
+    * 2. curArray.forEach
+    * if(!用some 判断，some接收一个函数作为参数){
+    *  acc.push
+    * }
+    * */
+
+    // function mergeArraysWithStrategy(arrays, isEqualFn = (a, b) => a === b) {
+    //   return arrays.reduce((acc, currentArray) => {
+    //     currentArray.forEach(item => {
+    //       if (!acc.some(existing => isEqualFn(existing, item))) {
+    //         acc.push(item);
+    //       }
+    //     });
+    //     return acc;
+    //   }, []);
+    // }
+
+
+    const mergeArrayWithCustomIsEqual = (arrays, isEqual = (a, b) => a.id === b.id) => {
+      // 最后一次acc的值就是reduce函数的执行结果，所以reduce函数和map函数一样，要return出去
+      return arrays.reduce((acc, curArray) => {
+        curArray.forEach((curItem) => {
+          if (!acc.some((existingItem) => isEqual(existingItem, curItem))) {
+            acc.push(curItem)
+          }
+        })
+
+        return acc
+      }, [])
+    }
+
+
+    const users1 = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }];
+    const users2 = [{ id: 2, name: 'Robert' }, { id: 3, name: 'Charlie' }];
+    const mergedUsers = mergeArrayWithCustomIsEqual(
+      [users1, users2],
+      (a, b) => a.id === b.id
+    );
+
+    console.log('mergedUsers==>', mergedUsers)
   </script>
 </body>
 
