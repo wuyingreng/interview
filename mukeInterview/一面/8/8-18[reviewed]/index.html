@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+
+  </style>
+
+</head>
+
+<body>
+
+  <script src="Mypromise.js"></script>
+  <script>
+    // 这个是先实例化，再then
+    const p1 = new MyPromise((resolve, reject) => {
+      resolve(100)
+    });
+    const p11 = myPromise.then((res) => {
+      console.log('res==>', res)
+    }, (err) => {
+      console.log('error==>', err)
+    })
+
+
+    //下面的是类里面的方法
+    const p2 = MyPromise.resolve(100)
+    const p3 = MyPromise.reject('错误信息')
+    const p4 = MyPromise.all([p1, p2])
+    const p5 = MyPromise.race([p1, p2])
+  </script>
+</body>
+
+</html>

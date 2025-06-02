@@ -12,7 +12,7 @@
 
 <body>
 
-  <script src="MyPromiseCopy3.js"></script>
+  <script src="myPromise.js"></script>
   <script>
     const p1 = new MyPromise((resolve, reject) => {
       // resolve(100);
@@ -38,11 +38,12 @@
     // console.log('p13==>', p13)
 
     // // ?? p2,p3是什么
-    // const p2 = MyPromise.resolve(200);
-    // const p3 = MyPromise.reject('一个错误信息');
-    // const p4 = MyPromise.all([p1, p2]);
-    // const p5 = MyPromise.race([p1, p2]);
-
+    const p2 = MyPromise.resolve(200);
+    const p3 = MyPromise.reject('一个错误信息');
+    const p4 = MyPromise.all([p1, p2]);
+    console.log('p4==>', p4)
+    const p5 = MyPromise.race([p1, p2]);
+    console.log('p5==>', p5)
 
   </script>
 </body>

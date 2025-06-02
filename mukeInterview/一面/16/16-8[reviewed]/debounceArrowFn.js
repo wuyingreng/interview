@@ -1,5 +1,12 @@
 const input1 = document.getElementById('input1')
 
+/**
+ * 会写错的点：
+ * timer是赋值给setTimeout
+ * 绑定的事情是keyup,不是change，change要失去焦点后触发
+*/
+
+
 const debounce = (fn, delay = 500) => {
 	/**
 	 * timer是在闭包中。

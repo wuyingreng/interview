@@ -30,9 +30,11 @@ async function concurrentRequest(urls, maxConcurrent) {
           this.activeCount++;
           /**
            * task().then(resolve, reject) 就是把task的值返回给外层的promise。记得是2个参数
-           * 相当于task().then((res)=>{resolve(res)}).tach((err)=>{reject(err)})
+           * 相当于task().then((res)=>{resolve(res)}).catch((err)=>{reject(err)})
+           * 
           */
           task().then((res) => {
+            // 需要有个地方当单个的promise错误的时候也resolve，不能因为单个的错误，导致整个promise.all不返回
             resolve({ status: 'success', data: res })
           }, (err) => {
             resolve({ status: 'failure', data: err })
@@ -79,7 +81,7 @@ async function concurrentRequest(urls, maxConcurrent) {
   const allPromises = urls.map((url, index) =>
     controller.add(mockRequest(url), index)
   );
-
+  // Promise.all 就可以保证返回的res的数组的顺序和一开始urls.map的顺序一致
   return await Promise.all(allPromises).then((res) => {
     console.log('res==>', res);
     return res
