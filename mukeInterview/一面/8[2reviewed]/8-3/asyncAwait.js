@@ -2,10 +2,15 @@ async function fn() {
   return 100
 }
 (async function () {
-  const a = fn()// ??
-  const b = await fn()// ??
+  const a = fn()// ?? a应该是个promise 
+  const b = await fn()// ?? b是100
 })();
 
+/**
+ * 我理解应该是start a b 
+ * await Promise.reject(300) 抛出错误。
+ * .catch是捕获错误。不要混淆了
+*/
 (async function () {
   console.log('start')
   const a = await 100

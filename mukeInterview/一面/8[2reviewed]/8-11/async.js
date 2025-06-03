@@ -1,3 +1,19 @@
+const fnNormal100 = async () => {
+  return 100 // 相当于Promise.resolve(100)
+}
+console.log('fnNormal100==>', fnNormal100())
+
+const fnRejected100 = async () => {
+  return Promise.reject(100) // 相当于Promise.resolve(100)
+}
+console.log('fnRejected100==>', fnRejected100())
+
+const fnRejected100C = async () => {
+  await Promise.reject(100)
+  console.log('fnRejected100C after==>', 999)
+}
+console.log('fnRejected100C==>', fnRejected100C())
+
 async function fn1() {
   return Promise.resolve(200)
 }
@@ -8,6 +24,14 @@ async function fn1() {
   const data = await p1 // await相当于promise then
   console.log('data', data)
 })()
+
+const asyncResolveWithoutReturn = async () => {
+  const p1 = Promise.resolve(300);
+  const data = await p1
+  console.log('asyncResolveWithoutReturn-data', data)
+}
+
+console.log('asyncResolveWithoutReturn==>', asyncResolveWithoutReturn())
 
 
 !(async function () {

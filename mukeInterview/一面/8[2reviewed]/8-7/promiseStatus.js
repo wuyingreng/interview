@@ -7,6 +7,7 @@ console.log('p1==>', p1)
 const p2 = new Promise((resolve, reject) => {
   setTimeout(() => {
     resolve()
+    console.log('测试下resolve之后代码还会不会执行9999') // resolve之后代码还是会执行的
   })
 })
 

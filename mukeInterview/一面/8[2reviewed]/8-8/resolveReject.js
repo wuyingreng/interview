@@ -2,11 +2,14 @@ const p1 = Promise.resolve().then(() => {
   return 100
 });
 
+
+
 console.log('p1==>', p1) // resolve 会触发后续then
 
 
 const p2 = Promise.resolve().then(() => {
   throw new Error('then error')
+  console.log('err')
 }).then(() => {
   console.log('p2 then after throw error==>', p2)
 }).catch(() => {
