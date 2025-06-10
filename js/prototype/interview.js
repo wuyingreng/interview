@@ -69,6 +69,10 @@ console.log(b.__proto__.__proto__ === A.prototype); // ?
 
 
 /** --------- 6. 手写instanceof----------*/
+/**
+ * 可以和遍历链表差不多：
+ * https://github.com/wuyingreng/interview/blob/main/mukeInterview/algorithm/5Link/5-7.js
+*/
 function myInstanceof(left, right) {
   let proto = Object.getPrototypeOf(left);
   const prototype = right.prototype;

@@ -181,3 +181,28 @@ axios.get('/data', {
 
 // 取消请求
 controller.abort('用户手动取消');
+
+class AbortController {
+  constructor() {
+    // 这里要加this
+    this.signal = {
+      aborted: false,
+      reason: undefined,
+      onabort: null,
+      addEventListenerL: (handler) => {
+        this.signal.onabort = handler;
+      },
+      removeEventListener: () => {
+        this.signal.onabort = null;
+      }
+    }
+  }
+  // 调用这个abort方法一定会强制再取消一次。改改reason
+  abort(reason) {
+    this.signal.aborted = true;
+    this.signal.reason = reason;
+    if (!this.signal.onabort) {
+      this.signal.onabort();
+    }
+  }
+}

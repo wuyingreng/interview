@@ -4,7 +4,11 @@
  * interceptors 拦截器相关
  * 方法
  * request,_dispatchRequest
- * 
+ * 核心要点：
+ * interceptor:每次是放2个的
+ * chain每次也是放2个
+ * 处理也是每次处理2个
+ * promise=promise.then(chain.shift(),chain.shift())
 */
 
 class Axios {
@@ -22,6 +26,7 @@ class Axios {
       request: {
         handlers: [],
         use: function (fulfilled, rejected) {
+          console.log('this==>', this)
           this.handlers.push(fulfilled, rejected);
           return this.handlers.length - 1
         },
@@ -134,3 +139,49 @@ class Axios {
   }
 
 }
+
+const axios = new Axios({ baseUrl: 'https://api.example.com' });
+
+axios.interceptors.request.use((config) => {
+  config.headers.Authorization = 'xxx';
+  // 这里要用return ,因为then函数链式调用的值来自于上一次返回的
+  return config;
+})
+
+// 返回的interceptor 要指定错误处理函数。因为要处理结果了。
+axios.interceptors.response.use((res) => {
+  const transformRes = transFunc(res);
+  return transformRes
+}, (err) => {
+  return err
+})
+
+// 取消请求：
+
+const abortController = new AbortController();
+
+axios.get('xxx', { signal: abortController.signal });
+
+abortController.abort('用户取消操作')
+
+
+class AbortController {
+  constructor() {
+    this.signal = {
+      aborted: false,
+      reason: null,
+      onabort: null,
+      addEventListener: (type, handler) => {
+        this.signal.onabort = handler;
+      },
+      removeEventListener: () => {
+        this.signal.onabort = null;
+      }
+    };
+  }
+  abort(reason) {
+    this.signal.aborted = true;
+    this.signal.reason = reason;
+    if (this.signal.onabort) this.signal.onabort();
+  }
+};
