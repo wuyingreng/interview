@@ -54,9 +54,11 @@ const bfs = (root) => {
   const q = [];
   q.push(root)
   while (q.length > 0) {
+    console.log('q==>', q)
     const n = q.shift()
     console.log('n==>', n.val)
     n.children.forEach(children => {
+      console.log('children==>', children)
       q.push(children)
     });
   }
