@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>清除浮动示例</title>
+  <style>
+    .par {
+      border: 1px solid #000;
+      margin-bottom: 20px;
+    }
+
+    .child {
+      float: left;
+      width: 100px;
+      height: 100px;
+      background-color: #3498db;
+    }
+
+    /* 方法1：使用overflow:hidden */
+    .par1 {
+      overflow: hidden;
+    }
+
+    /* 方法2：使用clear:both */
+    .par2::after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+
+    /* 方法3：使用clearfix类 */
+    .clearfix::after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+
+    /* 方法4：使用display:flow-root */
+    .par4 {
+      display: flow-root;
+    }
+
+    /* 添加说明样式 */
+    .description {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #3498db;
+    }
+
+    .pros {
+      color: #27ae60;
+    }
+
+    .cons {
+      color: #e74c3c;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 方法1：使用overflow:hidden -->
+  <div class="par par1">
+    <div class="child">方法1</div>
+  </div>
+  <div class="description">
+    <h3>方法1：使用 overflow: hidden</h3>
+    <p class="pros">优点：</p>
+    <ul>
+      <li>代码简洁，使用方便</li>
+      <li>兼容性好，支持所有浏览器</li>
+      <li>不需要额外的HTML元素</li>
+    </ul>
+    <p class="cons">缺点：</p>
+    <ul>
+      <li>可能会隐藏超出容器的内容</li>
+      <li>如果内容需要显示在容器外，则不能使用此方法</li>
+      <li>在某些情况下可能会影响定位元素</li>
+    </ul>
+  </div>
+
+  <!-- 方法2：使用clear:both -->
+  <div class="par par2">
+    <div class="child">方法2</div>
+  </div>
+  <div class="description">
+    <h3>方法2：使用 clear: both</h3>
+    <p class="pros">优点：</p>
+    <ul>
+      <li>不会影响其他样式</li>
+      <li>可以精确控制清除浮动的位置</li>
+      <li>兼容性好</li>
+    </ul>
+    <p class="cons">缺点：</p>
+    <ul>
+      <li>需要额外的CSS代码</li>
+      <li>如果忘记添加可能会出现问题</li>
+      <li>代码相对冗长</li>
+    </ul>
+  </div>
+
+  <!-- 方法3：使用clearfix类 -->
+  <div class="par clearfix">
+    <div class="child">方法3</div>
+  </div>
+  <div class="description">
+    <h3>方法3：使用 clearfix 类</h3>
+    <p class="pros">优点：</p>
+    <ul>
+      <li>可重用性强，一次定义多处使用</li>
+      <li>代码结构清晰</li>
+      <li>兼容性好</li>
+      <li>不会影响其他样式</li>
+    </ul>
+    <p class="cons">缺点：</p>
+    <ul>
+      <li>需要额外的类名</li>
+      <li>代码量相对较大</li>
+      <li>需要记住类名</li>
+    </ul>
+  </div>
+
+  <!-- 方法4：使用display:flow-root -->
+  <div class="par par4">
+    <div class="child">方法4</div>
+  </div>
+  <div class="description">
+    <h3>方法4：使用 display: flow-root</h3>
+    <p class="pros">优点：</p>
+    <ul>
+      <li>语义化好，专门用于创建BFC</li>
+      <li>代码简洁</li>
+      <li>不会产生副作用</li>
+      <li>现代浏览器支持良好</li>
+    </ul>
+    <p class="cons">缺点：</p>
+    <ul>
+      <li>不支持IE浏览器</li>
+      <li>需要现代浏览器支持</li>
+      <li>在某些特殊情况下可能会有兼容性问题</li>
+    </ul>
+  </div>
+</body>
+
+</html>

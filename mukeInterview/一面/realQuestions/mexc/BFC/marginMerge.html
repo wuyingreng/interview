@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BFC基础示例</title>
+  <style>
+    .container {
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+
+    /* 加上了这行代码中间的和上下的间距才会是20px */
+    .wrap {
+      /* 创建BFC */
+      overflow: hidden;
+      /* overflow: visible;不起作用 */
+      overflow: visible;
+    }
+
+    .box {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      background-color: #3498db;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="box">盒子1</div>
+    <div class="wrap">
+      <div class="box">盒子2</div>
+    </div>
+
+    <div class="box">盒子3</div>
+  </div>
+</body>
+
+</html>

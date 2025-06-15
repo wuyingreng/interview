@@ -10,29 +10,42 @@
       height: 100%;
     }
 
+    .container {
+      display: inline-flex;
+      border: 1px solid black;
+    }
+
+    .normal {
+      background-color: rgba(0, 0, 255, 0.2);
+      border: 3px solid blue;
+      width: 65px;
+      height: 65px;
+    }
+
     .fixed {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100px;
-      background: red;
-    }
-
-    .normal {
-      width: 100%;
-      height: 300px;
-      background: blue;
+      background-color: yellow;
+      border: 3px solid red;
+      z-index: 1;
+      width: 65px;
+      height: 65px;
     }
   </style>
 </head>
 
 <body class="window">
-  <div class="fixed" id="fixed1">
-    示例一
-  </div>
-  <div class="normal">
-    normal
+  <div class="container">
+    <div class="normal">
+      normal
+    </div>
+    <div class="fixed" id="fixed1">
+      position: fixed;
+    </div>
+    <div class="normal">
+      normal
+    </div>
   </div>
 </body>
 
