@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -6,9 +6,33 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
 
+  useEffect(() => {
+    // 设置基准字体大小
+    const setRootFontSize = () => {
+      const designWidth = 750; // 设计稿宽度
+      const htmlWidth = document.documentElement.clientWidth; // 实际设备宽度
+      console.log('htmlWidth==>', htmlWidth, 'designWidth==>', designWidth)
+      const fontSize = (htmlWidth / designWidth) * 100; // 计算基准字体大小
+      console.log('fontSize==>', fontSize)
+      document.documentElement.style.fontSize = fontSize + 'px';
+    };
+
+    // 初始化
+    setRootFontSize();
+    // 监听窗口变化
+    window.addEventListener('resize', setRootFontSize);
+
+    return () => {
+      window.removeEventListener('resize', setRootFontSize);
+    };
+  }, []);
+
   return (
     <>
       <div>
+        <div className="test">
+          99999
+        </div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
