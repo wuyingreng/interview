@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>二叉树中序遍历解析</title>
+  <style>
+    .container {
+      margin: 20px;
+      padding: 20px;
+      font-family: monospace;
+    }
+
+    .explanation {
+      margin: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #3498db;
+    }
+
+    .code-block {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+
+    .step {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      background-color: #f9f9f9;
+    }
+
+    .tree-visual {
+      text-align: center;
+      margin: 20px 0;
+      font-family: monospace;
+    }
+
+    .highlight {
+      background-color: #ffeb3b;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="explanation">
+    <h3>中序遍历代码分析：</h3>
+    <div class="code-block">
+      <pre>
+const inOrder = (root) => {
+  if (!root) return;
+  const stack = [];
+  let p = root;
+  while (stack.length > 0 || p) {
+    while (p) {
+      stack.push(p);
+      <span class="highlight">p = p.left;</span>  // 为什么这里是 p.left？
+    }
+    const n = stack.pop();
+    console.log('n', n.val);
+    <span class="highlight">p = n.right;</span>  // 为什么这里是 n.right？
+  }
+}
+            </pre>
+    </div>
+  </div>
+
+  <div class="tree-visual">
+    <h4>示例二叉树：</h4>
+    <pre>
+      4
+     / \
+    2   6
+   / \ / \
+  1  3 5  7
+        </pre>
+  </div>
+
+  <div class="explanation">
+    <h3>关键理解：p 和 n 的区别</h3>
+    <p><strong>1. p = p.left（内循环中）：</strong></p>
+    <ul>
+      <li><code>p</code> 是当前正在处理的节点</li>
+      <li>我们要一直向左走，找到最左边的节点</li>
+      <li>所以 <code>p = p.left</code> 让p指向当前节点的左子节点</li>
+      <li>这个过程中，p在不断变化：4 → 2 → 1 → null</li>
+    </ul>
+
+    <p><strong>2. p = n.right（访问节点后）：</strong></p>
+    <ul>
+      <li><code>n</code> 是刚从栈中弹出的节点（已经访问过的节点）</li>
+      <li>中序遍历：左 → 根 → 右</li>
+      <li>访问完根节点后，需要访问右子树</li>
+      <li>所以 <code>p = n.right</code> 让p指向已访问节点的右子节点</li>
+    </ul>
+
+    <h3>为什么不能都用 p？</h3>
+    <div class="code-block">
+      <pre>
+// 错误的写法：
+while (p) {
+  stack.push(p);
+  p = p.left;
+}
+const n = stack.pop();
+console.log('n', n.val);
+<span style="color: red;">p = p.right;  // 错误！此时p已经是null了</span>
+            </pre>
+    </div>
+    <p>因为在内循环结束时，<code>p</code> 已经是 <code>null</code>（最左节点的左子节点），所以 <code>p.right</code> 会报错！</p>
+  </div>
+
+  <div class="container">
+    <h3>详细执行步骤：</h3>
+    <div id="steps"></div>
+  </div>
+
+  <div class="explanation">
+    <h3>变量状态追踪：</h3>
+    <div id="variableStates"></div>
+  </div>
+
+  <script>
+    // 二叉树节点定义
+    class TreeNode {
+      constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+      }
+    }
+
+    // 构建示例树
+    const root = new TreeNode(4,
+      new TreeNode(2,
+        new TreeNode(1),
+        new TreeNode(3)
+      ),
+      new TreeNode(6,
+        new TreeNode(5),
+        new TreeNode(7)
+      )
+    );
+
+    // 中序遍历（带详细步骤和变量状态）
+    function inOrderWithDetailedSteps(root) {
+      if (!root) return;
+      const stack = [];
+      let p = root;
+      let step = 1;
+      const steps = [];
+      const states = [];
+
+      while (stack.length > 0 || p) {
+        // 记录循环开始时的状态
+        states.push({
+          step: step - 1,
+          p: p ? p.val : 'null',
+          stack: stack.map(node => node.val),
+          action: '循环开始'
+        });
+
+        // 第一个内循环：一直向左走
+        while (p) {
+          steps.push(`步骤${step}: 将节点${p.val}入栈，p从${p.val}变为${p.left ? p.left.val : 'null'}`);
+          states.push({
+            step: step,
+            p: p.val,
+            stack: [...stack.map(node => node.val), p.val],
+            action: `p = p.left (${p.val} → ${p.left ? p.left.val : 'null'})`
+          });
+          stack.push(p);
+          p = p.left;
+          step++;
+        }
+
+        // 弹出节点并访问
+        const n = stack.pop();
+        steps.push(`步骤${step}: 弹出节点${n.val}，访问它`);
+        states.push({
+          step: step,
+          p: 'null',
+          stack: stack.map(node => node.val),
+          action: `弹出并访问节点${n.val}`
+        });
+        step++;
+
+        // 转向右子树
+        p = n.right;
+        steps.push(`步骤${step}: p从null变为${p ? p.val : 'null'} (n.right)`);
+        states.push({
+          step: step,
+          p: p ? p.val : 'null',
+          stack: stack.map(node => node.val),
+          action: `p = n.right (null → ${p ? p.val : 'null'})`
+        });
+        step++;
+      }
+
+      return { steps, states };
+    }
+
+    // 显示执行步骤
+    const { steps, states } = inOrderWithDetailedSteps(root);
+
+    const stepsDiv = document.getElementById('steps');
+    steps.forEach(step => {
+      const div = document.createElement('div');
+      div.className = 'step';
+      div.textContent = step;
+      stepsDiv.appendChild(div);
+    });
+
+    // 显示变量状态
+    const statesDiv = document.getElementById('variableStates');
+    const table = document.createElement('table');
+    table.style.borderCollapse = 'collapse';
+    table.style.width = '100%';
+    table.innerHTML = `
+      <tr style="background-color: #f0f0f0;">
+        <th style="border: 1px solid #ddd; padding: 8px;">步骤</th>
+        <th style="border: 1px solid #ddd; padding: 8px;">p的值</th>
+        <th style="border: 1px solid #ddd; padding: 8px;">栈内容</th>
+        <th style="border: 1px solid #ddd; padding: 8px;">操作</th>
+      </tr>
+    `;
+
+    states.forEach(state => {
+      const row = table.insertRow();
+      row.innerHTML = `
+        <td style="border: 1px solid #ddd; padding: 8px;">${state.step}</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">${state.p}</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">[${state.stack.join(', ')}]</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">${state.action}</td>
+      `;
+    });
+
+    statesDiv.appendChild(table);
+  </script>
+</body>
+
+</html>
