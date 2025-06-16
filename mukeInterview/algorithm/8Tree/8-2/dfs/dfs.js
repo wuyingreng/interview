@@ -35,10 +35,10 @@ const tree = {
 
 const dfs = (root) => {
   /**
-   * for each遇到空数组会自动退出
+   * forEach在空数组上不会执行任何操作。调用栈就往上一层走了
    * 遍历是为了访问，所以要打印console.log
   */
-  console.log('root.val==>', root.val)
+  console.log('root.val==>', root, root.val)
   return root.children.forEach(dfs);
 }
 
