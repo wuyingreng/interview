@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>虚拟滚动原理示例</title>
+  <style>
+    .container {
+      width: 300px;
+      height: 400px;
+      border: 1px solid #ccc;
+      margin: 20px;
+      position: relative;
+      overflow: scroll;
+    }
+
+    .virtual-list {
+      position: relative;
+      width: 100%;
+    }
+
+    .item {
+      height: 50px;
+      line-height: 50px;
+      padding: 0 20px;
+      border-bottom: 1px solid #eee;
+      box-sizing: border-box;
+    }
+
+    /* 添加缓冲区可视化样式 */
+    .item.buffer-top {
+      background-color: #e8f5e9;
+    }
+
+    .item.buffer-bottom {
+      background-color: #e3f2fd;
+    }
+
+    .item.visible {
+      background-color: #fff3e0;
+    }
+
+    .explanation {
+      margin: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #3498db;
+    }
+
+    .debug-info {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    /* 添加可视区域指示器 */
+    .viewport-indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 400px;
+      border: 2px dashed red;
+      pointer-events: none;
+      z-index: 1000;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="explanation">
+    <h3>虚拟滚动原理：</h3>
+    <p>1. 只渲染可视区域的内容</p>
+    <p>2. 通过计算滚动位置，动态更新渲染的内容</p>
+    <p>3. 使用占位元素保持滚动条的正确高度</p>
+    <p>4. 使用缓冲区提升滚动体验</p>
+    <p>5. <strong>使用transform向上移动内容到正确位置</strong></p>
+  </div>
+
+  <div class="container" id="container">
+    <div class="viewport-indicator"></div>
+    <div class="virtual-list" id="virtualList"></div>
+  </div>
+
+  <div class="debug-info" id="debugInfo">
+    当前显示: 0-0 项<br>
+    总高度: 0px<br>
+    缓冲区: 上下各5项<br>
+    Transform: 0px
+  </div>
+
+  <script>
+    // 模拟数据
+    const totalItems = 1000;
+    const itemHeight = 50;
+    const visibleItems = Math.ceil(400 / itemHeight); // 可视区域能显示的项目数
+    const bufferItems = 5; // 上下缓冲区的项目数
+
+    // 初始化
+    const container = document.getElementById('container');
+    const virtualList = document.getElementById('virtualList');
+    const debugInfo = document.getElementById('debugInfo');
+
+    // 设置总高度 - 这是关键！保持滚动条的正确高度
+    virtualList.style.height = `${totalItems * itemHeight}px`;
+
+    // 渲染函数
+    function renderItems(startIndex) {
+      // 计算需要渲染的项目范围
+      const endIndex = Math.min(startIndex + visibleItems + bufferItems * 2, totalItems);
+      const start = Math.max(0, startIndex - bufferItems);
+
+      // 关键：使用负值向上移动内容
+      // 因为我们渲染的是从start开始的内容，但需要显示在正确位置
+      const translateY = -start * itemHeight;
+      virtualList.style.transform = `translateY(${translateY}px)`;
+
+      // 清空并重新渲染
+      virtualList.innerHTML = '';
+      for (let i = start; i < endIndex; i++) {
+        const item = document.createElement('div');
+        item.className = 'item';
+
+        // 添加缓冲区可视化
+        if (i < startIndex) {
+          item.classList.add('buffer-top');
+        } else if (i >= startIndex + visibleItems) {
+          item.classList.add('buffer-bottom');
+        } else {
+          item.classList.add('visible');
+        }
+
+        item.textContent = `Item ${i + 1}`;
+        virtualList.appendChild(item);
+      }
+
+      // 更新调试信息
+      debugInfo.innerHTML = `
+                当前显示: ${startIndex}-${startIndex + visibleItems} 项<br>
+                实际渲染: ${start}-${endIndex} 项<br>
+                总高度: ${totalItems * itemHeight}px<br>
+                缓冲区: 上下各${bufferItems}项<br>
+                Transform: ${translateY}px (向上移动)
+            `;
+    }
+
+    // 监听滚动事件
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const startIndex = Math.floor(scrollTop / itemHeight);
+      renderItems(startIndex);
+    });
+
+    // 初始渲染
+    renderItems(0);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transform原理解释</title>
+  <style>
+    .demo-container {
+      width: 300px;
+      height: 200px;
+      border: 2px solid #333;
+      margin: 20px;
+      position: relative;
+      overflow: hidden;
+      background-color: #f0f0f0;
+    }
+
+    .content {
+      width: 100%;
+      background-color: #3498db;
+      color: white;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .explanation {
+      margin: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #3498db;
+    }
+
+    .controls {
+      margin: 20px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="explanation">
+    <h3>Transform: translateY() 原理解释：</h3>
+    <p>1. transform不会移动滚动条</p>
+    <p>2. transform移动的是元素本身</p>
+    <p>3. 正值向下移动，负值向上移动</p>
+    <p>4. 在虚拟滚动中，我们用它来定位内容</p>
+  </div>
+
+  <div class="demo-container" id="container">
+    <div class="content" id="content">
+      这是要移动的内容<br>
+      当前位置: 0px
+    </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="moveContent(0)">位置: 0px</button>
+    <button onclick="moveContent(50)">位置: 50px (向下)</button>
+    <button onclick="moveContent(-50)">位置: -50px (向上)</button>
+    <button onclick="moveContent(100)">位置: 100px (向下)</button>
+    <button onclick="moveContent(-100)">位置: -100px (向上)</button>
+  </div>
+
+  <div class="explanation">
+    <h3>在虚拟滚动中的应用：</h3>
+    <p>当我们滚动到第10项时：</p>
+    <ul>
+      <li>我们需要渲染第5-28项（包含缓冲区）</li>
+      <li>但这些内容默认会从容器顶部开始显示</li>
+      <li>我们需要将内容向上移动 250px (5 * 50px)</li>
+      <li>这样第10项就会出现在可视区域顶部</li>
+    </ul>
+    <p><strong>关键：transform是向上移动内容，而不是移动滚动条！</strong></p>
+  </div>
+
+  <script>
+    function moveContent(value) {
+      const content = document.getElementById('content');
+      content.style.transform = `translateY(${value}px)`;
+      content.innerHTML = `
+                这是要移动的内容<br>
+                当前位置: ${value}px<br>
+                ${value > 0 ? '向下移动' : value < 0 ? '向上移动' : '原始位置'}
+            `;
+    }
+  </script>
+</body>
+
+</html>
