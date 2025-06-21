@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>满二叉树但非完美二叉树示例</title>
+  <style>
+    .container {
+      margin: 20px;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      max-width: 1200px;
+    }
+
+    .explanation {
+      margin: 20px 0;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #2196f3;
+      border-radius: 5px;
+    }
+
+    .tree-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin: 30px 0;
+    }
+
+    .tree-card {
+      padding: 20px;
+      border-radius: 10px;
+      border: 3px solid;
+      background-color: white;
+      text-align: center;
+    }
+
+    .card-full {
+      border-color: #2196f3;
+      background-color: #e3f2fd;
+    }
+
+    .card-perfect {
+      border-color: #9c27b0;
+      background-color: #f3e5f5;
+    }
+
+    .tree-svg {
+      width: 100%;
+      max-width: 400px;
+      height: 300px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: white;
+      margin: 10px auto;
+      display: block;
+    }
+
+    .array-display {
+      background-color: #2d3748;
+      color: #e2e8f0;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 14px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .feature-list {
+      text-align: left;
+      font-size: 14px;
+      margin: 15px 0;
+    }
+
+    .feature-list li {
+      margin: 8px 0;
+    }
+
+    .highlight {
+      background-color: #ffeb3b;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+
+    .comparison {
+      background-color: #fff3cd;
+      padding: 20px;
+      border-left: 4px solid #ffc107;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+
+    .key-point {
+      background-color: #d1ecf1;
+      padding: 15px;
+      border-left: 4px solid #17a2b8;
+      margin: 15px 0;
+      border-radius: 5px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: #2c3e50;
+    }
+
+    .status-icon {
+      font-size: 20px;
+      margin-right: 8px;
+    }
+
+    .tree-legend {
+      font-size: 12px;
+      color: #666;
+      margin: 10px 0;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="explanation">
+    <h1>🌳 满二叉树 vs 完美二叉树</h1>
+    <h2>满二叉树但不是完美二叉树的典型例子</h2>
+  </div>
+
+  <div class="container">
+    <!-- 核心概念解释 -->
+    <div class="key-point">
+      <h3>🎯 核心区别</h3>
+      <p><strong>满二叉树 (Full Binary Tree)：</strong>每个节点要么有0个子节点，要么有2个子节点（绝不能只有1个子节点）</p>
+      <p><strong>完美二叉树 (Perfect Binary Tree)：</strong>所有叶子节点都在同一层，且所有内部节点都有2个子节点</p>
+      <p><span class="highlight">关键：满二叉树的叶子节点可以在不同层！</span></p>
+    </div>
+
+    <!-- 两个树的对比 -->
+    <div class="tree-container">
+      <!-- 满二叉树但非完美 -->
+      <div class="tree-card card-full">
+        <h4><span class="status-icon">🔵</span>满二叉树（非完美）</h4>
+        <svg class="tree-svg" viewBox="0 0 400 300">
+          <!-- 连线 -->
+          <line x1="200" y1="30" x2="140" y2="80" stroke="#2196f3" stroke-width="3" />
+          <line x1="200" y1="30" x2="260" y2="80" stroke="#2196f3" stroke-width="3" />
+          <line x1="140" y1="80" x2="100" y2="130" stroke="#2196f3" stroke-width="3" />
+          <line x1="140" y1="80" x2="180" y2="130" stroke="#2196f3" stroke-width="3" />
+          <!-- 注意：节点3只是叶子节点，没有子节点 -->
+          <line x1="100" y1="130" x2="70" y2="180" stroke="#2196f3" stroke-width="3" />
+          <line x1="100" y1="130" x2="130" y2="180" stroke="#2196f3" stroke-width="3" />
+          <line x1="180" y1="130" x2="150" y2="180" stroke="#2196f3" stroke-width="3" />
+          <line x1="180" y1="130" x2="210" y2="180" stroke="#2196f3" stroke-width="3" />
+
+          <!-- 节点 -->
+          <circle cx="200" cy="30" r="15" fill="#2196f3" stroke="#1565c0" stroke-width="3" />
+          <text x="200" y="37" text-anchor="middle" fill="white" font-size="12" font-weight="bold">1</text>
+
+          <circle cx="140" cy="80" r="15" fill="#2196f3" stroke="#1565c0" stroke-width="3" />
+          <text x="140" y="87" text-anchor="middle" fill="white" font-size="12" font-weight="bold">2</text>
+
+          <!-- 这个节点是叶子节点（第2层） -->
+          <circle cx="260" cy="80" r="15" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="260" y="87" text-anchor="middle" fill="white" font-size="12" font-weight="bold">3</text>
+
+          <circle cx="100" cy="130" r="15" fill="#2196f3" stroke="#1565c0" stroke-width="3" />
+          <text x="100" y="137" text-anchor="middle" fill="white" font-size="12" font-weight="bold">4</text>
+
+          <circle cx="180" cy="130" r="15" fill="#2196f3" stroke="#1565c0" stroke-width="3" />
+          <text x="180" y="137" text-anchor="middle" fill="white" font-size="12" font-weight="bold">5</text>
+
+          <!-- 第4层的叶子节点 -->
+          <circle cx="70" cy="180" r="15" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="70" y="187" text-anchor="middle" fill="white" font-size="12" font-weight="bold">6</text>
+
+          <circle cx="130" cy="180" r="15" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="130" y="187" text-anchor="middle" fill="white" font-size="12" font-weight="bold">7</text>
+
+          <circle cx="150" cy="180" r="15" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="150" y="187" text-anchor="middle" fill="white" font-size="12" font-weight="bold">8</text>
+
+          <circle cx="210" cy="180" r="15" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="210" y="187" text-anchor="middle" fill="white" font-size="12" font-weight="bold">9</text>
+
+          <!-- 图例 -->
+          <text x="200" y="220" text-anchor="middle" fill="#2196f3" font-size="12"
+            font-weight="bold">蓝色：内部节点(2个子节点)</text>
+          <text x="200" y="240" text-anchor="middle" fill="#4caf50" font-size="12"
+            font-weight="bold">绿色：叶子节点(0个子节点)</text>
+          <text x="200" y="260" text-anchor="middle" fill="#e91e63" font-size="12"
+            font-weight="bold">注意：叶子节点在不同层！</text>
+        </svg>
+
+        <div class="array-display">[1, 2, 3, 4, 5, null, null, 6, 7, 8, 9]</div>
+        <div class="tree-legend">
+          <strong>满二叉树特征：</strong><br>
+          ✅ 每个节点要么0个子节点，要么2个子节点<br>
+          ✅ 没有只有1个子节点的节点<br>
+          ❌ 叶子节点在第2层和第4层（不同层）
+        </div>
+        <ul class="feature-list">
+          <li>🔵 <strong>节点1：</strong>2个子节点 ✅</li>
+          <li>🔵 <strong>节点2：</strong>2个子节点 ✅</li>
+          <li>🟢 <strong>节点3：</strong>0个子节点 ✅ (叶子)</li>
+          <li>🔵 <strong>节点4：</strong>2个子节点 ✅</li>
+          <li>🔵 <strong>节点5：</strong>2个子节点 ✅</li>
+          <li>🟢 <strong>节点6,7,8,9：</strong>0个子节点 ✅ (叶子)</li>
+        </ul>
+      </div>
+
+      <!-- 完美二叉树对比 -->
+      <div class="tree-card card-perfect">
+        <h4><span class="status-icon">💎</span>完美二叉树（对比）</h4>
+        <svg class="tree-svg" viewBox="0 0 400 300">
+          <!-- 连线 -->
+          <line x1="200" y1="30" x2="140" y2="80" stroke="#9c27b0" stroke-width="3" />
+          <line x1="200" y1="30" x2="260" y2="80" stroke="#9c27b0" stroke-width="3" />
+          <line x1="140" y1="80" x2="100" y2="130" stroke="#9c27b0" stroke-width="3" />
+          <line x1="140" y1="80" x2="180" y2="130" stroke="#9c27b0" stroke-width="3" />
+          <line x1="260" y1="80" x2="220" y2="130" stroke="#9c27b0" stroke-width="3" />
+          <line x1="260" y1="80" x2="300" y2="130" stroke="#9c27b0" stroke-width="3" />
+          <line x1="100" y1="130" x2="70" y2="180" stroke="#9c27b0" stroke-width="3" />
+          <line x1="100" y1="130" x2="130" y2="180" stroke="#9c27b0" stroke-width="3" />
+          <line x1="180" y1="130" x2="150" y2="180" stroke="#9c27b0" stroke-width="3" />
+          <line x1="180" y1="130" x2="210" y2="180" stroke="#9c27b0" stroke-width="3" />
+          <line x1="220" y1="130" x2="190" y2="180" stroke="#9c27b0" stroke-width="3" />
+          <line x1="220" y1="130" x2="250" y2="180" stroke="#9c27b0" stroke-width="3" />
+          <line x1="300" y1="130" x2="270" y2="180" stroke="#9c27b0" stroke-width="3" />
+          <line x1="300" y1="130" x2="330" y2="180" stroke="#9c27b0" stroke-width="3" />
+
+          <!-- 节点 -->
+          <circle cx="200" cy="30" r="15" fill="#9c27b0" stroke="#6a1b9a" stroke-width="3" />
+          <text x="200" y="37" text-anchor="middle" fill="white" font-size="12" font-weight="bold">1</text>
+
+          <circle cx="140" cy="80" r="15" fill="#9c27b0" stroke="#6a1b9a" stroke-width="3" />
+          <text x="140" y="87" text-anchor="middle" fill="white" font-size="12" font-weight="bold">2</text>
+
+          <circle cx="260" cy="80" r="15" fill="#9c27b0" stroke="#6a1b9a" stroke-width="3" />
+          <text x="260" y="87" text-anchor="middle" fill="white" font-size="12" font-weight="bold">3</text>
+
+          <circle cx="100" cy="130" r="15" fill="#9c27b0" stroke="#6a1b9a" stroke-width="3" />
+          <text x="100" y="137" text-anchor="middle" fill="white" font-size="12" font-weight="bold">4</text>
+
+          <circle cx="180" cy="130" r="15" fill="#9c27b0" stroke="#6a1b9a" stroke-width="3" />
+          <text x="180" y="137" text-anchor="middle" fill="white" font-size="12" font-weight="bold">5</text>
+
+          <circle cx="220" cy="130" r="15" fill="#9c27b0" stroke="#6a1b9a" stroke-width="3" />
+          <text x="220" y="137" text-anchor="middle" fill="white" font-size="12" font-weight="bold">6</text>
+
+          <circle cx="300" cy="130" r="15" fill="#9c27b0" stroke="#6a1b9a" stroke-width="3" />
+          <text x="300" y="137" text-anchor="middle" fill="white" font-size="12" font-weight="bold">7</text>
+
+          <!-- 所有叶子节点都在同一层 -->
+          <circle cx="70" cy="180" r="12" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="70" y="186" text-anchor="middle" fill="white" font-size="10" font-weight="bold">8</text>
+
+          <circle cx="130" cy="180" r="12" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="130" y="186" text-anchor="middle" fill="white" font-size="10" font-weight="bold">9</text>
+
+          <circle cx="150" cy="180" r="12" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="150" y="186" text-anchor="middle" fill="white" font-size="10" font-weight="bold">10</text>
+
+          <circle cx="210" cy="180" r="12" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="210" y="186" text-anchor="middle" fill="white" font-size="10" font-weight="bold">11</text>
+
+          <circle cx="190" cy="180" r="12" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="190" y="186" text-anchor="middle" fill="white" font-size="10" font-weight="bold">12</text>
+
+          <circle cx="250" cy="180" r="12" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="250" y="186" text-anchor="middle" fill="white" font-size="10" font-weight="bold">13</text>
+
+          <circle cx="270" cy="180" r="12" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="270" y="186" text-anchor="middle" fill="white" font-size="10" font-weight="bold">14</text>
+
+          <circle cx="330" cy="180" r="12" fill="#4caf50" stroke="#2e7d32" stroke-width="3" />
+          <text x="330" y="186" text-anchor="middle" fill="white" font-size="10" font-weight="bold">15</text>
+
+          <text x="200" y="220" text-anchor="middle" fill="#9c27b0" font-size="12"
+            font-weight="bold">紫色：内部节点(都有2个子节点)</text>
+          <text x="200" y="240" text-anchor="middle" fill="#4caf50" font-size="12"
+            font-weight="bold">绿色：叶子节点(都在同一层)</text>
+          <text x="200" y="260" text-anchor="middle" fill="#e91e63" font-size="12"
+            font-weight="bold">完美：所有叶子在第4层！</text>
+        </svg>
+
+        <div class="array-display">[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]</div>
+        <div class="tree-legend">
+          <strong>完美二叉树特征：</strong><br>
+          ✅ 每个内部节点都有2个子节点<br>
+          ✅ 所有叶子节点都在同一层（第4层）<br>
+          ✅ 节点总数 = 2^h - 1 = 15
+        </div>
+        <ul class="feature-list">
+          <li>💎 <strong>高度4，节点数15</strong></li>
+          <li>💎 <strong>完全对称结构</strong></li>
+          <li>💎 <strong>既是满二叉树又是完全二叉树</strong></li>
+          <li>💎 <strong>所有叶子在同一层</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 详细分析 -->
+    <div class="comparison">
+      <h3>🔍 详细分析：为什么左边是满二叉树但不是完美二叉树？</h3>
+
+      <h4>✅ 满足满二叉树条件：</h4>
+      <ul>
+        <li><strong>节点1：</strong>有2个子节点（节点2, 3）</li>
+        <li><strong>节点2：</strong>有2个子节点（节点4, 5）</li>
+        <li><strong>节点3：</strong>有0个子节点（叶子节点）</li>
+        <li><strong>节点4：</strong>有2个子节点（节点6, 7）</li>
+        <li><strong>节点5：</strong>有2个子节点（节点8, 9）</li>
+        <li><strong>节点6,7,8,9：</strong>都有0个子节点（叶子节点）</li>
+        <li><span class="highlight">关键：没有任何节点只有1个子节点！</span></li>
+      </ul>
+
+      <h4>❌ 不满足完美二叉树条件：</h4>
+      <ul>
+        <li><strong>叶子节点不在同一层：</strong></li>
+        <ul>
+          <li>节点3在第2层（深度1）</li>
+          <li>节点6,7,8,9在第4层（深度3）</li>
+        </ul>
+        <li><strong>不是所有内部节点都在同一深度：</strong>节点3是叶子，但节点2,4,5是内部节点</li>
+      </ul>
+    </div>
+
+    <!-- 更多例子 -->
+    <div class="key-point">
+      <h3>🌟 更多满二叉树但非完美二叉树的例子</h3>
+
+      <h4>例子1：简单情况</h4>
+      <div class="array-display">树结构: 1 → (2, 3)，其中2和3都是叶子</div>
+      <p><strong>分析：</strong>节点1有2个子节点，节点2和3有0个子节点。满足满二叉树，但高度只有2，不够"完美"。</p>
+
+      <h4>例子2：不对称情况</h4>
+      <div class="array-display">
+        树结构:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;1<br>
+        &nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;\<br>
+        &nbsp;2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3<br>
+        /&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;\<br>
+        4&nbsp;&nbsp;5&nbsp;&nbsp;6&nbsp;&nbsp;7
+      </div>
+      <p><strong>分析：</strong>如果我们把节点6和7移除，那么节点3变成叶子，而节点4,5仍然是叶子。这样叶子节点就在不同层了。</p>
+
+      <h4>🎯 记忆要点</h4>
+      <ul>
+        <li><span class="highlight">满二叉树</span>：关注的是"子节点数量"（0或2，不能是1）</li>
+        <li><span class="highlight">完美二叉树</span>：关注的是"结构完美性"（所有叶子同层）</li>
+        <li><span class="highlight">关键区别</span>：满二叉树允许叶子在不同层，完美二叉树不允许</li>
+      </ul>
+    </div>
+  </div>
+</body>
+
+</html>
