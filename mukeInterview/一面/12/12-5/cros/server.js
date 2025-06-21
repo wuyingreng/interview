@@ -7,11 +7,13 @@ const server = http.createServer((req, res) => {
   // 设置 CORS 头（关键部分）
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8011')
   res.setHeader('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization')
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization,token')
   res.setHeader('Access-Control-Allow-Credentials', 'true')
 
   // 处理预检请求
   if (req.method === 'OPTIONS') {
+    // 设置预检请求缓存时间为24小时（86400秒）
+    res.setHeader('Access-Control-Max-Age', '86400')
     res.writeHead(204)
     res.end()
     return

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>如何减少重绘和重排</title>
+  <link rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <div id="box"></div>
+  <div id="container"></div>
+  <script>
+    // 正确做法1：使用cssText批量修改
+    const element = document.getElementById('box');
+
+    element.style.cssText = `
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    margin: 5px;
+  `;
+
+    // ✅ 正确做法：使用DocumentFragment批量操作
+    const container = document.getElementById('container');
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < 1000; i++) {
+      const div = document.createElement('div');
+      div.textContent = `Item ${i}`;
+      fragment.appendChild(div); // 在内存中操作，不触发重排
+    }
+
+    container.appendChild(fragment); // 只触发一次重排
+
+
+  </script>
+</body>
+
+</html>

@@ -28,8 +28,7 @@ function throttle(fn, delay = 100) {
         }, delay)
     }
 }
-
-div1.addEventListener('drag', throttle(function (e) {
+const throttleFn = throttle(function (e) {
     /**
      * e的来源是参数传递，而不是全局变量或其他作用域
      * 传递过程：addEventListener 把e pass给了上面return回来的匿名函数
@@ -39,6 +38,7 @@ div1.addEventListener('drag', throttle(function (e) {
     */
 
     console.log(e.offsetX, e.offsetY)
-}), 5000)
+}, 5000)
+div1.addEventListener('drag', throttleFn)
 
 

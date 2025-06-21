@@ -90,10 +90,10 @@ class Axios {
       }
       // 处理用户手动取消请求
       if (config.signal) {
-        signal.addEventListener('abort', () => {
-          xhr.abort();
-          reject('用户取消了请求')
-        })
+        // signal.addEventListener('abort', () => {
+        //   xhr.abort();
+        //   reject('用户取消了请求')
+        // })
       }
       const url = config.baseUrl + config.url;
       // 打开请求
