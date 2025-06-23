@@ -1,3 +1,4 @@
+
 function myObjectCreate(proto) {
   function F() { } // 创建一个空的构造函数
   F.prototype = proto; // 设置原型
