@@ -1,5 +1,6 @@
 
 
+import Class from './Class';
 
 function App() {
   // 类型断言
@@ -48,6 +49,7 @@ function App() {
       <div>{arr2}</div>
       <div>{x}</div>
       <div>c:{c}</div>
+      <Class />
     </div>
   );
 }

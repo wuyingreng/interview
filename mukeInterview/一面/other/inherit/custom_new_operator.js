@@ -39,6 +39,14 @@ function myNew2(constructor, ...args) {
   return result instanceof Object ? result : obj;
 }
 
+function myNew2(constructor, ...args) {
+  const obj = {};
+  obj.__proto__ = Object.create(constructor.prototype);
+  console.log('args==>', args, ...args)
+  const result = constructor.apply(obj, args)
+  return typeof result === 'object' ? result : obj
+}
+
 /**
  * 完整版本（包含更多边界检查）
  */
