@@ -4,12 +4,6 @@ bin/www.js:基本的server相关的技术
 app.js:业务层面的，业务代码
 
 
-## 基本配置
-在这个例子中，服务器和浏览器还是用一个端口，一个本地localhost
-
-1. npm init 初始化项目
-2. bin 放初次的代码
-3. 执行node bin/www.js，在浏览器访问localhost:8000端口
 
 ## 进阶下
 1. 用淘宝镜像下载包nodemon cross-env
@@ -38,3 +32,9 @@ nodemon 只是会自动重启node，可以看到terminal变化如下
 但是为了看到效果，浏览器还是需要重新刷新。
 这个和自动刷新机制和热更新机制是分开的
 
+3. 在localhost:8000/url
+可以看到不同的返回
+4. postman
+账号：414615448@qq.com
+访问路径：
+http://localhost:8000/api/blog/list
