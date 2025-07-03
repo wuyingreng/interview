@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>浮动元素BFC核心演示</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .example {
+      background: white;
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    /* 核心演示：浮动元素包含浮动子元素 */
+    .float-bfc-container {
+      float: left;
+      /* 关键：这里形成BFC */
+      width: 300px;
+      border: 4px solid #e74c3c;
+      background: #ffebee;
+      padding: 10px;
+      margin-right: 20px;
+    }
+
+    .float-bfc-container::before {
+      content: "BFC容器 (float: left)";
+      display: block;
+      background: #e74c3c;
+      color: white;
+      padding: 5px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .normal-container {
+      width: 300px;
+      border: 4px solid #666;
+      background: #f5f5f5;
+      padding: 10px;
+    }
+
+    .normal-container::before {
+      content: "普通容器 (无BFC)";
+      display: block;
+      background: #666;
+      color: white;
+      padding: 5px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .float-item {
+      float: left;
+      width: 60px;
+      height: 60px;
+      background: #2196F3;
+      margin: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .clear {
+      clear: both;
+    }
+
+    /* 右浮动演示 */
+    .float-right-bfc {
+      float: right;
+      /* 右浮动也形成BFC */
+      width: 200px;
+      border: 4px solid #ff9800;
+      background: #fff3e0;
+      padding: 10px;
+      margin-left: 20px;
+    }
+
+    .float-right-bfc::before {
+      content: "右浮动BFC (float: right)";
+      display: block;
+      background: #ff9800;
+      color: white;
+      padding: 5px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    /* BFC边界演示 */
+    .boundary-demo {
+      height: 200px;
+      background: #4caf50;
+      color: white;
+      padding: 10px;
+    }
+
+    .boundary-demo.with-bfc {
+      overflow: hidden;
+      /* 形成BFC，不与浮动元素重叠 */
+      background: #2196F3;
+    }
+
+    .explanation {
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🎯 浮动元素形成BFC - 核心演示</h1>
+
+  <!-- 演示1：BFC包含浮动子元素 -->
+  <div class="example">
+    <h2>演示1：BFC包含浮动子元素的关键差异</h2>
+
+    <div style="display: flex; gap: 20px; align-items: flex-start;">
+      <div class="float-bfc-container">
+        <div class="float-item">1</div>
+        <div class="float-item">2</div>
+        <div class="float-item">3</div>
+        <div class="float-item">4</div>
+      </div>
+
+      <div class="normal-container">
+        <div class="float-item">1</div>
+        <div class="float-item">2</div>
+        <div class="float-item">3</div>
+        <div class="float-item">4</div>
+      </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="explanation">
+      <strong>关键对比：</strong><br>
+      🔴 <strong>浮动BFC容器</strong>：高度自动扩展，完全包含了内部的浮动子元素<br>
+      ⚫ <strong>普通容器</strong>：高度塌陷，浮动子元素"逃出"了容器
+    </div>
+  </div>
+
+  <!-- 演示2：左右浮动都形成BFC -->
+  <div class="example">
+    <h2>演示2：float: left 和 float: right 都形成BFC</h2>
+
+    <div style="overflow: hidden;">
+      <div class="float-bfc-container" style="float: left;">
+        <div class="float-item">A</div>
+        <div class="float-item">B</div>
+      </div>
+
+      <div class="float-right-bfc">
+        <div class="float-item">C</div>
+        <div class="float-item">D</div>
+      </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="explanation">
+      <strong>左右浮动特性：</strong><br>
+      • <code>float: left</code> 和 <code>float: right</code> 都会触发BFC<br>
+      • 两个浮动BFC容器都能正确包含其内部的浮动子元素
+    </div>
+  </div>
+
+  <!-- 演示3：BFC边界不重叠 -->
+  <div class="example">
+    <h2>演示3：BFC元素不与浮动元素重叠</h2>
+
+    <div style="overflow: hidden; margin-bottom: 20px;">
+      <div style="float: left; width: 150px; height: 100px; background: #f44336; color: white; padding: 10px;">
+        浮动元素<br>(float: left)
+      </div>
+      <div class="boundary-demo">
+        普通div - 内容会环绕浮动元素，文字在浮动元素右侧继续显示
+      </div>
+    </div>
+
+    <div style="overflow: hidden;">
+      <div style="float: left; width: 150px; height: 100px; background: #f44336; color: white; padding: 10px;">
+        浮动元素<br>(float: left)
+      </div>
+      <div class="boundary-demo with-bfc">
+        BFC div - 通过overflow:hidden形成BFC，完全独立，不与浮动元素重叠
+      </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="explanation">
+      <strong>BFC边界规则：</strong><br>
+      🟢 <strong>普通元素</strong>：内容会环绕浮动元素<br>
+      🔵 <strong>BFC元素</strong>：与浮动元素保持独立，不发生重叠
+    </div>
+  </div>
+
+  <!-- 关键代码 -->
+  <div class="example">
+    <h2>🔧 关键CSS代码</h2>
+    <pre
+      style="background: #263238; color: #fff; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px;">
+<span style="color: #82b1ff;">/* 浮动元素形成BFC的核心代码 */</span>
+<span style="color: #a5d6a7;">.float-bfc-container</span> {
+    <span style="color: #ffab91;">float</span>: <span style="color: #81c784;">left</span>;   <span style="color: #82b1ff;">/* 👈 这行代码触发BFC */</span>
+    <span style="color: #ffab91;">width</span>: <span style="color: #f8bbd9;">300px</span>;
+    <span style="color: #ffab91;">border</span>: <span style="color: #f8bbd9;">4px solid #e74c3c</span>;
+}
+
+<span style="color: #82b1ff;">/* BFC的四个核心特性：*/</span>
+<span style="color: #82b1ff;">/* 1. 包含内部浮动元素（防止高度塌陷）*/</span>
+<span style="color: #82b1ff;">/* 2. 不与其他浮动元素重叠 */</span>
+<span style="color: #82b1ff;">/* 3. 防止margin塌陷 */</span>
+<span style="color: #82b1ff;">/* 4. 形成独立的布局计算环境 */</span>
+
+<span style="color: #82b1ff;">/* 验证：内部浮动子元素 */</span>
+<span style="color: #a5d6a7;">.float-item</span> {
+    <span style="color: #ffab91;">float</span>: <span style="color: #81c784;">left</span>;
+    <span style="color: #ffab91;">width</span>: <span style="color: #f8bbd9;">60px</span>;
+    <span style="color: #ffab91;">height</span>: <span style="color: #f8bbd9;">60px</span>;
+    <span style="color: #82b1ff;">/* 这些子元素会被父BFC完全包含 */</span>
+}</pre>
+  </div>
+
+  <div class="example">
+    <h2>🔍 验证方法</h2>
+    <div class="explanation">
+      <strong>在浏览器中验证BFC：</strong><br>
+      1. 右键点击红色边框的浮动容器 → 检查元素<br>
+      2. 在开发者工具中可以看到容器高度自动适应内容<br>
+      3. 对比灰色普通容器的高度塌陷现象<br>
+      4. 尝试修改CSS，去掉<code>float: left</code>，观察高度变化<br>
+      5. 添加<code>overflow: hidden</code>到普通容器，观察BFC效果
+    </div>
+  </div>
+</body>
+
+</html>

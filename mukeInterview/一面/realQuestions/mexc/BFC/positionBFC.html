@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    .container {
+      position: relative;
+      height: 300px;
+      border: 2px solid blue;
+    }
+
+    .absolute-bfc {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      width: 200px;
+      border: 2px solid red;
+      /* 这个元素脱离文档流，但内部形成BFC */
+    }
+
+    .float-child {
+      float: left;
+      width: 50px;
+      height: 50px;
+      background: yellow;
+      margin: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="absolute-bfc">
+      <div class="float-child">浮动1</div>
+      <div class="float-child">浮动2</div>
+      <!-- 绝对定位元素的BFC会包含这些浮动子元素 -->
+    </div>
+  </div>
+</body>
+
+</html>
