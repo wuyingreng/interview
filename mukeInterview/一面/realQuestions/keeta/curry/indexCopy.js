@@ -26,3 +26,17 @@ function sum(a, b, c) {
 }
 const curriedSum = curry(sum);
 console.log(curriedSum(1)(2, 3));
+
+
+// 1. 先前的去哪里找呢
+
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length === fn.length) {
+      return fn.apply(this, args)
+    }
+    return (...nextArgs) => {
+      curried.apply(this, ...nextArgs.concat(args))
+    }
+  }
+}

@@ -58,3 +58,6 @@ list.add(4);
 
 
 list.traverse(); // 输出: 1 2 3
+
+
+console.log('test==>', new ListNode(222))
