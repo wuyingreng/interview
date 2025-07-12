@@ -12,3 +12,4 @@ function ajax(url, successFn) {
     }
   }
 }
+

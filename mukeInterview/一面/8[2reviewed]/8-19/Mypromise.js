@@ -111,7 +111,8 @@ class MyPromise {
 
 
 MyPromise.resolve = function (value) {
-  return new MyPromise((resolve, reject) => resolve(value))
+
+  return new Promise((resolve, reject) => resolve(value))
 }
 
 MyPromise.reject = function (reson) {
@@ -127,7 +128,6 @@ MyPromise.all = function (promiseList = []) {
      * 不能用index===length-1 判断是不是走到最后一个promise.
      * 因为index是同步的，是forEach定义的，而then可能是异步，index跑完的时候，then可能还没有执行
     */
-    // 问题4: 这里怎么看出来promiseList 有一个reject，整个MyPromise.all 就返回一个rejected的promise呢
     promiseList.forEach((p, index) => {
       p.then(data => {
         result.push(data);

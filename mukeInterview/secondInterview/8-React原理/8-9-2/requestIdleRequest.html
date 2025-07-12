@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CORS 客户端示例</title>
+</head>
+
+<body>
+  <h1>RequestIdle Request</h1>
+
+
+  <script>
+    /**
+     * var handle = window.requestIdleCllback(callback, [options]);
+     * var deadline ={
+     *  timeRemaining: () => number, // 当前浏览器的剩余空闲时间( 该帧剩余时间),单位ms。
+     *  didTimeout: boolean //是否超时。
+     * }
+    */
+
+    Window.cancelIdleCallback(id)
+
+    function work(deadline) {
+      console.log(`当前帧剩余时间:${deadline.timeRemaining()}`);
+      if (deadline.timeRemaining() > 1 || deadline.didTimeout) {
+        // 走到这里，说明时间有余，我们就可以在这里写自己的代码逻辑
+
+      }
+      // 走到这里, 说明时间不够了, 就让出控制权给主线程, 下次空闲时继续调用
+      requestIdleCallback(work);
+    }
+
+    const id = requestIdleCallback(work, { timeout: 1000 });
+  </script>
+</body>
+
+</html>

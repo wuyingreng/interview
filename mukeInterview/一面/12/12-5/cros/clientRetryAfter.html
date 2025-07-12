@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CORS 客户端示例</title>
+</head>
+
+<body>
+  <h1>CORS 测试递归重试客户端</h1>
+  <button onclick="sendRequest()">发送请求</button>
+
+  <script>
+
+
+    const fetchWithRetry = async ({ url, maxCount, options }) => {
+      let alreadyFetchCount = 0;
+      return new Promise((resolve, reject) => {
+        const fetchAPI = async () => {
+          console.log('alreadyFetchCount==>', alreadyFetchCount)
+          alreadyFetchCount++
+          const response = await fetch('http://localhost:3000/api/data', {
+            method: 'GET',
+            credentials: 'include', // 携带凭证
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'token': '123',
+              ...options
+            }
+          });
+          console.log('response==>', response)
+          if (response.code !== 200 && alreadyFetchCount < maxCount) {
+            return fetchAPI()
+          } else if (response.code !== 200 && alreadyFetchCount >= maxCount) {
+            return resolve({ msg: '超出最大现在', response })
+          } else {
+            return resolve(response)
+          }
+        }
+        return fetchAPI()
+      })
+    }
+
+    const sendRequest = () => {
+      return fetchWithRetry({ url: 'http://localhost:3000/api/data', maxCount: 3 })
+    }
+
+    // 现在可以直接获取到解析后的数据
+    console.log('sendRequest==>', sendRequest().then(async (data) => {
+      console.log('data==>', await data.response.json())
+    }))
+  </script>
+</body>
+
+</html>
