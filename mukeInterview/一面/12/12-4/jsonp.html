@@ -13,16 +13,51 @@
 </head>
 
 <body>
+  <div>99</div>
   <!-- callback的名字也不是固定的 -->
   <script>
-    window.callback = (data) => {
-      console.log('callback data', data)
 
-    }
   </script>
 
   <!-- jsonp.js可以根据入参动态返回 -->
-  <script src="http://localhost:8082/jsonp.js"></script>
+  <!-- <script src="http://localhost:8082/jsonp.js"></script> -->
+
+  <script>
+    /**
+     * callbackName :只需要pass函数名称，函数是在fetchjsonp函数里面定义的
+     * 操作dom:document.body.appendChild(script);
+     * document.body.removeChild(script);
+     * 移除全局变量 delete window[callbackName]
+    */
+
+
+    function jsonp({ url, params, callbackName }) {
+      let search = ''
+      Object.entries(params).map(([key, value]) => {
+        return search += `${key}=${encodeURIComponent(value)}&`
+      })
+      // 修改1：服务器端固定调用'callback'，所以URL参数也是callback
+      const fetchUrl = `${url}?${search}callback=${callbackName}`;
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = fetchUrl;
+        script.id = fetchUrl;
+        document.body.appendChild(script);
+        // 修改2：服务器端调用的是'callback'这个字符串名称的函数
+        window[callbackName] = (data) => {
+          console.log('🔥 window.callback 被调用了！', data);
+          resolve(data);
+          console.log('callback outter data', data)
+          // 修改4：正确删除script标签
+          document.body.removeChild(script);
+          // 修改5：清理全局回调函数
+          delete window[callbackName];
+        }
+      })
+    }
+
+    jsonp({ url: 'http://localhost:8082/jsonp.js', params: { name: 'emily', time: '0712' }, callbackName: 'callback' })
+  </script>
 </body>
 
 </html>
