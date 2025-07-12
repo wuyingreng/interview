@@ -18,7 +18,7 @@ class EventDemo extends React.Component<Props, State> {
     console.log('React componentDidMount!');
     this.parentRef.current?.addEventListener('click', (e: Event) => {
       console.log('原生事件:父元素 DOM 事件监听!')
-      e.stopImmediatePropagation(); // 阻止后续所有事件监听器执行
+
     })
     this.childRef.current?.addEventListener('click', () => {
       console.log('原生事件:子元素 DOM 事件监听!')
@@ -27,7 +27,9 @@ class EventDemo extends React.Component<Props, State> {
       console.log('原生事件:root DOM 事件监听!')
     })
 
-
+    window.addEventListener('error', (error) => {
+      console.log('error==>', error)
+    })
 
   }
 
@@ -42,6 +44,7 @@ class EventDemo extends React.Component<Props, State> {
     console.log('React 事件:子元素事件监听!');
     // 加了这行代码后parentClickFun 就不会执行了
     // e.stopPropagation()
+    throw new Error()
   }
 
   render() {
@@ -56,8 +59,4 @@ class EventDemo extends React.Component<Props, State> {
   }
 }
 
-export default EventDemo
-
-
-
-
+export default EventDemo;
