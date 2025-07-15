@@ -34,7 +34,12 @@ class MyPromise {
         this.rejectCallbacks.forEach(fn => fn(this.reason))
       }
     }
+    /**
+     * 这个是为了兼容：  const p3 = new Promise((resolve, reject) => {
+     * throw new Error('error')
+    })
 
+    */
     try {
       fn(resolveHandler, rejectHandler)
     } catch (err) {

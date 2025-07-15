@@ -53,6 +53,11 @@ class MyPromise {
   then(fn1, fn2) {
     /**
      * 对应这种情况
+     *  const p6 = new MyPromise((resolve, reject) => {
+     * resolve(200)
+    *}).then(400).then((res) => {
+    *  console.log('res==>', res) // 这里的res是200
+    *})
      * Promise.resolve().catch(() => {
      }.then((res)=>{console.log('res==>',res)})
   */
@@ -136,6 +141,7 @@ class MyPromise {
     return this.then(null, fn)
   }
 
+  // static的方法都会体现在实例对应的原型的constructor里面
   static resolve(value) {
     return new MyPromise((resolve, reject) => {
       resolve(value)

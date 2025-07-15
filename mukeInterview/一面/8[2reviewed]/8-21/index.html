@@ -45,6 +45,11 @@
     const p5 = MyPromise.race([p1, p2]);
     console.log('p5==>', p5)
 
+    const p6 = new MyPromise((resolve, reject) => {
+      resolve(200)
+    }).then(400).then((res) => {
+      console.log('res==>', res)
+    })
   </script>
 </body>
 

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CORS 客户端示例</title>
+</head>
+
+<body>
+  <h1>CORS 测试递归重试客户端</h1>
+  <button onclick="sendRequest()">发送请求</button>
+
+  <script>
+
+
+    const fetchWithRetry = async ({ url, maxCount, options }) => {
+      let alreadyFetchCount = 0;
+      const fetchAPI = () => {
+        console.log('alreadyFetchCount==>', alreadyFetchCount)
+        alreadyFetchCount++
+
+        return fetch('http://localhost:3000/api/data', {
+          method: 'GET',
+          credentials: 'include', // 携带凭证
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'token': '123',
+            ...options
+          }
+        }).then((res) => {
+          // 修复：使用 res.status 而不是 res.code
+          if (res.code !== 200 && alreadyFetchCount < maxCount) {
+            console.log('res.status !== 200, 重试')
+            return fetchAPI() // 递归重试
+          } else if (alreadyFetchCount >= maxCount) {
+            console.log('alreadyFetchCount >= 3', res)
+            alreadyFetchCount = 0;
+            return res;
+          } else {
+            console.log('请求成功')
+            alreadyFetchCount = 0;
+            return res;
+          }
+        }).catch((err) => {
+          console.log('catch')
+          if (alreadyFetchCount < maxCount) {
+            return fetchAPI() // 递归重试
+          } else {
+            alreadyFetchCount = 0;
+            return err
+          }
+        })
+      }
+
+      return await fetchAPI()
+    }
+
+    const sendRequest = () => {
+      return fetchWithRetry({ url: 'http://localhost:3000/api/data', maxCount: 3 })
+    }
+    console.log('sendRequest==>', sendRequest().then((res) => {
+      console.log('res==>', res.json())
+    }))
+  </script>
+</body>
+
+</html>

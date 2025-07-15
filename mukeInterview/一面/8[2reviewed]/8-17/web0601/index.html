@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+
+  </style>
+
+</head>
+
+<body>
+
+  <script>
+    window.addEventListener('unhandledrejection', (event) => {
+      console.warn(`Unhadnler Promise Rjection${event.reason}`)
+      // 阻止它对全局造成影响
+      event.preventDefault()
+    })
+    const p1 = new Promise((resolve, reject) => {
+      resolve('succss');
+      reject('fail')
+    })
+    console.log('p1==>', p1);
+
+    const p2 = new Promise((resolve, reject) => {
+
+      reject('fail')
+      resolve('succss');
+    })
+    console.log('p2==>', p2);
+
+    const p3 = new Promise((resolve, reject) => {
+      throw new Error('error')
+    })
+
+    console.log('p3==>', p3);
+
+    const p4 = new Promise((resolve, reject) => {
+      resolve(100)
+    }).then(200).then((res) => { console.log(res) })
+  </script>
+  <script src="./myPromise.js"></script>
+  <script src="./thenThis.js"></script>
+  <script>
+    const test1 = new MyPromise((resolve, reject) => {
+      resolve(200);
+      reject(300)
+    }).then((res) => { console.log('res==>', res) })
+    const test2 = new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('success');
+      })
+    }).then((res) => { return res * 2 }, err => err * 2);
+    const test3 = new MyPromise((resolve, reject) => {
+      resolve(100)
+    }).then((res) => { return res * 2 }, err => err * 2).then((res) => console.log(`success${res}`), err => console.log('fail error'));
+
+    const test4 = new MyPromise((resolve, reject) => {
+      resolve(100)
+    }).then((res) => {
+      return new MyPromise((resolve, reject) => {
+        reject(2 * res)
+      })
+    }, err => {
+      return new MyPromise((resolve, reject) => {
+        resolve(2 * err)
+      })
+    }).then((res) => console.log(`success${res}`), err => console.log(`fail ${err}`));
+
+  </script>
+</body>
+
+</html>
