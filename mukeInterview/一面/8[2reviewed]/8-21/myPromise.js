@@ -27,6 +27,7 @@ class MyPromise {
 
 
   constructor(fn) {
+    // 这里要用箭头函数，通过闭包的形式访问实例的this
     const resolveHandler = (value) => {
       if (this.state === 'pending') {
         this.value = value;
@@ -69,6 +70,7 @@ class MyPromise {
  }.catch((res)=>{console.log('res==>',res)})
 */
     const newFn2 = typeof fn2 === 'function' ? fn2 : (error) => { throw error; };
+    // 这里要用箭头函数，通过闭包的形式访问上一个实例的this
     return new MyPromise((resolve, reject) => {
       if (this.state === 'pending') {
         this.resolvedCallbacks.push(() => {

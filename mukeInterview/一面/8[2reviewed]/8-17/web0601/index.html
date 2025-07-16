@@ -42,32 +42,34 @@
     }).then(200).then((res) => { console.log(res) })
   </script>
   <script src="./myPromise.js"></script>
-  <script src="./thenThis.js"></script>
+  <script src="./myPromise.js"></script>
   <script>
     const test1 = new MyPromise((resolve, reject) => {
       resolve(200);
       reject(300)
     }).then((res) => { console.log('res==>', res) })
-    const test2 = new MyPromise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('success');
-      })
-    }).then((res) => { return res * 2 }, err => err * 2);
-    const test3 = new MyPromise((resolve, reject) => {
-      resolve(100)
-    }).then((res) => { return res * 2 }, err => err * 2).then((res) => console.log(`success${res}`), err => console.log('fail error'));
 
-    const test4 = new MyPromise((resolve, reject) => {
-      resolve(100)
-    }).then((res) => {
-      return new MyPromise((resolve, reject) => {
-        reject(2 * res)
-      })
-    }, err => {
-      return new MyPromise((resolve, reject) => {
-        resolve(2 * err)
-      })
-    }).then((res) => console.log(`success${res}`), err => console.log(`fail ${err}`));
+
+    // const test2 = new MyPromise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     resolve('success');
+    //   })
+    // }).then((res) => { return res * 2 }, err => err * 2);
+    // const test3 = new MyPromise((resolve, reject) => {
+    //   resolve(100)
+    // }).then((res) => { return res * 2 }, err => err * 2).then((res) => console.log(`success${res}`), err => console.log('fail error'));
+
+    // const test4 = new MyPromise((resolve, reject) => {
+    //   resolve(100)
+    // }).then((res) => {
+    //   return new MyPromise((resolve, reject) => {
+    //     reject(2 * res)
+    //   })
+    // }, err => {
+    //   return new MyPromise((resolve, reject) => {
+    //     resolve(2 * err)
+    //   })
+    // }).then((res) => console.log(`success${res}`), err => console.log(`fail ${err}`));
 
   </script>
 </body>
