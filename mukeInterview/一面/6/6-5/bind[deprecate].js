@@ -8,7 +8,7 @@ const fn2 = fn1.bind({ x: 100 }, 10, 20, 30)
 console.log('fn2==>', fn2())
 
 // 模拟Bind
-Function.prototype.bind1 = function () {
+Function.prototype.myBind = function () {
   const args = Array.from(arguments);
   // 获取this（数组第一项）；
   const t = args.shift();
@@ -23,7 +23,7 @@ Function.prototype.bind1 = function () {
   }
 }
 
-const fnbind12 = fn1.bind1({ x: 200 }, 10, 20, 30);
+const fnbind12 = fn1.myBind({ x: 200 }, 10, 20, 30);
 
 
 console.log('fnbind12==>', fnbind12())

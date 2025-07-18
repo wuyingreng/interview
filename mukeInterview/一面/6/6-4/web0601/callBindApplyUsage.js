@@ -8,6 +8,7 @@ function checkscope() {
 }
 checkscope();
 
+/**--------------  call ---------------*/
 // call方法
 function greet(greeting, punctuation) {
   // punctuation /ˌpʌŋktʃuˈeɪʃən/ 标点符号
@@ -17,6 +18,13 @@ const person = { name: "Alice" };
 
 greet.call(person, "Hello", '!');
 
+
+
+
+
+
+
+/**--------------  apply方法 ---------------*/
 // apply方法
 function sum(a, b, c) {
   console.log(this.name)
@@ -29,6 +37,8 @@ const numbers = [1, 2, 3];
 sum.apply(obj, numbers);
 
 
+
+/**--------------  bind方法 ---------------*/
 function sayHello(greeting) {
   console.log(`${greeting}${this.name}`)
 }
@@ -37,4 +47,6 @@ sayHello("Hi");// fragmentconst
 //在这里函数还没执行!
 boundSayHello = sayHello.bind(user, 'Hi')
 boundSayHello()
+
+
 

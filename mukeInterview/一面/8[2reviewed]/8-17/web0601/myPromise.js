@@ -65,7 +65,7 @@ class MyPromise {
         return resolvedPromise(onReject)
       } else {
         // 异步任务的处理。存储回调函数。这里的this都要研究下
-        this.onFulfilledCallbacks.push(resolvedPromise.bind(this, onFulfilled));
+        this.onFulfilledCallbacks.push(resolvedPromise.(this, onFulfilled));
         this.onRjectedCallbacks.push(resolvedPromise.bind(this, onReject));
       }
     })
