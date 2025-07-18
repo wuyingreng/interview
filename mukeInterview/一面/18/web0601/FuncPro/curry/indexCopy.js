@@ -12,7 +12,6 @@ const curry = (fn) => {
   return function curried(...args) {
     console.log('args==>', args, fn.length, args >= fn.length, 'this==>', this)
     if (args.length >= fn.length) {
-      console.log('return value==>', fn.apply(this, args))
       return fn.apply(this, args)
     }
     // 用箭头函数。锁定 this 值，避免后续调用改变上下文
