@@ -35,4 +35,9 @@ fetch('http://localhost:3000/posts')
 
 可以看到打印的数据
 
-
+## 3. axios 文件夹下的代码如何跑
+1. axios目录下执行npm run request
+2. 在node环境下跑
+node test.js
+返回了数据
+ data: [ { id: '1', title: 'json-server', author: 'chenghuai' } ]

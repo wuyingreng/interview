@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "build": "babel ./js/src --out-dir ./dist/bundle",
+    "browserify": "browserify ./dist/bundle.js -o ./dist/bundle2.js",
+    "build:all": "npm run build &&npm run browserify"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "browserify": "^17.0.0"
+  }
+}

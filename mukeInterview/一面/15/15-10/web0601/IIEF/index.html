@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IIFE实现数据私有</title>
+</head>
+
+<body>
+
+</body>
+<script src="./index.js"></script>
+<script>
+  myModule.foo();
+  myModule.bar();
+  console.log(myModule.data); // undefined
+  myModule.data = "xxxx";
+  myModule.foo()
+
+</script>
+
+</html>
