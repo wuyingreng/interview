@@ -15,38 +15,63 @@ objB.parent = objA;  // objB 又引用 objA → 形成循环引用
 
 
 const deepClone = (obj, hash = new WeakMap()) => {
-  // 函数一般不做拷贝。
-  if (typeof obj !== 'object' || obj === null) return obj
-  if (hash.has(obj)) return hash.get(obj)
-
-  if (obj instanceof Date) {
-    return new Date(obj)
-  }
-  if (obj instanceof RegExp) return new RegExp(obj)
+  if (typeof obj === 'function') return obj;
+  if (typeof obj !== 'object' || obj == null) return obj;
+  if (hash.has(obj)) return hash.get(obj);
+  if (obj instanceof Date) return new Date(obj);
+  if (obj instanceof RegExp) return new RegExp(obj);
   if (obj instanceof Map) {
     const clone = new Map();
-    hash.set(obj, clone)
     obj.forEach((value, key) => {
-      clone.set(deepClone(key, hash), deepClone(value, hash))
-    })
-    return clone
+      // 写错的地方
+      clone.set(deepClone(key, hash), deepClone(value, hash));
+    });
+    return clone;
   }
   if (obj instanceof Set) {
-    const clone = new Set()
-    hash.set(obj, clone)
+    const clone = new Set();
     obj.forEach((value) => {
-      clone.add(deepClone(value, hash))
+      clone.add(deepClone(value, hash));
     })
+    return clone;
   }
   const clone = Array.isArray(obj) ? [] : {};
   hash.set(obj, clone)
-  for (const key in obj) {
+  for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
       clone[key] = deepClone(obj[key], hash)
     }
   }
-  return clone
+  return clone;
 }
+
+const map = new Map();
+map.set('a', 1);
+map.set('b', 2);
+map.set('c', 3);
+const cloneMap = new Map();
+map.forEach((value, key) => {
+  cloneMap.set(value, key)
+})
+console.log('cloneMap==>', cloneMap)
+
+
+const objtest = { a: 1, b: 2 };
+const cloneObj = {};
+for (let key in objtest) {
+  if (objtest.hasOwnProperty(key)) {
+    cloneObj[key] = objtest[key]
+  }
+}
+console.log('cloneObj==>', cloneObj);
+
+const dateTest = new Date('2025-07-23');
+
+if (dateTest instanceof Date) {
+  console.log(dateTest.getTime() === new Date(dateTest).getTime()) // true);
+}
+
+
 
 /** ---------------   执行深拷贝循环引用      ---------------*/
 const clonedWeakMap = deepClone(objA);

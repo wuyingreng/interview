@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>iframe</title>
+
+
+</head>
+
+<body>
+
+</body>
+<script>
+  const doc = window.document;
+  const body = doc.body;
+
+  const iframe = doc.createElement('iframe');
+
+  iframe.style.display = 'none';
+  iframe.src = 'wxx://shareMassage?title=pageTitle'
+
+  body.appendChild(iframe)
+
+</script>
+
+</html>

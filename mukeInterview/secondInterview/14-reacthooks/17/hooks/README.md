@@ -52,3 +52,6 @@ export default tseslint.config({
   },
 })
 ```
+
+
+# css in js style-components
