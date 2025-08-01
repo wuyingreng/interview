@@ -19,12 +19,17 @@ class MyPromise {
     this.promiseState = 'pending'
   }
   initBind() {
-    // // 这里不懂为什么这么写？？？不这么写会怎么样
+    //  这里不懂为什么这么写？？？不这么写会怎么样
+    /**
+     * 如果不写绑定this,实际上调用resolve，reject是在executor的时候调用
+     * 没有this了，在严格模式下是undefined
+    // */
     // this.resolve = this.resolve.bind(this);
     // this.reject = this.reject.bind(this)
   }
   resolve(value) {
     // 状态不可以逆
+    console.log('this==>', this)
     if (this.promiseState !== 'pending') return
     this.promiseState = 'fulfilled';
     this.promiseReuslt = value;
@@ -65,7 +70,7 @@ class MyPromise {
         return resolvedPromise(onReject)
       } else {
         // 异步任务的处理。存储回调函数。这里的this都要研究下
-        this.onFulfilledCallbacks.push(resolvedPromise.(this, onFulfilled));
+        this.onFulfilledCallbacks.push(resolvedPromise.bind(this, onFulfilled));
         this.onRjectedCallbacks.push(resolvedPromise.bind(this, onReject));
       }
     })
@@ -165,11 +170,11 @@ class MyPromise {
   }
 }
 
-request(1).then(
-  res1 => {
-    console.log(res1)//1秒后输出2
-    request(2).then(res2 => {
-      console.log(res2)//2秒后 输出 4
-    })
-  })
+// request(1).then(
+//   res1 => {
+//     console.log(res1)//1秒后输出2
+//     request(2).then(res2 => {
+//       console.log(res2)//2秒后 输出 4
+//     })
+//   })
 

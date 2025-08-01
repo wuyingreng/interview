@@ -19,6 +19,7 @@ console.log(person.strength) // 60
 
 person.sayYourName(); // I am Kevin
 
+// 这里是没有this的因为调用方式是objectFactory(fn,args)不像bind是 obj.bind(xx)实例调用bind
 /** ------------  手写new       ------------*/
 /**
  * 根据需求写函数

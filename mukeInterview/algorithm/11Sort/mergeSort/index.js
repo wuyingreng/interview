@@ -1,3 +1,4 @@
+// 让哥哥解释下
 Array.prototype.merge = function () {
   const rec = (arr) => {
     // 这里要返回回去，因为orderLeft/orderRight要拿到这个值
@@ -7,8 +8,9 @@ Array.prototype.merge = function () {
     const left = arr.slice(0, mid);
     const right = arr.slice(mid, length);
     const orderLeft = rec(left);
+    console.log('orderLeft==>', orderLeft)
     const orderRight = rec(right);
-
+    console.log('orderRight==>', orderRight)
     // 用队列的形式
     const res = [];
     while (orderLeft.length || orderRight.length) {

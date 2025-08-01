@@ -13,6 +13,8 @@
 <body>
 
   <script>
+    // 在 HTML 文件中，script 标签默认是严格模式
+    // 或者在模块中也是严格模式
     window.addEventListener('unhandledrejection', (event) => {
       console.warn(`Unhadnler Promise Rjection${event.reason}`)
       // 阻止它对全局造成影响
@@ -26,13 +28,13 @@
 
     const p2 = new Promise((resolve, reject) => {
 
-      reject('fail')
+      reject('p2 fail')
       resolve('succss');
     })
     console.log('p2==>', p2);
 
     const p3 = new Promise((resolve, reject) => {
-      throw new Error('error')
+      throw new Error('p3 error')
     })
 
     console.log('p3==>', p3);
@@ -42,7 +44,7 @@
     }).then(200).then((res) => { console.log(res) })
   </script>
   <script src="./myPromise.js"></script>
-  <script src="./myPromise.js"></script>
+
   <script>
     const test1 = new MyPromise((resolve, reject) => {
       resolve(200);
