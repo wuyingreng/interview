@@ -1,0 +1,40 @@
+name: encode-bundle docs deploy
+# 只有在master分支推送的时候才会触发这个workflow
+on:
+  push:
+    branches:
+      - master
+jobs:
+# 只有一个任务，构建发布
+  build-and-deploy:
+  # job在什么环境下执行 Docker 安装 Ubuntu。
+  # 所有的命令都是在这个里面跑，不会污染其他的
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+
+      - name: Lock npm version
+        uses: actions/setup-node@v3
+        with:
+        # 固定npm版本
+          node-version: 16.18.0
+
+      - name: Install and Build
+        run: |
+          npm i -g pnpm
+          pnpm run init
+          pnpm run build:docs
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
+
+      - name: Deploy
+      # 设置老生代空间的大小
+        uses: JamesIves/github-pages-deploy-action@4.1.3
+        with:
+        # 把代码推送到这个分支里面，更新网站。https://encode-studio-fe.github.io/encode-bundle/
+          BRANCH: gh-pages
+          FOLDER: docs/build
+          ACCESS_TOKEN: ${{ secrets.GIT_TOKEN }}

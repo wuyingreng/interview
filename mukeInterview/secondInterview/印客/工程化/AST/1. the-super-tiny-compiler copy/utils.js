@@ -91,6 +91,7 @@ function tokenizer(input) {
       continue;
     }
 
+    // 每一个if 里面要加continue，因为后面有抛出错误
     throw new TypeError('I dont know what this character is: ' + char);
   }
   return tokens;

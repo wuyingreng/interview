@@ -7,8 +7,11 @@ function incCounter() {
   numObj.num++;
   return counter
 }
+// 默认导出一个对象 要加=
+
 module.exports = {
-  counter: counter,
+  counter,
   numObj,
-  incCounter: incCounter,
-};
+  incCounter,
+
+}

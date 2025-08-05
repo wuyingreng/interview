@@ -1,8 +1,16 @@
-const { marked } = require('marked')
+// const { marked } = require('marked')
 
-module.exports = function (content) {
-  const ret = marked.parse(content)
+// module.exports = function (content) {
+//   const ret = marked.parse(content)
+//   console.log('md', ret)
+
+//   return ret
+// }
+
+const { marked } = require('marked');
+
+module.exports = function (source) {
+  const ret = marked.parse(source);
   console.log('md', ret)
-
   return ret
 }
