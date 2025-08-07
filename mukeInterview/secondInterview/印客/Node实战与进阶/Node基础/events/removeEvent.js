@@ -15,6 +15,7 @@ const callbackA=function(){
 
 myEmiter.on('event1',callbackA);
 
+// 这种像onClick的感觉
 myEmiter.emit('event1','a','b');
 myEmiter.emit('event1','c','d');
 
