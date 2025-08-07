@@ -17,3 +17,10 @@ myEmiter.on('event1',callbackA);
 
 myEmiter.emit('event1','a','b');
 myEmiter.emit('event1','c','d');
+
+
+myEmiter.removeAllListeners();
+
+
+myEmiter.emit('event1','a','b');
+myEmiter.emit('event1','c','d');
