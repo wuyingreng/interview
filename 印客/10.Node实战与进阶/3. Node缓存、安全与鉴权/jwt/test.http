@@ -1,0 +1,15 @@
+POST http://localhost:8000/signin
+Content-Type: application/json
+
+{
+        "username": "user2",
+        "password":"password2"
+}
+
+###
+
+GET http://localhost:8000/welcome
+
+###
+
+POST http://localhost:8000/refresh

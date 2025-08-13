@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-	<head></head>
+
+<head></head>
 
 
-	<body>
-		<form method='post' action='http://localhost:8888'>
-			<input placeholder='username' name='username'/>
-			<input type='submit' val='提交'/>
-		</form>
-		
-	</body>
+<body>
+	<form method='post' action='http://localhost:8888'>
+		<input placeholder='username' name='username' />
+		<input type='submit' val='提交' />
+	</form>
+
+	<form method="GET" action="/search">
+		<input type="text" name="q">
+		<button>搜索</button>
+	</form>
+</body>
 
 
 </html>
