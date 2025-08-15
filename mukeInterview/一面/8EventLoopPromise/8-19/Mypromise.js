@@ -51,6 +51,7 @@ class MyPromise {
     // 这里是不是有个问题，这么写会不会直接赋值了fn1
     // 下面不要加constant
     fn1 = typeof fn1 === 'function' ? fn1 : (v) => v;
+    // 这里是错误的
     fn2 = typeof fn2 === 'function' ? fn2 : (e) => e;
 
     if (this.state === 'pending') {

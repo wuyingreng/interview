@@ -41,6 +41,9 @@ class MyPromise {
     if (this.promiseState !== 'pending') return
     this.promiseState = 'rejected';
     this.promiseReuslt = reason;
+    while (this.onFulfilledCallbacks.length > 0) {
+      this.onFulfilledCallbacks.shift()(this.promiseReuslt)
+    }
   }
   // ? 有个问题，为什么这里都是上一次的promise的结构:因为then Promise中的函数是箭头函数
   then(onFulfilled, onReject) {
@@ -60,7 +63,8 @@ class MyPromise {
           return resolve(result)
         } catch (err) {
           reject(err);
-          throw new Error(err)
+          // 这个有点多余了
+          // throw new Error(err)
         }
       }
       if (this.promiseState === 'fulfilled') {
