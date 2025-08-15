@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket 通信演示</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .demo-section {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+
+    .btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      padding: 15px;
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #007bff;
+    }
+
+    .sent {
+      border-left-color: #28a745;
+    }
+
+    .received {
+      border-left-color: #ffc107;
+    }
+
+    .error {
+      border-left-color: #dc3545;
+    }
+
+    .input-group {
+      margin: 15px 0;
+    }
+
+    .input-group input {
+      width: 70%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🌐 WebSocket 通信演示</h1>
+
+  <div class="demo-section">
+    <h3>MessageChannel 在 WebSocket 中的应用</h3>
+    <p><strong>说明：</strong>这里演示如何将 MessageChannel 与 WebSocket 结合使用</p>
+
+    <div class="input-group">
+      <input type="text" id="ws-url" value="wss://echo.websocket.org" placeholder="WebSocket 服务器地址">
+      <button class="btn" onclick="connectWebSocket()">连接</button>
+    </div>
+
+    <button class="btn" onclick="sendMessage()">发送消息</button>
+    <button class="btn" onclick="clearLog()">清除日志</button>
+
+    <div class="log" id="log"></div>
+  </div>
+
+  <script>
+    let ws = null;
+    let messageChannel = null;
+    let port1 = null;
+
+    function addLog(message, type = '') {
+      const log = document.getElementById('log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('log').innerHTML = '';
+    }
+
+    function connectWebSocket() {
+      const url = document.getElementById('ws-url').value;
+      if (!url) {
+        addLog('请输入 WebSocket 服务器地址', 'error');
+        return;
+      }
+
+      try {
+        ws = new WebSocket(url);
+
+        ws.onopen = function () {
+          addLog('WebSocket 连接成功', 'received');
+
+          // 创建 MessageChannel
+          messageChannel = new MessageChannel();
+          port1 = messageChannel.port1;
+
+          // 监听来自 MessageChannel 的消息
+          port1.onmessage = function (event) {
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({
+                type: 'message',
+                data: event.data,
+                timestamp: Date.now()
+              }));
+              addLog(`通过 WebSocket 发送: ${event.data}`, 'sent');
+            }
+          };
+
+          addLog('MessageChannel 建立成功', 'received');
+        };
+
+        ws.onmessage = function (event) {
+          addLog(`收到 WebSocket 消息: ${event.data}`, 'received');
+        };
+
+        ws.onerror = function (error) {
+          addLog(`WebSocket 错误: ${error}`, 'error');
+        };
+
+        ws.onclose = function () {
+          addLog('WebSocket 连接关闭', 'received');
+        };
+
+      } catch (error) {
+        addLog(`连接失败: ${error.message}`, 'error');
+      }
+    }
+
+    function sendMessage() {
+      if (!port1) {
+        addLog('请先连接 WebSocket', 'error');
+        return;
+      }
+
+      const message = `客户端消息 ${Date.now()}`;
+      port1.postMessage(message);
+      addLog(`发送到 MessageChannel: ${message}`, 'sent');
+    }
+
+    // 页面加载完成
+    window.addEventListener('load', function () {
+      addLog('页面加载完成，可以连接 WebSocket 服务器');
+    });
+  </script>
+</body>
+
+</html>

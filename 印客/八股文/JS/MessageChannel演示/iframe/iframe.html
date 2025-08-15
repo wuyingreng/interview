@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iframe 通信演示</title>
+  <style>
+    body {
+      font-family: 'Microsoft YaHei', Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .message-box {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .message-input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin: 10px 0;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .send-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    .send-btn:hover {
+      background: #45a049;
+    }
+
+    .log-container {
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 150px;
+      overflow-y: auto;
+      margin-top: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #4CAF50;
+      padding-left: 10px;
+    }
+
+    .log-received {
+      border-left-color: #2196F3;
+    }
+
+    .log-sent {
+      border-left-color: #FF9800;
+    }
+
+    .status {
+      text-align: center;
+      padding: 10px;
+      background: rgba(76, 175, 80, 0.3);
+      border-radius: 5px;
+      margin: 15px 0;
+      border: 1px solid rgba(76, 175, 80, 0.5);
+    }
+  </style>
+</head>
+
+<body>
+  <h3>iframe 页面</h3>
+  <button onclick="sendMessageToParent()">发送消息给父页面</button>
+  <div id="log"></div>
+
+  <script>
+    function addLog(message) {
+      const log = document.getElementById('log');
+      log.innerHTML += '<div>' + message + '</div>';
+    }
+
+    // 发送消息给父页面
+    function sendMessageToParent() {
+      const message = 'Hello from iframe!';
+      window.parent.postMessage(message, '*');
+      addLog('发送消息: ' + message);
+    }
+
+    // 监听来自父页面的消息
+    window.addEventListener('message', function (event) {
+      if (event.source === window.parent) {
+        addLog('收到父页面消息: ' + JSON.stringify(event.data));
+
+        // 自动回复
+        setTimeout(() => {
+          const reply = 'iframe已收到消息';
+          window.parent.postMessage(reply, '*');
+          addLog('自动回复: ' + reply);
+        }, 1000);
+      }
+    });
+
+    // 页面加载完成
+    window.addEventListener('load', function () {
+      addLog('iframe页面加载完成');
+    });
+  </script>
+</body>
+
+</html>

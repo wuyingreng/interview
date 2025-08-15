@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<head>
+  <title>单独测试iframe</title>
+</head>
+
+<body>
+  <iframe src='./iframe.html' id="demo-iframe"></iframe>
+</body>
+
+<script>
+  const iframe = document.getElementById('demo-iframe');
+
+  // 等待iframe加载完成后再发送消息
+  iframe.addEventListener('load', function () {
+    console.log('iframe加载完成，开始发送消息');
+
+    // 发送消息给iframe
+    iframe.contentWindow.postMessage({ from: 'index.html' }, '*');
+  });
+
+  // 监听来自iframe的消息
+  window.addEventListener('message', (event) => {
+    if (event.source === iframe.contentWindow) {
+      console.log('收到了来自iframe的消息:', event.data);
+    }
+  });
+</script>

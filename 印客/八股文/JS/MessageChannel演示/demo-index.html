@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MessageChannel 使用场景演示</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .container {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 15px;
+    }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .scenario-card {
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      padding: 20px;
+      background: #fafafa;
+      transition: transform 0.3s ease;
+    }
+
+    .scenario-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .scenario-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #34495e;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .scenario-title::before {
+      margin-right: 10px;
+      font-size: 24px;
+    }
+
+    .scenario-desc {
+      color: #7f8c8d;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background: #3498db;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: inline-block;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #2980b9;
+    }
+
+    .info-box {
+      background: #d5f4e6;
+      border: 2px solid #27ae60;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .info-title {
+      color: #27ae60;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .info-content {
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🔗 MessageChannel 使用场景演示</h1>
+
+    <div class="info-box">
+      <div class="info-title">📚 MessageChannel 简介</div>
+      <div class="info-content">
+        MessageChannel 是一个 JavaScript API，用于在两个独立的执行环境之间建立双向通信的通道。
+        它提供了两个通信端点（port1 和 port2），可以在不同的执行环境之间传递消息。
+        以下是5种主要使用场景的演示。
+      </div>
+    </div>
+
+    <div class="scenario-grid">
+      <!-- 1. Web Workers 通信 -->
+      <div class="scenario-card">
+        <div class="scenario-title">🔧 Web Workers 通信</div>
+        <div class="scenario-desc">
+          在主线程和 Web Worker 之间建立通信通道，实现双向消息传递。
+          适合处理复杂计算任务，避免阻塞主线程。
+        </div>
+        <a href="webworker-demo.html" class="btn">查看演示</a>
+      </div>
+
+      <!-- 2. 不同浏览上下文通信 -->
+      <div class="scenario-card">
+        <div class="scenario-title">🌐 不同浏览上下文通信</div>
+        <div class="scenario-desc">
+          在 iframe、弹窗、标签页等不同浏览上下文之间实现通信。
+          支持跨页面、跨窗口的消息传递。
+        </div>
+        <a href="browsing-context-demo.html" class="btn">查看演示</a>
+      </div>
+
+      <!-- 3. SharedWorker 通信 -->
+      <div class="scenario-card">
+        <div class="scenario-title">🤝 SharedWorker 通信</div>
+        <div class="scenario-desc">
+          在主线程和 Shared Worker 之间建立通信通道。
+          多个页面可以共享同一个Worker，适合跨页面状态同步。
+        </div>
+        <a href="sharedworker-demo.html" class="btn">查看演示</a>
+      </div>
+
+      <!-- 4. 服务端和客户端通信 -->
+      <div class="scenario-card">
+        <div class="scenario-title">🌐 服务端和客户端通信</div>
+        <div class="scenario-desc">
+          将 MessageChannel 与 WebSocket 结合使用，实现更灵活的通信机制。
+          支持实时双向数据流和消息路由。
+        </div>
+        <a href="websocket-demo.html" class="btn">查看演示</a>
+      </div>
+
+      <!-- 5. 异步任务处理 -->
+      <div class="scenario-card">
+        <div class="scenario-title">⚡ 异步任务处理</div>
+        <div class="scenario-desc">
+          使用 MessageChannel 处理异步任务，提供独立于主线程的通信通道。
+          支持任务进度监控和状态管理。
+        </div>
+        <a href="async-task-demo.html" class="btn">查看演示</a>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-title">💡 使用说明</div>
+      <div class="info-content">
+        <strong>重要提示：</strong>由于浏览器的安全策略，这些演示需要使用HTTP服务器运行，不能直接打开HTML文件。
+        <br><br>
+        <strong>启动方式：</strong>
+        <br>• 使用 http-server: <code>npx http-server -p 8000</code>
+        <br>• 使用 Python: <code>python3 -m http.server 8000</code>
+        <br>• 然后访问 <code>http://localhost:8000/demo-index.html</code>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

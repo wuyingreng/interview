@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>不同浏览上下文通信演示</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .demo-section {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+
+    .btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      padding: 15px;
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #007bff;
+    }
+
+    .sent {
+      border-left-color: #28a745;
+    }
+
+    .received {
+      border-left-color: #ffc107;
+    }
+
+    .iframe-container {
+      border: 2px solid #007bff;
+      border-radius: 8px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+
+    .iframe-container iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🌐 不同浏览上下文通信演示</h1>
+
+  <div class="demo-section">
+    <h3>iframe 与父页面通信</h3>
+    <button class="btn" onclick="sendToIframe()">发送消息给 iframe</button>
+    <button class="btn" onclick="clearLog()">清除日志</button>
+
+    <div class="iframe-container">
+      <iframe src="iframe/iframe.html" id="demo-iframe"></iframe>
+    </div>
+
+    <div class="log" id="log"></div>
+  </div>
+
+  <script>
+    function addLog(message, type = '') {
+      const log = document.getElementById('log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('log').innerHTML = '';
+    }
+
+    function sendToIframe() {
+      const iframe = document.getElementById('demo-iframe');
+      if (iframe.contentWindow) {
+        const message = `父页面消息 ${Date.now()}`;
+        iframe.contentWindow.postMessage(message, '*');
+        addLog(`发送给 iframe: ${message}`, 'sent');
+      } else {
+        addLog('iframe 未加载完成', 'error');
+      }
+    }
+
+    // 监听来自 iframe 的消息
+    window.addEventListener('message', function (event) {
+      if (event.source === document.getElementById('demo-iframe')?.contentWindow) {
+        addLog(`收到来自 iframe: ${event.data}`, 'received');
+      }
+    });
+
+    // 页面加载完成
+    window.addEventListener('load', function () {
+      addLog('页面加载完成，可以测试 iframe 通信');
+    });
+  </script>
+</body>
+
+</html>

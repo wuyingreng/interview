@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>异步任务处理演示</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .demo-section {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+
+    .btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      padding: 15px;
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #007bff;
+    }
+
+    .sent {
+      border-left-color: #28a745;
+    }
+
+    .received {
+      border-left-color: #ffc107;
+    }
+
+    .error {
+      border-left-color: #dc3545;
+    }
+
+    .info {
+      border-left-color: #17a2b8;
+    }
+
+    .progress {
+      width: 100%;
+      height: 20px;
+      background: #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #007bff;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>⚡ 异步任务处理演示</h1>
+
+  <div class="demo-section">
+    <h3>MessageChannel 在异步任务处理中的应用</h3>
+    <p><strong>特点：</strong>使用 MessageChannel 可以更方便地处理异步任务，提供独立于主线程的通信通道</p>
+
+    <button class="btn" onclick="startAsyncTask()">启动异步任务</button>
+    <button class="btn" onclick="clearLog()">清除日志</button>
+
+    <div class="progress">
+      <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+    </div>
+
+    <div class="log" id="log"></div>
+  </div>
+
+  <script>
+    let taskChannel = null;
+    let port1 = null;
+
+    function addLog(message, type = '') {
+      const log = document.getElementById('log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('log').innerHTML = '';
+    }
+
+    function updateProgress(progress) {
+      document.getElementById('progress-bar').style.width = progress + '%';
+    }
+
+    function startAsyncTask() {
+      if (taskChannel) {
+        addLog('任务已在运行中', 'error');
+        return;
+      }
+
+      addLog('启动异步任务', 'info');
+      updateProgress(0);
+
+      // 创建 MessageChannel
+      const channel = new MessageChannel();
+      port1 = channel.port1;
+
+      // 监听来自 Worker 的消息
+      port1.onmessage = function (event) {
+        const { type, data, progress } = event.data;
+
+        switch (type) {
+          case 'progress':
+            updateProgress(progress);
+            addLog(`任务进度: ${progress}%`, 'info');
+            break;
+          case 'complete':
+            addLog(`任务完成: ${data}`, 'received');
+            updateProgress(100);
+            taskChannel = null;
+            port1 = null;
+            break;
+          case 'error':
+            addLog(`任务错误: ${data}`, 'error');
+            taskChannel = null;
+            port1 = null;
+            break;
+        }
+      };
+
+      // 创建 Worker 处理异步任务
+      const worker = new Worker('async-worker.js');
+      worker.postMessage({ type: 'start', port: channel.port2 }, [channel.port2]);
+
+      // 保存通道引用
+      taskChannel = { port1, worker };
+
+      addLog('异步任务已启动', 'sent');
+    }
+
+    // 页面加载完成
+    window.addEventListener('load', function () {
+      addLog('页面加载完成，可以启动异步任务');
+      addLog('提示：任务会在独立的 Worker 中执行，不会阻塞主线程', 'info');
+    });
+  </script>
+</body>
+
+</html>

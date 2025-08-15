@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SharedWorker 通信演示</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .demo-section {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+
+    .btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #0056b3;
+    }
+
+    .log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      padding: 15px;
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #007bff;
+    }
+
+    .sent {
+      border-left-color: #28a745;
+    }
+
+    .received {
+      border-left-color: #ffc107;
+    }
+
+    .error {
+      border-left-color: #dc3545;
+    }
+
+    .info {
+      border-left-color: #17a2b8;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🤝 SharedWorker 通信演示</h1>
+
+  <div class="demo-section">
+    <h3>MessageChannel 在 SharedWorker 中的应用</h3>
+    <p><strong>特点：</strong>多个页面可以共享同一个Worker，适合跨页面通信</p>
+
+    <button class="btn" onclick="startSharedWorker()">启动 SharedWorker</button>
+    <button class="btn" onclick="sendMessage()">发送消息</button>
+    <button class="btn" onclick="clearLog()">清除日志</button>
+
+    <div class="log" id="log"></div>
+  </div>
+
+  <script>
+    let sharedWorker = null;
+    let port1 = null;
+
+    function addLog(message, type = '') {
+      const log = document.getElementById('log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('log').innerHTML = '';
+    }
+
+    function startSharedWorker() {
+      if (sharedWorker) {
+        addLog('SharedWorker 已经启动', 'error');
+        return;
+      }
+
+      try {
+        // 创建 MessageChannel
+        const channel = new MessageChannel();
+        port1 = channel.port1;
+
+        // 创建 SharedWorker
+        sharedWorker = new SharedWorker('sharedworker.js');
+
+        // 监听来自 SharedWorker 的连接
+        sharedWorker.port.onmessage = function (event) {
+          if (event.data.type === 'ready') {
+            // SharedWorker 准备就绪，发送 port
+            sharedWorker.port.postMessage({ type: 'init', port: channel.port2 }, [channel.port2]);
+            addLog('SharedWorker 准备就绪，MessageChannel 建立', 'info');
+          } else if (event.data.type === 'broadcast') {
+            addLog(`广播消息: ${event.data.data}`, 'received');
+          }
+        };
+
+        // 启动 SharedWorker
+        sharedWorker.port.start();
+
+        // 监听来自 SharedWorker 的消息
+        port1.onmessage = function (event) {
+          addLog(`收到来自 SharedWorker: ${event.data}`, 'received');
+        };
+
+        addLog('SharedWorker 启动成功', 'info');
+      } catch (error) {
+        addLog(`启动 SharedWorker 失败: ${error.message}`, 'error');
+      }
+    }
+
+    function sendMessage() {
+      if (!port1) {
+        addLog('请先启动 SharedWorker', 'error');
+        return;
+      }
+
+      const message = `页面消息 ${Date.now()}`;
+      port1.postMessage(message);
+      addLog(`发送给 SharedWorker: ${message}`, 'sent');
+    }
+
+    // 页面加载完成
+    window.addEventListener('load', function () {
+      addLog('页面加载完成，可以启动 SharedWorker');
+      addLog('提示：可以在多个标签页中打开此页面测试共享功能', 'info');
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+
+
+<script>
+	const url = 'https://www.baidu.com/s?wd=javascript';
+	const urls = new Array(5).fill(url);
+
+
+	const concurrentFetchWithMaxCount = (urls = [], maxCount) => {
+		let count = 0;
+		let result = new Array(urls.length).fill(false);
+		const sum = urls.length;
+
+		return new Promise((resolve, reject) => {
+			const next = () => {
+				let current = count++;
+				if (current >= sum) {
+					return resolve(result);
+				}
+				const url = urls[current];
+				fetch(url).then(async (res) => {
+					const resJson = await res.json()
+					result[current] = {res:resJson,current};
+					if (current < sum) {
+						next()
+					}
+				}).catch((err) => {
+					result[current] = {err,current};
+					if (current < sum) {
+						next()
+					}
+				})
+			}
+
+			while (count < maxCount) {
+				console.log('count==>', count)
+				next();
+			}
+		})
+
+	}
+
+
+
+
+	const getAllResults = async () => {
+		const res = await concurrentFetchWithMaxCount(urls, 2);
+		return res
+	};
+
+	getAllResults().then((res) => {
+		console.log('res===>', res)
+	})
+
+
+</script>
+
+
+</html>

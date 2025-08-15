@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+
+<script>
+	const array = [1, 2, 3];
+
+	const obj = {
+		a: 1,
+		b: 2,
+		[Symbol.iterator]: function () {
+			const self = this;
+			let index = 0;
+			const keys = Object.keys(this);
+			return {
+				next: function () {
+					if (index <= keys.length - 1) {
+						return {
+							done: false,
+							value: self[keys[index++]]
+						}
+					} else {
+						return {
+							done: true,
+							value: undefined
+						}
+					}
+				}
+			}
+
+
+		}
+	}
+
+	const [a, b] = obj;
+
+	console.log('a==>', a, 'b==>', b)
+</script>
+
+</html>

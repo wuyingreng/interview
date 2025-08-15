@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件冒泡演示 - 不会冒泡的事件</title>
+  <style>
+    body {
+      font-family: 'Microsoft YaHei', Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 15px;
+    }
+
+    .event-section {
+      margin: 25px 0;
+      padding: 20px;
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+
+    .event-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #34495e;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .event-title::before {
+      content: "🎯";
+      margin-right: 10px;
+      font-size: 20px;
+    }
+
+    .demo-element {
+      padding: 15px;
+      margin: 10px 0;
+      border: 2px solid #3498db;
+      border-radius: 5px;
+      background: #e8f4fd;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .demo-element:hover {
+      background: #d1ecf1;
+      transform: translateY(-2px);
+    }
+
+    .demo-element:focus {
+      outline: none;
+      border-color: #e74c3c;
+      box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+    }
+
+    .log-container {
+      background: #2c3e50;
+      color: #ecf0f1;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 15px;
+    }
+
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #3498db;
+      padding-left: 10px;
+    }
+
+    .log-target {
+      color: #f39c12;
+      font-weight: bold;
+    }
+
+    .log-parent {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .log-grandparent {
+      color: #9b59b6;
+      font-weight: bold;
+    }
+
+    .log-document {
+      color: #1abc9c;
+      font-weight: bold;
+    }
+
+    .clear-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 20px 0;
+      transition: background 0.3s ease;
+    }
+
+    .clear-btn:hover {
+      background: #c0392b;
+    }
+
+    .info-box {
+      background: #d5f4e6;
+      border: 2px solid #27ae60;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .info-title {
+      color: #27ae60;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .info-content {
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+
+    .media-demo {
+      margin: 15px 0;
+    }
+
+    .media-demo audio,
+    .media-demo video {
+      width: 100%;
+      max-width: 400px;
+      margin: 10px 0;
+    }
+
+    .scroll-demo {
+      height: 100px;
+      overflow-y: auto;
+      border: 2px solid #9b59b6;
+      padding: 20px;
+      background: #f8f9fa;
+      margin: 15px 0;
+    }
+
+    .scroll-content {
+      height: 200px;
+      background: linear-gradient(45deg, #f39c12, #e74c3c, #9b59b6, #3498db);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🎭 事件冒泡演示 - 不会冒泡的事件</h1>
+
+    <div class="info-box">
+      <div class="info-title">📚 说明</div>
+      <div class="info-content">
+        这个页面演示了JavaScript中不会冒泡的事件。当事件触发时，日志会显示事件是否传播到了父元素、祖父元素和document元素。
+        如果事件不会冒泡，那么只有目标元素会显示日志；如果事件会冒泡，则会在所有父级元素上显示日志。
+      </div>
+    </div>
+
+    <!-- Focus 事件演示 -->
+    <div class="event-section">
+      <div class="event-title">Focus 事件（不会冒泡）</div>
+      <div class="demo-element" tabindex="0">
+        点击或Tab键聚焦此元素
+      </div>
+      <div class="log-container" id="focus-log"></div>
+    </div>
+
+    <!-- Blur 事件演示 -->
+    <div class="event-section">
+      <div class="event-title">Blur 事件（不会冒泡）</div>
+      <div class="demo-element" tabindex="0">
+        聚焦后点击其他地方失去焦点
+      </div>
+      <div class="log-container" id="blur-log"></div>
+    </div>
+
+    <!-- Load 事件演示 -->
+    <div class="event-section">
+      <div class="event-title">Load 事件（不会冒泡）</div>
+      <div class="demo-element">
+        <img
+          src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzM0OThkYiIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRlZDwvdGV4dD48L3N2Zz4="
+          alt="测试图片" style="width: 100px; height: 100px;">
+      </div>
+      <div class="log-container" id="load-log"></div>
+    </div>
+
+    <!-- Media 事件演示 -->
+    <div class="event-section">
+      <div class="event-title">Media 事件（不会冒泡）</div>
+      <div class="media-demo">
+        <audio controls>
+          <source
+            src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT"
+            type="audio/wav">
+        </audio>
+      </div>
+      <div class="log-container" id="media-log"></div>
+    </div>
+
+    <!-- Scroll 事件演示 -->
+    <div class="event-section">
+      <div class="event-title">Scroll 事件（不会冒泡）</div>
+      <div class="scroll-demo">
+        <div class="scroll-content">
+          滚动此区域来触发scroll事件
+        </div>
+      </div>
+      <div class="log-container" id="scroll-log"></div>
+    </div>
+
+    <!-- Stop 事件演示 -->
+    <div class="event-section">
+      <div class="event-title">Stop 事件（不会冒泡）</div>
+      <div class="media-demo">
+        <video controls width="400" height="225">
+          <source
+            src="data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAGhtZGF0AAACmwYF//+p3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE0OCByMjYzOSBhOWE1Y2YgLSBILjI2NC9NUEVHLTQgQVZQIGNvZGVjIC0gQ29weWxlZnQgMjAwMy0yMDE1IC0gaHR0cDovL3d3dy52aWRlb2xhbi5vcmcveDI2NC5odG1sIC0gb3B0aW9uczogY2FiYWM9MSByZWY9MyBkZWJsb2NrPTE6MDowIGFuYWx5c2U9MSB4bWw9MSBtaW5oPTAgbWF4aD0xIGZ0cD0xIGJ3aWR0aD0xIGhlaWdodD0xIG1lZGlhX3dpZHRoPTAgbWVkaWFfaGVpZ2h0PTAgb2Zmc2V0PTAgY3JvcD0wIGZvY3VzPTAgd2lkdGg9NDAwIGhlaWdodD0yMjU="
+            type="video/mp4">
+          您的浏览器不支持视频标签
+        </video>
+      </div>
+      <div class="log-container" id="stop-log"></div>
+    </div>
+
+    <!-- Unload 事件演示 -->
+    <div class="event-section">
+      <div class="event-title">Unload 事件（不会冒泡）</div>
+      <div class="demo-element">
+        <p>尝试关闭页面或刷新页面来触发unload事件</p>
+        <button onclick="testUnload()"
+          style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">测试Unload事件</button>
+      </div>
+      <div class="log-container" id="unload-log"></div>
+    </div>
+
+    <!-- Readystatechange 事件演示 -->
+    <div class="event-section">
+      <div class="event-title">Readystatechange 事件（不会冒泡）</div>
+      <div class="demo-element">
+        <p>当前页面readyState: <span id="current-readystate">loading...</span></p>
+        <button onclick="testReadystatechange()"
+          style="background: #9b59b6; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">手动触发Readystatechange</button>
+      </div>
+      <div class="log-container" id="readystatechange-log"></div>
+    </div>
+
+    <!-- 对比：会冒泡的事件 -->
+    <div class="event-section">
+      <div class="event-title">对比：Click 事件（会冒泡）</div>
+      <div class="demo-element" id="clickable-element">
+        点击此元素（会冒泡到父元素）
+      </div>
+      <div class="log-container" id="click-log"></div>
+    </div>
+
+    <button class="clear-btn" onclick="clearAllLogs()">清除所有日志</button>
+  </div>
+
+  <script>
+    // 获取所有需要添加事件监听器的元素
+    const focusElement = document.querySelector('[tabindex="0"]');
+    const blurElement = document.querySelectorAll('[tabindex="0"]')[1];
+    const imgElement = document.querySelector('img');
+    const audioElement = document.querySelector('audio');
+    const scrollElement = document.querySelector('.scroll-demo');
+    const clickElement = document.getElementById('clickable-element');
+    const videoElement = document.querySelector('video');
+
+    // 通用日志函数
+    function addLog(containerId, message, className = '') {
+      const container = document.getElementById(containerId);
+      const logEntry = document.createElement('div');
+      logEntry.className = `log-entry ${className}`;
+      logEntry.innerHTML = message;
+      container.appendChild(logEntry);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // 清除所有日志
+    function clearAllLogs() {
+      const logContainers = document.querySelectorAll('.log-container');
+      logContainers.forEach(container => {
+        container.innerHTML = '';
+      });
+    }
+
+    // Focus 事件监听器
+    focusElement.addEventListener('focus', function (e) {
+      addLog('focus-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Focus事件触发`, 'log-target');
+    });
+
+    // 父元素上的focus事件监听器
+    focusElement.parentElement.addEventListener('focus', function (e) {
+      addLog('focus-log', `<span class="log-parent">父元素: ${e.target.tagName}</span> - Focus事件触发`, 'log-parent');
+    });
+
+    // 祖父元素上的focus事件监听器
+    focusElement.parentElement.parentElement.addEventListener('focus', function (e) {
+      addLog('focus-log', `<span class="log-grandparent">祖父元素: ${e.target.tagName}</span> - Focus事件触发`, 'log-grandparent');
+    });
+
+    // Document上的focus事件监听器
+    document.addEventListener('focus', function (e) {
+      addLog('focus-log', `<span class="log-document">Document</span> - Focus事件触发`, 'log-document');
+    });
+
+    // Blur 事件监听器
+    blurElement.addEventListener('blur', function (e) {
+      addLog('blur-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Blur事件触发`, 'log-target');
+    });
+
+    // 父元素上的blur事件监听器
+    blurElement.parentElement.addEventListener('blur', function (e) {
+      addLog('blur-log', `<span class="log-parent">父元素: ${e.target.tagName}</span> - Blur事件触发`, 'log-parent');
+    });
+
+    // 祖父元素上的blur事件监听器
+    blurElement.parentElement.parentElement.addEventListener('blur', function (e) {
+      addLog('blur-log', `<span class="log-grandparent">祖父元素: ${e.target.tagName}</span> - Blur事件触发`, 'log-grandparent');
+    });
+
+    // Document上的blur事件监听器
+    document.addEventListener('blur', function (e) {
+      addLog('blur-log', `<span class="log-document">Document</span> - Blur事件触发`, 'log-document');
+    });
+
+    // Load 事件监听器
+    imgElement.addEventListener('load', function (e) {
+      addLog('load-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Load事件触发`, 'log-target');
+    });
+
+    // 父元素上的load事件监听器
+    imgElement.parentElement.addEventListener('load', function (e) {
+      addLog('load-log', `<span class="log-parent">父元素: ${e.target.tagName}</span> - Load事件触发`, 'log-parent');
+    });
+
+    // 祖父元素上的load事件监听器
+    imgElement.parentElement.parentElement.addEventListener('load', function (e) {
+      addLog('load-log', `<span class="log-grandparent">祖父元素: ${e.target.tagName}</span> - Load事件触发`, 'log-grandparent');
+    });
+
+    // Document上的load事件监听器
+    document.addEventListener('load', function (e) {
+      addLog('load-log', `<span class="log-document">Document</span> - Load事件触发`, 'log-document');
+    });
+
+    // Media 事件监听器
+    audioElement.addEventListener('play', function (e) {
+      addLog('media-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Play事件触发`, 'log-target');
+    });
+
+    audioElement.addEventListener('pause', function (e) {
+      addLog('media-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Pause事件触发`, 'log-target');
+    });
+
+    audioElement.addEventListener('ended', function (e) {
+      addLog('media-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Ended事件触发`, 'log-target');
+    });
+
+    // 父元素上的media事件监听器
+    audioElement.parentElement.addEventListener('play', function (e) {
+      addLog('media-log', `<span class="log-parent">父元素: ${e.target.tagName}</span> - Play事件触发`, 'log-parent');
+    });
+
+    // 祖父元素上的media事件监听器
+    audioElement.parentElement.parentElement.addEventListener('play', function (e) {
+      addLog('media-log', `<span class="log-grandparent">祖父元素: ${e.target.tagName}</span> - Play事件触发`, 'log-grandparent');
+    });
+
+    // Document上的media事件监听器
+    document.addEventListener('play', function (e) {
+      addLog('media-log', `<span class="log-document">Document</span> - Play事件触发`, 'log-document');
+    });
+
+    // Scroll 事件监听器
+    scrollElement.addEventListener('scroll', function (e) {
+      addLog('scroll-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Scroll事件触发`, 'log-target');
+    });
+
+    // 父元素上的scroll事件监听器
+    scrollElement.parentElement.addEventListener('scroll', function (e) {
+      addLog('scroll-log', `<span class="log-parent">父元素: ${e.target.tagName}</span> - Scroll事件触发`, 'log-parent');
+    });
+
+    // 祖父元素上的scroll事件监听器
+    scrollElement.parentElement.parentElement.addEventListener('scroll', function (e) {
+      addLog('scroll-log', `<span class="log-grandparent">祖父元素: ${e.target.tagName}</span> - Scroll事件触发`, 'log-grandparent');
+    });
+
+    // Document上的scroll事件监听器
+    document.addEventListener('scroll', function (e) {
+      addLog('scroll-log', `<span class="log-document">Document</span> - Scroll事件触发`, 'log-document');
+    });
+
+    // Stop 事件监听器
+    videoElement.addEventListener('pause', function (e) {
+      addLog('stop-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Pause事件触发`, 'log-target');
+    });
+
+    videoElement.addEventListener('ended', function (e) {
+      addLog('stop-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Ended事件触发`, 'log-target');
+    });
+
+    // 父元素上的stop相关事件监听器
+    videoElement.parentElement.addEventListener('pause', function (e) {
+      addLog('stop-log', `<span class="log-parent">父元素: ${e.target.tagName}</span> - Pause事件触发`, 'log-parent');
+    });
+
+    // 祖父元素上的stop相关事件监听器
+    videoElement.parentElement.parentElement.addEventListener('pause', function (e) {
+      addLog('stop-log', `<span class="log-grandparent">祖父元素: ${e.target.tagName}</span> - Pause事件触发`, 'log-grandparent');
+    });
+
+    // Document上的stop相关事件监听器
+    document.addEventListener('pause', function (e) {
+      addLog('stop-log', `<span class="log-document">Document</span> - Pause事件触发`, 'log-document');
+    });
+
+    // Unload 事件监听器
+    window.addEventListener('beforeunload', function (e) {
+      addLog('unload-log', `<span class="log-target">Window</span> - Beforeunload事件触发`, 'log-target');
+    });
+
+    // 父元素上的unload事件监听器（通常不会触发，因为unload不会冒泡）
+    document.addEventListener('beforeunload', function (e) {
+      addLog('unload-log', `<span class="log-document">Document</span> - Beforeunload事件触发`, 'log-document');
+    });
+
+    // Readystatechange 事件监听器
+    document.addEventListener('readystatechange', function (e) {
+      addLog('readystatechange-log', `<span class="log-target">Document</span> - Readystatechange事件触发，readyState: ${document.readyState}`, 'log-target');
+      document.getElementById('current-readystate').textContent = document.readyState;
+    });
+
+    // 父元素上的readystatechange事件监听器（通常不会触发，因为readystatechange不会冒泡）
+    window.addEventListener('readystatechange', function (e) {
+      addLog('readystatechange-log', `<span class="log-parent">Window</span> - Readystatechange事件触发`, 'log-parent');
+    });
+
+    // Click 事件监听器（对比：会冒泡）
+    clickElement.addEventListener('click', function (e) {
+      addLog('click-log', `<span class="log-target">目标元素: ${e.target.tagName}</span> - Click事件触发`, 'log-target');
+    });
+
+    // 父元素上的click事件监听器
+    clickElement.parentElement.addEventListener('click', function (e) {
+      addLog('click-log', `<span class="log-parent">父元素: ${e.target.tagName}</span> - Click事件触发`, 'log-parent');
+    });
+
+    // 祖父元素上的click事件监听器
+    clickElement.parentElement.parentElement.addEventListener('click', function (e) {
+      addLog('click-log', `<span class="log-grandparent">祖父元素: ${e.target.tagName}</span> - Click事件触发`, 'log-grandparent');
+    });
+
+    // Document上的click事件监听器
+    document.addEventListener('click', function (e) {
+      addLog('click-log', `<span class="log-document">Document</span> - Click事件触发`, 'log-document');
+    });
+
+    // 页面加载完成后显示说明
+    window.addEventListener('load', function () {
+      addLog('load-log', `<span class="log-target">页面加载完成</span> - 现在可以测试各种事件了`, 'log-target');
+    });
+
+    // 测试函数
+    function testUnload() {
+      addLog('unload-log', `<span class="log-target">测试按钮</span> - 点击了测试Unload事件按钮`, 'log-target');
+      alert('现在尝试关闭页面或刷新页面来观察unload事件');
+    }
+
+    function testReadystatechange() {
+      addLog('readystatechange-log', `<span class="log-target">测试按钮</span> - 点击了测试Readystatechange事件按钮`, 'log-target');
+      // 手动触发一个readystatechange事件（虽然通常不会成功）
+      const event = new Event('readystatechange');
+      document.dispatchEvent(event);
+    }
+  </script>
+</body>
+
+</html>
