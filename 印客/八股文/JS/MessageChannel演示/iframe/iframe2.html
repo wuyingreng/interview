@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<body>
+
+	<button onclick="sendMessageToIframe()">发送消息给iframe</button>
+	<iframe src='./iframe.html' id='iframe'></iframe>
+
+</body>
+	
+<script >
+	const iframe=document.getElementById('iframe');
+
+	iframe.addEventListener('load',function(){
+		// iframe.contentWindow.parent===window // true
+		console.log('iframe加载完成',iframe.contentWindow,window,iframe.contentWindow.parent===window);
+
+
+	});
+
+	const sendMessageToIframe=()=>{
+
+		iframe.contentWindow.postMessage({
+			fromParent:'red'
+		},'*')
+	}
+
+
+	window.addEventListener('message',(event)=>{
+		console.log('event',event.data)
+	})
+
+</script>
+
+</html>

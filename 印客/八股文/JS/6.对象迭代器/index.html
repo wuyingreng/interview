@@ -2,38 +2,49 @@
 
 
 <script>
-	const array = [1, 2, 3];
+  const array = [1, 2, 3];
 
-	const obj = {
-		a: 1,
-		b: 2,
-		[Symbol.iterator]: function () {
-			const self = this;
-			let index = 0;
-			const keys = Object.keys(this);
-			return {
-				next: function () {
-					if (index <= keys.length - 1) {
-						return {
-							done: false,
-							value: self[keys[index++]]
-						}
-					} else {
-						return {
-							done: true,
-							value: undefined
-						}
-					}
-				}
-			}
+  const obj = {
+    a: '1',
+    b: '2',
+    [Symbol.iterator]: function () {
+      const self = this;
+      const keys = Object.keys(self);
+      let index = 0;
+      return {
+        next: function () {
+          if (index < keys.length) {
+            // 这里要写index++。每次调用next ，index是要递增的
+            return { done: false, value: self[keys[index++]] }
+          } else {
+            return { done: true, value: undefined }
+          }
+        }
+      }
+    }
+  };
+
+  const iterator = obj[Symbol.iterator]();
+  console.log(iterator.next());
+  console.log(iterator.next());
+  console.log(iterator.next());
+
+  for(let i of obj){
+  	console.log('i==>',i);
+
+  };
 
 
-		}
-	}
+  const obj2={
+  	name:'Emily',
+  	next:function(){
+  		console.log(this);
+  	}
+  };
 
-	const [a, b] = obj;
 
-	console.log('a==>', a, 'b==>', b)
+  obj2.next();
+
 </script>
 
 </html>

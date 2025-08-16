@@ -116,6 +116,7 @@
     // 发送消息给父页面
     function sendMessageToParent() {
       const message = 'Hello from iframe!';
+      console.log('iframe window')
       window.parent.postMessage(message, '*');
       addLog('发送消息: ' + message);
     }

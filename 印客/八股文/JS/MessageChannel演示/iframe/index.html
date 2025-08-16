@@ -5,7 +5,12 @@
 </head>
 
 <body>
+
+  <div>
+    <button onclick="postMessageToIframe()">发送消息给子页面</button>
+  </div>
   <iframe src='./iframe.html' id="demo-iframe"></iframe>
+
 </body>
 
 <script>
@@ -16,9 +21,13 @@
     console.log('iframe加载完成，开始发送消息');
 
     // 发送消息给iframe
-    iframe.contentWindow.postMessage({ from: 'index.html' }, '*');
+    iframe.contentWindow.postMessage({ fromParent: 'red' }, '*');
   });
 
+  postMessageToIframe = () => {
+    console.log('ifram->', iframe.contentWindow)
+    iframe.contentWindow.postMessage({ fromParent: 'green' }, '*')
+  }
   // 监听来自iframe的消息
   window.addEventListener('message', (event) => {
     if (event.source === iframe.contentWindow) {

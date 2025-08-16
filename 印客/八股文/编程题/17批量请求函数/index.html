@@ -1,58 +1,75 @@
 <!DOCTYPE html>
 
 
-
+<a href='https://x.sujianbin.com/?name=test.json'>测试点击显示的type是什么</a>
+<img src='https://x.sujianbin.com/?name=test.json'>测试点击显示的type是什么</a>
 <script>
-	const url = 'https://www.baidu.com/s?wd=javascript';
-	const urls = new Array(5).fill(url);
+	const sampleURL='https://x.sujianbin.com?name=test.json';
+	const urls=new Array(20).fill(sampleURL);
 
+ 
+	const concurrentFetch=(urls,maxCount)=>{
+		let sum=urls.length;
+			let result=new Array(urls.length).fill(false);
+			let count=0;
 
-	const concurrentFetchWithMaxCount = (urls = [], maxCount) => {
-		let count = 0;
-		let result = new Array(urls.length).fill(false);
-		const sum = urls.length;
+		return new Promise((resolve,reject)=>{
+			// next要写在promise里面
+			const next=()=>{
+				let curUrlIndex=count++;
+				if(curUrlIndex>=sum){
+					/**
+					 * 上一个最后请求返回的函数返回的时候就会resolve整个结果。
+					 * 比如:maxCount=3,total=6;
+					 *
+					 * 请求1 调用next 请求4 ，4最后返回。
+					 * 请求2 调用next 请求5 ，返回
+					 * 请求3 调用next 请求6 ，返回
+					 * 请求6（curUrlIndex=5）调用next,curUrlIndex 为6，count 6->7 不会继续发起请求，也不满足resolve的条件，不会resolve
+					 * 请求4返回后，发现count=7,currentIndex=7,count->8。
+					 * 不会发起请求，会resolve 结果
+					 * 
+					 * 虽然请求没有发出去，但是count会累加，count可能会大于最终的请求次数。
+					 * */
+					
+					   // 请求全部完成就将promise置为成功状态 , 然后将result作为promise值返回
+					 !result.includes(false)&&resolve(result);
+					 return
+				};
 
-		return new Promise((resolve, reject) => {
-			const next = () => {
-				let current = count++;
-				if (current >= sum) {
-					return resolve(result);
-				}
-				const url = urls[current];
-				fetch(url).then(async (res) => {
-					const resJson = await res.json()
-					result[current] = {res:resJson,current};
-					if (current < sum) {
-						next()
-					}
-				}).catch((err) => {
-					result[current] = {err,current};
-					if (current < sum) {
-						next()
-					}
+				let url=urls[curUrlIndex];
+				fetch(url).then(async(res)=>{
+					const jsonRes=await res.json();
+					return jsonRes;
+
+				}).then((res)=>{
+					result[curUrlIndex]={res,curUrlIndex};
+				}).catch((err)=>{
+					result[curUrlIndex]={err,curUrlIndex};
+				}).finally(()=>{
+					next();
 				})
-			}
 
-			while (count < maxCount) {
-				console.log('count==>', count)
-				next();
 			}
+		 // 初始化并发请求
+        for (let i = 0; i < Math.min(maxCount, sum); i++) {
+            next();
+        }
+
 		})
-
 	}
 
 
+	const batchFetch=async()=>{
+		const res=await concurrentFetch(urls,5);
 
-
-	const getAllResults = async () => {
-		const res = await concurrentFetchWithMaxCount(urls, 2);
-		return res
+		return res;
 	};
 
-	getAllResults().then((res) => {
-		console.log('res===>', res)
-	})
 
+	batchFetch().then((res)=>{
+		console.log('res==>',res)
+	});
 
 </script>
 
