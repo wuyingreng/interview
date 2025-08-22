@@ -27,6 +27,11 @@ const light = (cb, time) => {
 
 
 const steps = () => Promise.resolve().then(() => {
+  /**
+   * 要加return ,不加就很快的执行，起不到暂停的效果。想想源码，是返回值是promise才会等待promise resolve 继续then
+   * 否则就是同步resolve
+  * 
+   * */ 
   return light(red, 3000)
 }).then(() => {
   return light(green, 2000)

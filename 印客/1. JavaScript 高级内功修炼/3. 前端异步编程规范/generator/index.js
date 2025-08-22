@@ -1,3 +1,5 @@
+
+// 这里得起个名字，不然报错
 function* generator() {
   yield 1;
   yield 2;
@@ -6,7 +8,7 @@ function* generator() {
   return 4
 }
 const testg = generator();
-testg.next();
+testg.next(); // next是由const testg=generator() 调用的
 testg.next();
 testg.next();
 testg.next(); // {value:4,done:true}

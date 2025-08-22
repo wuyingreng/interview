@@ -1,0 +1,84 @@
+
+
+/**
+ * 高度 136px 宽度 430px 圆角12px 背景色#FFFOF1左边距30px 右边距24px，上下居中
+ * 
+ * 标题 24px 粗体副标题 22px 常规按钮宽度108px 高度45px圆角8px字体20px 粗体背景色#F00
+ * 
+ * 
+ * */
+
+.flash-sale-container{
+  display:flex;
+  align-items:center;
+  width:430px;
+  height:136px;
+
+  box-sizing:border-box;
+  border:1px solid red;
+  background-color:#fff0f1;
+  padding-left:30px;
+  padding-right:24px;
+  /* 写错了*/
+  border-radius:12px;
+}
+.flash-sale-content{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items: center;
+}
+.flash-sale-left{
+  width:calc(100% - 120px);
+  margin-right:12px;
+}
+.flash-sale-title{
+  font-size:24px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.flash-sale-sub-title{
+  font-size:22px;
+  color:grey;
+  /*
+  * 想象一个垂直放置的旧webkit盒子（-webkit-box），这个盒子被钳制（clamp）只能显示2行文本，超出盒子的部分隐藏（hidden）起来，
+  * 并用省略号（ellipsis）表示。同时，为了确保行数准确，我们设置了合适的行高（line-height）。
+  */
+  display:-webkit-box;
+    /* 写错了*/
+  -webkit-box-orient:vertical;
+  /* 写错了*/
+  -webkit-line-clamp:2;
+    /* 写错了*/
+  text-overflow:ellipsis;
+
+  overflow:hidden;
+  line-height:24px;
+  max-width:100%;
+}
+.flash-sale-right-button{
+  width:108px;
+  height:45px;
+  boder:1px solid red;
+  border-radius:8px;
+  font-size:20px;
+  /* 写错了 */
+  font-weight:bold;
+  background:#F00;
+  color:#fff;
+  /* 水平居中 */
+  text-align:center;
+  /* 垂直居中 */
+  line-height:43px;
+
+}
+.disabled{
+   /* 写错了 */
+  cursor:not-allowed;
+  point-event:none;
+     /* 写错了 */
+  background-color:gray;
+}
+
+
