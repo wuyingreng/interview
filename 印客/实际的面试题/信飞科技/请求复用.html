@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<head></head>
+<body>
+    <button  id='btn1'>按钮一</button>
+    <button  id='btn2'>按钮二</button>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        function createCachedRequest() {
+            // 闭包内的缓存对象
+            const cache = {
+                promise: null,
+                data: null,
+                error: null,
+                retryCnt: 0
+            };
+
+            return async function fetchData() {
+                // 1. 如果有缓存数据直接返回
+                if (cache.data) {
+                    console.log('使用缓存数据');
+                    return cache.data;
+                }
+                
+                // 2. 如果有正在进行的请求，返回同一个Promise
+                if (cache.promise) {
+                    console.log('复用进行中的请求');
+                    const response=await cache.promise;
+                    return response.data;
+                }
+            
+                // 3. 创建新请求并缓存Promise
+                try {
+                    console.log('发起新请求...');
+                    
+                    // 直接缓存axios的Promise，不要额外包装
+                    cache.promise = new Promise((resolve,reject)=>{
+                    	setTimeout(()=>{resolve(axios.get('https://x.sujianbin.com/?name=test.json'))},1000)
+                    });
+                    
+                    // 等待请求完成
+                    const response = await cache.promise;
+                    
+                    // 缓存数据，清空Promise
+                    cache.data = response.data;
+                    cache.promise = null;
+                    
+                    console.log('请求完成，数据已缓存');
+                    return response.data;
+                         
+                } catch (err) {
+                    cache.promise = null;  // 清空Promise状态
+                    
+                    if (cache.retryCnt < 3) {
+                        cache.retryCnt++;
+                        console.log(`重试第${cache.retryCnt}次...`);
+                        return fetchData();  // 递归重试
+                    } else {
+                        cache.error = err;   // 缓存错误
+                        cache.retryCnt = 0;  // 重置重试计数
+                        throw err;
+                    }
+                } 
+            };
+        }
+
+        // 创建一个缓存请求实例
+        const cachedFetch = createCachedRequest();
+
+        // 按钮1点击处理
+        async function handleButton1Click() {
+            try {
+                console.log('按钮1点击');
+                const data = await cachedFetch();
+                console.log("按钮1使用数据:", data);
+            } catch (err) {
+                console.error("按钮1请求失败:", err);
+            }
+        }
+
+        // 按钮2点击处理
+        async function handleButton2Click() {
+            try {
+                console.log('按钮2点击');
+                const data = await cachedFetch();
+                console.log("按钮2使用数据:", data);
+            } catch (err) {
+                console.error("按钮2请求失败:", err);
+            }
+        }
+
+        // 绑定按钮事件
+        document.getElementById('btn1').addEventListener('click', handleButton1Click);
+        document.getElementById('btn2').addEventListener('click', handleButton2Click);
+    </script>
+</body>
+</html>

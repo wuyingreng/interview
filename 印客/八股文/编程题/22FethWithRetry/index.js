@@ -8,7 +8,7 @@ function fetchWithRetry(url, options, maxRetry = 3) {
       try {
 
         const response = await fetch(url, options);
-        // // 包含了一个布尔值，标示该 Response 成功（HTTP 状态码的范围在 200-299）。
+        // 包含了一个布尔值，标示该 Response 成功（HTTP 状态码的范围在 200-299）。
         if (response.ok) {
           // 一次成功直接返回
           resolve(response);
