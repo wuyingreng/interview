@@ -56,7 +56,6 @@ module.exports = merge(webpackCommonConf, {
                 test: /\.less$/,
                 use: [
                     'css-loader',
-                    'less-loader',
                     {
                         loader: 'postcss-loader',
                         options: {
@@ -64,7 +63,8 @@ module.exports = merge(webpackCommonConf, {
                                 plugins: [postcssPresetEnv(/* pluginOptions */)]
                             },
                         },
-                    }
+                    },
+                    'less-loader',
                 ]
             }
         ]

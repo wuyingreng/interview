@@ -13,6 +13,7 @@ import { MemoChild } from '../components/memo';
 import { WhithoutMemoChild } from '../components/memo';
 import { ErroryBoundary, ErroryBoundaryChild } from '../components/ErrorBoundary';
 import { About } from '../components/LazyRelative/index';
+import {UseReducerCom} from '../components/hooks/useReducer'
 
 const { useState, Suspense } = React;
 
@@ -45,9 +46,10 @@ export function Welcome() {
       {/*<ErroryBoundary >
         <ErroryBoundaryChild />
       </ErroryBoundary>*/}
-      <Suspense fallback={'loading'}>
+     {/* <Suspense fallback={'loading'}>
         <About />
-      </Suspense>
+      </Suspense>*/}
+      <UseReducerCom/>
     </main>
   );
 }
