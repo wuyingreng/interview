@@ -1,9 +1,11 @@
-
+<!-- 先用这一个吧。感觉其他的还不怎么好 -->
 <!DOCTYPE html>
+
 <head></head>
+
 <body>
-    <button  id='btn1'>按钮一</button>
-    <button  id='btn2'>按钮二</button>
+    <button id='btn1'>按钮一</button>
+    <button id='btn2'>按钮二</button>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
@@ -22,37 +24,39 @@
                     console.log('使用缓存数据');
                     return cache.data;
                 }
-                
+
                 // 2. 如果有正在进行的请求，返回同一个Promise
                 if (cache.promise) {
                     console.log('复用进行中的请求');
-                    const response=await cache.promise;
+                    const response = await cache.promise;
                     return response.data;
                 }
-            
+
                 // 3. 创建新请求并缓存Promise
                 try {
                     console.log('发起新请求...');
-                    
                     // 直接缓存axios的Promise，不要额外包装
-                    cache.promise = new Promise((resolve,reject)=>{
-                    	setTimeout(()=>{resolve(axios.get('https://x.sujianbin.com/?name=test.json'))},1000)
+                    cache.promise = new Promise((resolve, reject) => {
+                        setTimeout(() => { resolve(axios.get('https://x.sujianbin.com/?name=test.json')) }, 10000)
                     });
-                    
                     // 等待请求完成
                     const response = await cache.promise;
-                    
+
                     // 缓存数据，清空Promise
                     cache.data = response.data;
                     cache.promise = null;
-                    
+                    cache.retryCnt = 0
                     console.log('请求完成，数据已缓存');
                     return response.data;
-                         
+
                 } catch (err) {
+
+                    // 只在网络错误或服务器错误时重试，不在客户端错误时重试
+                    const shouldRetry =
+                        !err.response || // 没有响应（网络错误）
+                        err.response.status >= 500; // 服务器错误（5xx）
                     cache.promise = null;  // 清空Promise状态
-                    
-                    if (cache.retryCnt < 3) {
+                    if (cache.retryCnt < 3 && shouldRetry) {
                         cache.retryCnt++;
                         console.log(`重试第${cache.retryCnt}次...`);
                         return fetchData();  // 递归重试
@@ -61,7 +65,7 @@
                         cache.retryCnt = 0;  // 重置重试计数
                         throw err;
                     }
-                } 
+                }
             };
         }
 
@@ -69,23 +73,29 @@
         const cachedFetch = createCachedRequest();
 
         // 按钮1点击处理
+        let loading = true;
         async function handleButton1Click() {
             try {
                 console.log('按钮1点击');
                 const data = await cachedFetch();
                 console.log("按钮1使用数据:", data);
+                loading = false;
             } catch (err) {
                 console.error("按钮1请求失败:", err);
+                loading = false;
             }
         }
 
         // 按钮2点击处理
+        let load2ing = true;
         async function handleButton2Click() {
             try {
                 console.log('按钮2点击');
                 const data = await cachedFetch();
-                console.log("按钮2使用数据:", data);
+                load2ing = false;
+                console.log("按钮2使用数据:", data, 'load2ing==>', load2ing);
             } catch (err) {
+                load2ing = false;
                 console.error("按钮2请求失败:", err);
             }
         }
@@ -95,4 +105,5 @@
         document.getElementById('btn2').addEventListener('click', handleButton2Click);
     </script>
 </body>
+
 </html>

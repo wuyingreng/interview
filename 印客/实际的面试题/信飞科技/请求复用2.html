@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>请求数据复用与重试功能</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      margin-top: 20px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .primary-btn {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .primary-btn:hover {
+      background-color: #2980b9;
+    }
+
+    .retry-btn {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .retry-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .status {
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .loading {
+      background-color: #f39c12;
+      color: white;
+    }
+
+    .error {
+      background-color: #e74c3c;
+
+    }
+
+    .success {
+      background-color: #2ecc71;
+
+    }
+
+    .data-container {
+      background-color: #f8f9fa;
+      border-left: 4px solid #3498db;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 0 4px 4px 0;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .explanation {
+      background-color: #e8f4fc;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useCallback, useRef } = React;
+
+    function MyComponent() {
+      // 两个loading来减少用户的焦虑
+      const [loading1, setLoading1] = useState(false);
+      const [loading2, setLoading2] = useState(false);
+      const [error, setError] = useState(null);
+      const [data, setData] = useState(null);
+      const retryRef = useRef({ retryCnt: 0, promise: null, maxRetries: 3 })
+      const setLoading = useCallback((btnType, loading) => {
+        if (btnType === 'btn1') {
+          setLoading1(loading)
+        } else {
+          setLoading2(loading)
+        }
+      }, []);
+
+      const fetchData = useCallback(async (btnType) => {
+        // 用户只要点击了就显示loading减少用户焦虑。但是很快设置为有数据，效果不是很大
+        setLoading(btnType, true);
+        if (error) {
+          setError(null);
+        }
+
+        // 如果已有缓存数据直接使用，把loading去掉
+        if (data) {
+          setLoading(btnType, false);
+          return;
+        }
+        // 如果有请求中的promise，则等待请求中的promise，等请求中的promise完成后就显示loading=false
+        if (retryRef.current.promise) {
+          await retryRef.current.promise;
+          setLoading(btnType, false);
+          return
+        };
+
+        try {
+          // 模拟网络延迟
+          retryRef.current.promise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(axios.get('https://x.sujianbin.com/?name=test.json'))
+
+            }, 20000)
+          })
+          const res = await retryRef.current.promise;
+          // 请求成功要清理状态，包括正在请求中的promise和retryCnt
+          retryRef.current.promise = null;
+          retryRef.current.retryCnt = 0;
+          console.log('res==>', res)
+          setData(res.data)
+          setLoading(btnType, false);
+        } catch (err) {
+          console.log('err==>', err);
+          // 清理当前失败的请求
+          retryRef.current.promise = null;
+          const shouldRetry =
+            !err.response || // 没有响应（网络错误）
+            err.response.status >= 500; // 服务器错误（5xx）
+          if (shouldRetry && retryRef.current.retryCnt < retryRef.current.maxRetries) {
+            fetchData(btnType);
+            retryRef.current.retryCnt++;
+          } else {
+            setError(err);
+            // 请求失败,再也不会去请求了也要清理重置重试状态
+            retryRef.current.retryCount = 0;
+
+          }
+        }
+      }, [data]);
+
+      return (
+        <div className="container">
+          <h1>请求数据复用与重试功能</h1>
+          <div className="buttons">
+            <div>
+              <button className="primary-btn" onClick={() => fetchData('btn1')}>
+                按钮1 - 请求数据
+              </button>
+              {loading1 && (
+                <div className="status loading">
+                  <p>加载中...</p>
+                </div>
+              )}
+
+              {error && (
+                <div className="status error">
+                  <p>错误: {error}</p>
+                  <button className="retry-btn" onClick={() => fetchData('btn1')}>
+                    重试请求
+                  </button>
+                </div>
+              )}
+
+              {data && !loading1 && (
+                <div className="status success">
+                  <p>数据加载成功！</p>
+                  <div className="data-container">
+                    <pre>{JSON.stringify(data)}</pre>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div>
+              <button className="primary-btn" onClick={() => fetchData('btn2')}>
+                按钮2 - 请求数据
+              </button>
+              {loading2 && (
+                <div className="status loading">
+                  <p>加载中...</p>
+                </div>
+              )}
+
+              {error && (
+                <div className="status error">
+                  <p>错误: {error}</p>
+                  <button className="retry-btn" onClick={() => fetchData('btn2')}>
+                    重试请求
+                  </button>
+                </div>
+              )}
+
+              {data && !loading2 && (
+                <div className="status success">
+                  <p>数据加载成功！</p>
+                  <div className="data-container">
+                    <pre>{JSON.stringify(data)}</pre>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<MyComponent />);
+  </script>
+</body>
+
+</html>
