@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+	<title>
+		展示fetch如何取消请求
+	</title>
+</head>
+	<body>
+			<script>
+				const searchParams=new URLSearchParams({name:'test.json',age:34});
+				const abortController=new AbortController();
+
+		// ?要记得自己带上去。
+		fetch(`https://x.sujianbin.com/?${searchParams.toString()}`,{
+			signal:abortController.signal
+		}).catch((err)=>{
+			console.log('打印错误原因==》',err)
+		});
+
+		abortController.abort('取消请求')
+		
+	</script>
+	</body>
+
+
+</html>

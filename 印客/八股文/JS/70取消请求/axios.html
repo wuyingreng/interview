@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+  <script>
+    const abortController = new AbortController();
+    const urlSearchParams = new URLSearchParams({ name: 'test.json' });
+    const mockRequest = async () => {
+      try {
+        await axios.get(`https://x.sujianbin.com/?${urlSearchParams.toString()}`, { signal: abortController.signal });
+      } catch (err) {
+        console.log('err=>', err)
+      }
+
+    }
+    mockRequest();
+    abortController.abort()
+
+  </script>
+</body>
+
+</html>

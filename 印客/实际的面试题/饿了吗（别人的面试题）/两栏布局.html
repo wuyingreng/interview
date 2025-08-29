@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<head>
+  <title>
+    两栏布局的样式处理
+  </title>
+  <style>
+    .left {
+      background: #f0f0f0;
+      height: 20px;
+    }
+
+    .right {
+      background: #f0f0f0;
+      height: 20px;
+    }
+
+    .flexContainer1 {
+      display: flex
+    }
+
+    .flexContainer1 .left {
+      width: 200px;
+      background: #f0f0f0;
+    }
+
+    .flexContainer1 .right {
+      flex: 1;
+      background: #e0e0e0;
+    }
+
+    .flexContainer2 {
+      display: flex;
+      background: #f0f0f0;
+    }
+
+    .flexContainer2 .left {
+      flex: 0 0 200px;
+    }
+
+    .flexContainer2 .right {
+      flex: 1;
+      background: #e0e0e0;
+    }
+
+    .gridContainer1 {
+      display: grid;
+      /*fr 单位代表网格容器中可用空间的一部分*/
+      grid-template-columns: 200px 1fr;
+      /* 左列200px，右列自适应 */
+      gap: 20px;
+    }
+
+    .gridContainer2 {
+      display: grid;
+      grid-template-areas: "left right";
+      /*fr 单位代表网格容器中可用空间的一部分*/
+      grid-template-columns: 200px 1fr;
+      /* 左列200px，右列自适应 */
+      gap: 20px;
+    }
+
+    .left {
+      grid-area: left;
+    }
+
+    .right {
+      grid-area: right;
+    }
+
+    .inlineContainer {
+      font-size: 0;
+      /* 消除间隙 */
+    }
+
+    .inlineContainer .left {
+      display: inline-block;
+      width: 200px;
+    }
+
+    .inlineContainer .right {
+      display: inline-block;
+      width: calc(100% - 200px);
+    }
+    .positionContainer{
+    	position:relative;
+    	height:20px;
+    }
+    .positionContainer .left{
+    	position:absolute;
+    	left:0;
+    	width:200px;
+    }
+    .positionContainer .right{
+    	position:absolute;
+    	left:200px;
+    	width:calc(100% - 200px)
+    }
+  </style>
+</head>
+<div>使用display:flex，一行用width指定宽度，一个占用所有的剩余空间</div>
+<div class='flexContainer1'>
+  <div class='left'></div>
+  <div class='right'></div>
+</div>
+<br />
+<br />
+<div>使用display:flex，一行用flex:0 0 200px指定宽度，一个占用所有的剩余空间</div>
+<div class='flexContainer2'>
+  <div class='left'></div>
+  <div class='right'>
+  </div>
+</div>
+<br />
+<br />
+<div>使用grip布局</div>
+<div class='gridContainer1'>
+  <div class='left'></div>
+  <div class='right'>
+  </div>
+</div>
+<br />
+<br />
+<div>使用grip布局带命名的形式</div>
+<div class='gridContainer2'>
+  <div class='left'></div>
+  <div class='right'>
+  </div>
+</div>
+<br />
+<br />
+<div>使用inline-flex的方式</div>
+<div class='inlineContainer'>
+  <div class='left'></div>
+  <div class='right'> </div>
+</div>
+<div>使用position:absolute方案</div>
+<div class='positionContainer'>
+	<div class='left'></div>
+	<div class='right'></div>
+</div>
+</html>

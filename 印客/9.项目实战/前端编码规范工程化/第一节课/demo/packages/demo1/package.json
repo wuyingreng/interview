@@ -1,0 +1,29 @@
+{
+  "name": "demo1",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "peifang.xiang <peifang.xiang@lazada.com>",
+  "homepage": "https://github.com/wuyingreng/interview#readme",
+  "license": "ISC",
+  "main": "lib/demo1.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wuyingreng/interview.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/demo1.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/wuyingreng/interview/issues"
+  }
+}

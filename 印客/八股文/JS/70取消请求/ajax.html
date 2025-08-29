@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+	<title>ajax取消请求</title>
+
+</head>
+<body>
+
+
+
+<script>
+	const xhr=new XMLHttpRequest();
+	const searchParams=new URLSearchParams({name:'test.json'}).toString()
+	xhr.open('GET',`https://x.sujianbin.com/?${searchParams}`);
+	xhr.send();
+	xhr.abort();
+
+
+</script>
+</body>
+
+<html>
