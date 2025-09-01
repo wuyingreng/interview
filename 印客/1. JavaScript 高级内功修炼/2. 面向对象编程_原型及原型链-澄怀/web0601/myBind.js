@@ -11,7 +11,8 @@ function bar(name) {
 var value = 2;
 
 const barBind = bar.myBind(foo, 'Emily2');
-const barObj = new barBind(18)
+
+const barObj = barBind(18);
 
 
 Function.prototype.myBind = function (ctx = window, ...args) {

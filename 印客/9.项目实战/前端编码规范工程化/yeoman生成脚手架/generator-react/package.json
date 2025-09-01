@@ -1,0 +1,23 @@
+{
+  "name": "generator-react",
+  "version": "1.0.0",
+  "description": "团队内部React项目脚手架生成器",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "yeoman-generator",
+    "react",
+    "scaffold",
+    "team"
+  ],
+  "author": "你的团队名称",
+  "license": "MIT",
+  "files": [
+    "generators"
+  ],
+  "devDependencies": {
+    "yeoman-generator": "^4.12.0"
+  }
+}

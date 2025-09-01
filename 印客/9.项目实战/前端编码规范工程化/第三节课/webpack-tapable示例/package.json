@@ -1,0 +1,21 @@
+{
+  "name": "webpack-tapable-examples",
+  "version": "1.0.0",
+  "description": "Webpack Tapable 使用示例",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webpack",
+    "tapable",
+    "hooks",
+    "plugin-system"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tapable": "^2.2.1"
+  }
+}

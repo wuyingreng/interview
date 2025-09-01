@@ -1,0 +1,30 @@
+{
+  "name": "eslint-plugin",
+  "version": "1.0.0",
+  "description": "ESLint插件 - 分号检查规则",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky install",
+    "test": "jest",
+    "prepublishOnly": "npm run test"
+  },
+  "keywords": [
+    "eslint",
+    "eslint-plugin",
+    "semicolon",
+    "code-style"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^11.3.1",
+    "jest": "^30.1.1",
+    "require-all": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=6.0.0"
+  }
+}
