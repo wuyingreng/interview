@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Worker 缓存策略演示</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .demo-section h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .strategy-card {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      border-left: 5px solid #667eea;
+      transition: transform 0.3s ease;
+    }
+
+    .strategy-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .strategy-card h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .strategy-card .description {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+
+    .strategy-card .use-cases {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .strategy-card .use-cases h4 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .strategy-card .use-cases ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .strategy-card .use-cases li {
+      padding: 5px 0;
+      color: #666;
+      font-size: 0.9rem;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .strategy-card .use-cases li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .demo-controls {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #1e7e34;
+      transform: translateY(-2px);
+    }
+
+    .btn-warning {
+      background: #ffc107;
+      color: #333;
+    }
+
+    .btn-warning:hover {
+      background: #e0a800;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status-panel {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .status-panel h3 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .status-item:last-child {
+      border-bottom: none;
+    }
+
+    .status-label {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .status-value {
+      color: #333;
+      font-family: monospace;
+    }
+
+    .status-value.success {
+      color: #28a745;
+    }
+
+    .status-value.error {
+      color: #dc3545;
+    }
+
+    .status-value.warning {
+      color: #ffc107;
+    }
+
+    .log-panel {
+      background: #2d3748;
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+
+    .log-panel h3 {
+      color: #e2e8f0;
+      margin-bottom: 15px;
+    }
+
+    .log-entry {
+      margin-bottom: 8px;
+      padding: 5px 0;
+    }
+
+    .log-entry.info {
+      color: #63b3ed;
+    }
+
+    .log-entry.success {
+      color: #68d391;
+    }
+
+    .log-entry.warning {
+      color: #fbd38d;
+    }
+
+    .log-entry.error {
+      color: #fc8181;
+    }
+
+    .log-timestamp {
+      color: #a0aec0;
+      font-size: 0.8rem;
+    }
+
+    .test-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .test-result {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-left: 5px solid #007bff;
+    }
+
+    .test-result h4 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .test-metric {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .test-metric:last-child {
+      margin-bottom: 0;
+    }
+
+    .metric-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .metric-value {
+      color: #333;
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .offline-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #dc3545;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      z-index: 1000;
+      display: none;
+    }
+
+    .offline-indicator.show {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .demo-section {
+        padding: 20px;
+      }
+
+      .strategy-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-controls {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="offline-indicator" id="offlineIndicator">
+    📡 离线模式
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>🛠️ Service Worker 缓存策略演示</h1>
+      <p>体验强缓存和协商缓存的不同策略和效果</p>
+    </div>
+
+    <div class="demo-section">
+      <h2>📊 Service Worker 状态</h2>
+      <div class="status-panel">
+        <div class="status-item">
+          <span class="status-label">Service Worker 状态:</span>
+          <span class="status-value" id="swStatus">检查中...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">缓存数量:</span>
+          <span class="status-value" id="cacheCount">-</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">网络状态:</span>
+          <span class="status-value" id="networkStatus">检查中...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">最后更新:</span>
+          <span class="status-value" id="lastUpdate">-</span>
+        </div>
+      </div>
+
+      <div class="demo-controls">
+        <button class="btn btn-primary" onclick="registerSW()">注册 Service Worker</button>
+        <button class="btn btn-success" onclick="testCacheStrategies()">测试缓存策略</button>
+        <button class="btn btn-warning" onclick="clearAllCaches()">清空所有缓存</button>
+        <button class="btn btn-danger" onclick="unregisterSW()">注销 Service Worker</button>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>🎯 缓存策略说明</h2>
+      <div class="strategy-grid">
+        <div class="strategy-card">
+          <h3>🔒 强缓存 (Cache First)</h3>
+          <div class="description">
+            优先使用缓存，适用于静态资源和不经常变化的内容。
+          </div>
+          <div class="use-cases">
+            <h4>适用场景:</h4>
+            <ul>
+              <li>JavaScript 文件</li>
+              <li>CSS 样式文件</li>
+              <li>图片资源</li>
+              <li>字体文件</li>
+              <li>版本化资源</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <h3>🔄 协商缓存 (Network First)</h3>
+          <div class="description">
+            优先请求网络，失败时使用缓存，适用于动态内容。
+          </div>
+          <div class="use-cases">
+            <h4>适用场景:</h4>
+            <ul>
+              <li>API 接口数据</li>
+              <li>用户生成内容</li>
+              <li>配置信息</li>
+              <li>实时数据</li>
+              <li>HTML 页面</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <h3>🌐 仅网络 (Network Only)</h3>
+          <div class="description">
+            只使用网络请求，不缓存任何内容，适用于敏感操作。
+          </div>
+          <div class="use-cases">
+            <h4>适用场景:</h4>
+            <ul>
+              <li>用户登录</li>
+              <li>支付操作</li>
+              <li>文件上传</li>
+              <li>管理操作</li>
+              <li>敏感数据</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <h3>💾 仅缓存 (Cache Only)</h3>
+          <div class="description">
+            只使用缓存，不请求网络，适用于离线模式。
+          </div>
+          <div class="use-cases">
+            <h4>适用场景:</h4>
+            <ul>
+              <li>离线模式</li>
+              <li>预加载资源</li>
+              <li>关键资源</li>
+              <li>备用内容</li>
+              <li>降级方案</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>🧪 缓存测试</h2>
+      <div class="demo-controls">
+        <button class="btn btn-primary" onclick="testStaticResources()">测试静态资源</button>
+        <button class="btn btn-success" onclick="testApiRequests()">测试 API 请求</button>
+        <button class="btn btn-warning" onclick="testOfflineMode()">测试离线模式</button>
+        <button class="btn btn-danger" onclick="clearLogs()">清空日志</button>
+      </div>
+
+      <div class="log-panel">
+        <h3>📝 测试日志</h3>
+        <div id="logContainer">
+          <div class="log-entry info">
+            <span class="log-timestamp">[系统]</span> 等待测试开始...
+          </div>
+        </div>
+      </div>
+
+      <div class="test-results" id="testResults">
+        <!-- 测试结果将在这里显示 -->
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📚 使用指南</h2>
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+        <h3>何时使用强缓存？</h3>
+        <ul style="margin: 15px 0; padding-left: 20px;">
+          <li><strong>静态资源</strong>：JS、CSS、图片、字体等不经常变化的文件</li>
+          <li><strong>版本化资源</strong>：带有 hash 值的文件名，内容变化时文件名也会变化</li>
+          <li><strong>离线优先</strong>：需要快速加载的关键资源</li>
+          <li><strong>性能优化</strong>：减少网络请求，提升加载速度</li>
+        </ul>
+
+        <h3>何时使用协商缓存？</h3>
+        <ul style="margin: 15px 0; padding-left: 20px;">
+          <li><strong>API 数据</strong>：需要实时性的接口数据</li>
+          <li><strong>动态内容</strong>：用户生成的内容、评论、动态等</li>
+          <li><strong>配置信息</strong>：可能变化的系统配置</li>
+          <li><strong>平衡性能</strong>：在性能和实时性之间取得平衡</li>
+        </ul>
+
+        <h3>最佳实践建议</h3>
+        <ul style="margin: 15px 0; padding-left: 20px;">
+          <li>根据资源类型选择合适的缓存策略</li>
+          <li>设置合理的缓存过期时间</li>
+          <li>定期清理过期缓存</li>
+          <li>监控缓存命中率和性能指标</li>
+          <li>提供离线降级方案</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="demo.js"></script>
+</body>
+
+</html>

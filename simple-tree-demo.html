@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Tree.js Demo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-add {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+      color: white;
+    }
+
+    .btn-delete {
+      background: linear-gradient(45deg, #f44336, #d32f2f);
+      color: white;
+    }
+
+    .btn-reset {
+      background: linear-gradient(45deg, #ff9800, #f57c00);
+      color: white;
+    }
+
+    .btn-search {
+      background: linear-gradient(45deg, #2196F3, #1976D2);
+      color: white;
+    }
+
+    .tree-container {
+      width: 100%;
+      height: 500px;
+      border: 3px solid #e0e0e0;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      opacity: 0.9;
+    }
+
+    .log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .log-entry {
+      margin-bottom: 8px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: #e9ecef;
+    }
+
+    .log-success {
+      background: #d4edda;
+      color: #155724;
+      border-left: 4px solid #28a745;
+    }
+
+    .log-error {
+      background: #f8d7da;
+      color: #721c24;
+      border-left: 4px solid #dc3545;
+    }
+
+    .log-info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .search-box {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .search-input {
+      padding: 10px 20px;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      font-size: 16px;
+      width: 300px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-input:focus {
+      border-color: #4CAF50;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌳 Tree.js Demo</h1>
+      <p>Interactive 3D Tree Visualization</p>
+    </div>
+
+    <div class="content">
+      <div class="controls">
+        <button class="btn btn-add" onclick="addRandomNode()">➕ Add Node</button>
+        <button class="btn btn-delete" onclick="deleteSelectedNode()">🗑️ Delete</button>
+        <button class="btn btn-reset" onclick="resetTree()">🔄 Reset</button>
+        <button class="btn btn-search" onclick="toggleSearch()">🔍 Search</button>
+      </div>
+
+      <div class="search-box" id="searchBox" style="display: none;">
+        <input type="text" class="search-input" id="searchInput" placeholder="Enter node name to search...">
+        <button class="btn btn-search" onclick="searchNode()">Search</button>
+      </div>
+
+      <div class="tree-container" id="treeContainer"></div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="nodeCount">0</div>
+          <div class="stat-label">Total Nodes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="levelCount">0</div>
+          <div class="stat-label">Max Depth</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="selectedNode">-</div>
+          <div class="stat-label">Selected Node</div>
+        </div>
+      </div>
+
+      <div class="log" id="log">
+        <div class="log-entry log-info">🚀 Tree.js Demo initialized successfully!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- OrbitControls CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <script>
+    // 全局变量
+    let scene, camera, renderer, controls;
+    let treeNodes = [];
+    let selectedNode = null;
+    let nodeIdCounter = 0;
+    let logContainer;
+
+    // 节点类
+    class TreeNode {
+      constructor(id, name, parent = null) {
+        this.id = id;
+        this.name = name;
+        this.parent = parent;
+        this.children = [];
+        this.position = { x: 0, y: 0, z: 0 };
+        this.mesh = null;
+        this.level = parent ? parent.level + 1 : 0;
+      }
+
+      addChild(child) {
+        this.children.push(child);
+        child.parent = this;
+        child.level = this.level + 1;
+      }
+
+      removeChild(child) {
+        const index = this.children.indexOf(child);
+        if (index > -1) {
+          this.children.splice(index, 1);
+          child.parent = null;
+        }
+      }
+    }
+
+    // 初始化Three.js
+    function initThreeJS() {
+      // 创建场景
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf0f8ff);
+
+      // 创建相机
+      camera = new THREE.PerspectiveCamera(75, 800 / 500, 0.1, 1000);
+      camera.position.set(0, 15, 25);
+
+      // 创建渲染器
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(800, 500);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      // 添加到容器
+      document.getElementById('treeContainer').appendChild(renderer.domElement);
+
+      // 创建控制器
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+
+      // 添加光源
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+      scene.add(ambientLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(20, 20, 10);
+      directionalLight.castShadow = true;
+      scene.add(directionalLight);
+
+      // 添加地面
+      const groundGeometry = new THREE.PlaneGeometry(100, 100);
+      const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
+      const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+      ground.rotation.x = -Math.PI / 2;
+      ground.receiveShadow = true;
+      scene.add(ground);
+
+      logContainer = document.getElementById('log');
+    }
+
+    // 创建节点网格
+    function createNodeMesh(node, isSelected = false) {
+      const geometry = new THREE.SphereGeometry(0.8, 16, 16);
+      const material = new THREE.MeshLambertMaterial({
+        color: isSelected ? 0xff6b6b : getNodeColor(node.level)
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.userData = { node: node };
+
+      return mesh;
+    }
+
+    // 获取节点颜色
+    function getNodeColor(level) {
+      const colors = [0x4ecdc4, 0x45b7d1, 0x96ceb4, 0xfeca57, 0xff9ff3, 0x54a0ff];
+      return colors[level % colors.length];
+    }
+
+    // 创建连接线
+    function createConnectionLine(parent, child) {
+      const points = [
+        new THREE.Vector3(parent.position.x, parent.position.y, parent.position.z),
+        new THREE.Vector3(child.position.x, child.position.y, child.position.z)
+      ];
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      const material = new THREE.LineBasicMaterial({ color: 0x666666, linewidth: 2 });
+      return new THREE.Line(geometry, material);
+    }
+
+    // 更新树的位置
+    function updateTreePositions() {
+      if (treeNodes.length === 0) return;
+
+      const root = treeNodes[0];
+      if (!root) return;
+
+      // 计算节点位置
+      function calculatePositions(node, x = 0, y = 0, z = 0) {
+        node.position = { x, y, z };
+
+        if (node.children.length > 0) {
+          const childSpacing = 4;
+          const startX = x - (node.children.length - 1) * childSpacing / 2;
+
+          node.children.forEach((child, index) => {
+            const childX = startX + index * childSpacing;
+            const childY = y - 3;
+            calculatePositions(child, childX, childY, z);
+          });
+        }
+      }
+
+      calculatePositions(root, 0, 10, 0);
+
+      // 更新网格位置
+      treeNodes.forEach(node => {
+        if (node.mesh) {
+          node.mesh.position.set(node.position.x, node.position.y, node.position.z);
+        }
+      });
+
+      // 重新创建连接线
+      scene.children = scene.children.filter(child => !(child instanceof THREE.Line));
+
+      treeNodes.forEach(node => {
+        if (node.parent && node.mesh) {
+          const line = createConnectionLine(node.parent, node);
+          scene.add(line);
+        }
+      });
+    }
+
+    // 添加节点
+    function addNode(name, parent = null) {
+      const node = new TreeNode(++nodeIdCounter, name, parent);
+      treeNodes.push(node);
+
+      if (parent) {
+        parent.addChild(node);
+      }
+
+      // 创建网格
+      node.mesh = createNodeMesh(node);
+      scene.add(node.mesh);
+
+      // 更新位置
+      updateTreePositions();
+
+      // 更新统计
+      updateStats();
+
+      log(`✅ Added node: ${name} (ID: ${node.id})`, 'success');
+    }
+
+    // 添加随机节点
+    function addRandomNode() {
+      const names = ['Node', 'Leaf', 'Branch', 'Root', 'Data', 'Info', 'Item', 'Tree'];
+      const randomName = names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 100);
+
+      if (treeNodes.length === 0) {
+        addNode(randomName);
+      } else {
+        const randomParent = treeNodes[Math.floor(Math.random() * treeNodes.length)];
+        addNode(randomName, randomParent);
+      }
+    }
+
+    // 删除选中的节点
+    function deleteSelectedNode() {
+      if (selectedNode) {
+        // 删除所有子节点
+        function deleteChildren(node) {
+          node.children.forEach(child => {
+            deleteChildren(child);
+            const index = treeNodes.indexOf(child);
+            if (index > -1) {
+              treeNodes.splice(index, 1);
+              scene.remove(child.mesh);
+            }
+          });
+        }
+
+        deleteChildren(selectedNode);
+
+        // 从父节点中移除
+        if (selectedNode.parent) {
+          selectedNode.parent.removeChild(selectedNode);
+        }
+
+        // 从场景中移除
+        scene.remove(selectedNode.mesh);
+
+        // 从数组中移除
+        const index = treeNodes.indexOf(selectedNode);
+        if (index > -1) {
+          treeNodes.splice(index, 1);
+        }
+
+        log(`🗑️ Deleted node: ${selectedNode.name} (ID: ${selectedNode.id})`, 'error');
+        selectedNode = null;
+        updateTreePositions();
+        updateStats();
+      } else {
+        log('❌ Please select a node first', 'error');
+      }
+    }
+
+    // 重置树
+    function resetTree() {
+      treeNodes.forEach(node => {
+        if (node.mesh) {
+          scene.remove(node.mesh);
+        }
+      });
+      treeNodes = [];
+      selectedNode = null;
+      nodeIdCounter = 0;
+      updateStats();
+      log('🔄 Tree reset successfully', 'info');
+    }
+
+    // 切换搜索框
+    function toggleSearch() {
+      const searchBox = document.getElementById('searchBox');
+      searchBox.style.display = searchBox.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // 搜索节点
+    function searchNode() {
+      const searchTerm = document.getElementById('searchInput').value;
+      if (searchTerm) {
+        const foundNode = treeNodes.find(node =>
+          node.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        if (foundNode) {
+          selectNode(foundNode);
+          log(`🔍 Found node: ${foundNode.name} (ID: ${foundNode.id})`, 'success');
+        } else {
+          log(`❌ No node found containing "${searchTerm}"`, 'error');
+        }
+      }
+    }
+
+    // 选择节点
+    function selectNode(node) {
+      // 取消之前的选择
+      if (selectedNode && selectedNode.mesh) {
+        selectedNode.mesh.material.color.setHex(getNodeColor(selectedNode.level));
+      }
+
+      // 选择新节点
+      selectedNode = node;
+      if (node.mesh) {
+        node.mesh.material.color.setHex(0xff6b6b);
+      }
+
+      updateStats();
+    }
+
+    // 更新统计信息
+    function updateStats() {
+      document.getElementById('nodeCount').textContent = treeNodes.length;
+      document.getElementById('levelCount').textContent = treeNodes.length > 0 ? Math.max(...treeNodes.map(node => node.level)) : 0;
+      document.getElementById('selectedNode').textContent = selectedNode ? selectedNode.name : '-';
+    }
+
+    // 日志函数
+    function log(message, type = 'info') {
+      const logEntry = document.createElement('div');
+      logEntry.className = `log-entry log-${type}`;
+      logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logContainer.appendChild(logEntry);
+      logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    // 鼠标点击事件
+    function onMouseClick(event) {
+      const mouse = new THREE.Vector2();
+      mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+      mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(scene.children.filter(child => child.userData.node));
+
+      if (intersects.length > 0) {
+        const clickedNode = intersects[0].object.userData.node;
+        selectNode(clickedNode);
+        log(`👆 Selected node: ${clickedNode.name} (ID: ${clickedNode.id})`, 'info');
+      }
+    }
+
+    // 渲染循环
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // 初始化
+    function init() {
+      initThreeJS();
+
+      // 添加事件监听
+      renderer.domElement.addEventListener('click', onMouseClick);
+
+      // 添加初始节点
+      addNode('Root');
+      addNode('Child 1', treeNodes[0]);
+      addNode('Child 2', treeNodes[0]);
+      addNode('Grandchild 1', treeNodes[1]);
+      addNode('Grandchild 2', treeNodes[1]);
+
+      // 开始渲染循环
+      animate();
+
+      log('🎉 Tree.js Demo initialized successfully!', 'success');
+    }
+
+    // 页面加载完成后初始化
+    window.addEventListener('load', init);
+  </script>
+</body>
+
+</html>

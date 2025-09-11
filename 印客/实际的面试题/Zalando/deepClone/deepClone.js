@@ -14,7 +14,7 @@ const deepClone = (obj, hash = new WeakMap()) => {
   // 循环引用1. 是判断是不是object,不是直接返回
   if (typeof obj !== 'object' || obj === null) return obj;
 
-  // 循环引用2. hash是object，这个写在后面
+  // 循环引用2. hash是object，。返回的是clone好的
   if (hash.has(obj)) return hash.get(obj);
 
 

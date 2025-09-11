@@ -11,6 +11,8 @@
  * 2. timeout没有设置第二个参数。
  * 3. 箭头函数没有自己的arguments，在某些JS环境中也不会继承外层函数的arguments，虽然某些环境下会。让不应该依赖。要显示
  * 对外层函数用...args的写法
+ * 
+ * 记住要清空timer
  */
 
 
@@ -22,8 +24,13 @@ const debounce = function (fn, timeout) {
 			// 清空之后要新建所以不能加return
 			clearTimeout(timer);
 		}
+		/**
+		 * 不会出现你所担心的问题的。你理理，最后一次的输出会在setTimeout的时间到之后触发。
+		 * */
+
 		timer = setTimeout(() => {
-			console.log('args==>', args,'this', this)
+			console.log('args==>', args, 'this', this);
+			// fn可以拿到target的值去请求
 			fn.apply(this, args);
 			timer = null;
 		}, timeout)
@@ -47,7 +54,7 @@ const throttle = function (fn, timetout) {
 			return
 		}
 		timer = setTimeout(() => {
-			console.log('args==>', args,  'this', this)
+			console.log('args==>', args, 'this', this)
 			fn.apply(this, args);
 			timer = null;
 		}, timetout)

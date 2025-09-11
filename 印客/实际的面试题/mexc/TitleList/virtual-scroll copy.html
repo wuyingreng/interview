@@ -98,33 +98,20 @@
   </div>
 
   <script>
-    // 模拟数据
-    const totalItems = 1000;
-    const itemHeight = 50;
-    const visibleItems = Math.ceil(400 / itemHeight); // 可视区域能显示的项目数
-    const bufferItems = 5; // 上下缓冲区的项目数
+      const totalItems=5000;
+      const itemHeight=50;
+      const visibleItems=Math.ceil(400/itemHeight);
+      const container=document.getElementById('container');
+      const virtualList=document.getElementById('virtualList');
+      const bufferItems=5;
 
-    // 初始化
-    const container = document.getElementById('container');
-    const virtualList = document.getElementById('virtualList');
-    const debugInfo = document.getElementById('debugInfo');
-
-    // 设置总高度 - 这是关键！保持滚动条的正确高度
-    virtualList.style.height = `${totalItems * itemHeight}px`;
-
-    // 渲染函数
-    function renderItems(startIndex) {
-      // 计算需要渲染的项目范围
-      const endIndex = Math.min(startIndex + visibleItems + bufferItems * 2, totalItems);
-      const start = Math.max(0, startIndex - bufferItems);
-
-      // 关键：使用负值向上移动内容
-      // 因为我们渲染的是从start开始的内容，但需要显示在正确位置
-      const translateY = -start * itemHeight;
-      // 是高度很大的容器
-      virtualList.style.transform = `translateY(${translateY}px)`;
-
-      // 清空并重新渲染
+      const renderItems=(start)=>{
+        const startIndex=Math.max(start-bufferItems,0);
+        const endIndex=Math.min(startIndex+bufferItems*2+visibleItems,totalItems);
+        const total=endIndex-startIndex;
+        const transformY=-startIndex*itemHeight;
+        virtualList.style.transform=`translateY${transformY}px`
+        // 清空并重新渲染
       virtualList.innerHTML = '';
       for (let i = start; i < endIndex; i++) {
         const item = document.createElement('div');
@@ -143,25 +130,12 @@
         virtualList.appendChild(item);
       }
 
-      // 更新调试信息
-      debugInfo.innerHTML = `
-                当前显示: ${startIndex}-${startIndex + visibleItems} 项<br>
-                实际渲染: ${start}-${endIndex} 项<br>
-                总高度: ${totalItems * itemHeight}px<br>
-                缓冲区: 上下各${bufferItems}项<br>
-                Transform: ${translateY}px (向上移动)
-            `;
-    }
-
-    // 监听滚动事件
-    container.addEventListener('scroll', () => {
-      const scrollTop = container.scrollTop;
+      document.getElementById('container').addEventListener('scroll',()=>{
+        const scrollTop=document.getElementById('container').scrollTop;
       const startIndex = Math.floor(scrollTop / itemHeight);
-      renderItems(startIndex);
-    });
+        renderItems(start)
+      })
 
-    // 初始渲染
-    renderItems(0);
   </script>
 </body>
 

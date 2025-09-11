@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>请求数据复用与重试功能</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+</head>
+
+<body>
+  <div id="test"></div>
+  <div id="root">
+
+  </div>
+
+  <script type="text/babel">
+    console.log('ReactDOM==>', ReactDOM.createPortal)
+    function PortalCom() {
+      return ReactDOM.createPortal(<div>This is rendered using a portal!</div>, document.getElementById('test'));
+
+    };
+
+    /**
+     *   如果要在root里面渲染，要在 MyComponent里面声明<div id='test' 不能直接在上面的<div id='root' 里面写，
+     * 因为MyComponent会直接替换掉它
+    */
+    function MyComponent() {
+
+
+      return (
+        <div className="container">
+
+          <PortalCom />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<MyComponent />);
+  </script>
+</body>
+
+</html>

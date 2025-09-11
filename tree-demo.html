@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tree.js Demo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .controls {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0056b3;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #1e7e34;
+    }
+
+    .btn-warning {
+      background: #ffc107;
+      color: #212529;
+    }
+
+    .btn-warning:hover {
+      background: #e0a800;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+    }
+
+    .info-panel {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .info-panel h4 {
+      margin-top: 0;
+      color: #495057;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 5px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .stat-label {
+      color: #6c757d;
+      font-size: 14px;
+    }
+
+    #tree-container {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      background: #fafafa;
+    }
+
+    .log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 15px;
+      margin-top: 20px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .log-entry {
+      margin-bottom: 5px;
+      padding: 2px 0;
+    }
+
+    .log-info {
+      color: #007bff;
+    }
+
+    .log-success {
+      color: #28a745;
+    }
+
+    .log-warning {
+      color: #ffc107;
+    }
+
+    .log-error {
+      color: #dc3545;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌳 Tree.js Demo</h1>
+      <p>基于Three.js的3D树形结构可视化演示</p>
+    </div>
+
+    <div class="content">
+      <div class="info-panel">
+        <h4>📋 功能说明</h4>
+        <p>这是一个基于Three.js的3D树形结构可视化演示，支持动态添加节点、删除节点、搜索节点等功能。</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="nodeCount">0</div>
+          <div class="stat-label">节点数量</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="levelCount">0</div>
+          <div class="stat-label">层级深度</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="selectedNode">-</div>
+          <div class="stat-label">选中节点</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-primary" onclick="addRandomNode()">🎲 添加随机节点</button>
+        <button class="btn btn-success" onclick="addChildNode()">➕ 添加子节点</button>
+        <button class="btn btn-warning" onclick="searchNode()">🔍 搜索节点</button>
+        <button class="btn btn-danger" onclick="deleteNode()">🗑️ 删除节点</button>
+        <button class="btn btn-primary" onclick="resetTree()">🔄 重置树</button>
+        <button class="btn btn-success" onclick="exportTree()">💾 导出树</button>
+      </div>
+
+      <div id="tree-container"></div>
+
+      <div class="log" id="log">
+        <div class="log-entry log-info">🚀 Tree.js Demo 初始化完成</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 引入Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- 引入OrbitControls -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <script>
+    // 全局变量
+    let scene, camera, renderer, controls;
+    let treeNodes = [];
+    let selectedNode = null;
+    let nodeIdCounter = 0;
+    let logContainer;
+
+    // 节点类
+    class TreeNode {
+      constructor(id, name, parent = null) {
+        this.id = id;
+        this.name = name;
+        this.parent = parent;
+        this.children = [];
+        this.position = { x: 0, y: 0, z: 0 };
+        this.mesh = null;
+        this.level = parent ? parent.level + 1 : 0;
+      }
+
+      addChild(child) {
+        this.children.push(child);
+        child.parent = this;
+        child.level = this.level + 1;
+      }
+
+      removeChild(child) {
+        const index = this.children.indexOf(child);
+        if (index > -1) {
+          this.children.splice(index, 1);
+          child.parent = null;
+        }
+      }
+    }
+
+    // 初始化Three.js场景
+    function initThreeJS() {
+      // 创建场景
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf0f0f0);
+
+      // 创建相机
+      camera = new THREE.PerspectiveCamera(75, 800 / 600, 0.1, 1000);
+      camera.position.set(0, 10, 20);
+
+      // 创建渲染器
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(800, 600);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      // 添加到容器
+      document.getElementById('tree-container').appendChild(renderer.domElement);
+
+      // 创建控制器
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+
+      // 添加光源
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+      scene.add(ambientLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(10, 10, 5);
+      directionalLight.castShadow = true;
+      directionalLight.shadow.mapSize.width = 2048;
+      directionalLight.shadow.mapSize.height = 2048;
+      scene.add(directionalLight);
+
+      // 添加地面
+      const groundGeometry = new THREE.PlaneGeometry(50, 50);
+      const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
+      const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+      ground.rotation.x = -Math.PI / 2;
+      ground.receiveShadow = true;
+      scene.add(ground);
+
+      logContainer = document.getElementById('log');
+    }
+
+    // 创建节点网格
+    function createNodeMesh(node, isSelected = false) {
+      const geometry = new THREE.SphereGeometry(0.5, 16, 16);
+      const material = new THREE.MeshLambertMaterial({
+        color: isSelected ? 0xff6b6b : (node.level === 0 ? 0x4ecdc4 : 0x45b7d1)
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.userData = { node: node };
+
+      return mesh;
+    }
+
+    // 创建连接线
+    function createConnectionLine(parent, child) {
+      const points = [
+        new THREE.Vector3(parent.position.x, parent.position.y, parent.position.z),
+        new THREE.Vector3(child.position.x, child.position.y, child.position.z)
+      ];
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      const material = new THREE.LineBasicMaterial({ color: 0x666666 });
+      return new THREE.Line(geometry, material);
+    }
+
+    // 更新树的位置
+    function updateTreePositions() {
+      if (treeNodes.length === 0) return;
+
+      // 简单的树形布局算法
+      const root = treeNodes[0];
+      if (!root) return;
+
+      // 计算每个节点的位置
+      function calculatePositions(node, x = 0, y = 0, z = 0) {
+        node.position = { x, y, z };
+
+        if (node.children.length > 0) {
+          const childSpacing = 3;
+          const startX = x - (node.children.length - 1) * childSpacing / 2;
+
+          node.children.forEach((child, index) => {
+            const childX = startX + index * childSpacing;
+            const childY = y - 2;
+            calculatePositions(child, childX, childY, z);
+          });
+        }
+      }
+
+      calculatePositions(root, 0, 8, 0);
+
+      // 更新网格位置
+      treeNodes.forEach(node => {
+        if (node.mesh) {
+          node.mesh.position.set(node.position.x, node.position.y, node.position.z);
+        }
+      });
+
+      // 重新创建连接线
+      scene.children = scene.children.filter(child => !(child instanceof THREE.Line));
+
+      treeNodes.forEach(node => {
+        if (node.parent && node.mesh) {
+          const line = createConnectionLine(node.parent, node);
+          scene.add(line);
+        }
+      });
+    }
+
+    // 添加节点
+    function addNode(name, parent = null) {
+      const node = new TreeNode(++nodeIdCounter, name, parent);
+      treeNodes.push(node);
+
+      if (parent) {
+        parent.addChild(node);
+      }
+
+      // 创建网格
+      node.mesh = createNodeMesh(node);
+      scene.add(node.mesh);
+
+      // 更新位置
+      updateTreePositions();
+
+      // 更新统计
+      updateStats();
+
+      log(`✅ 添加节点: ${name} (ID: ${node.id})`);
+    }
+
+    // 添加随机节点
+    function addRandomNode() {
+      const names = ['Node', 'Leaf', 'Branch', 'Root', 'Tree', 'Data', 'Info', 'Item'];
+      const randomName = names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 100);
+
+      if (treeNodes.length === 0) {
+        addNode(randomName);
+      } else {
+        const randomParent = treeNodes[Math.floor(Math.random() * treeNodes.length)];
+        addNode(randomName, randomParent);
+      }
+    }
+
+    // 添加子节点
+    function addChildNode() {
+      if (selectedNode) {
+        const name = prompt('请输入节点名称:', 'New Node');
+        if (name) {
+          addNode(name, selectedNode);
+        }
+      } else {
+        alert('请先选择一个节点');
+      }
+    }
+
+    // 搜索节点
+    function searchNode() {
+      const searchTerm = prompt('请输入要搜索的节点名称:');
+      if (searchTerm) {
+        const foundNode = treeNodes.find(node =>
+          node.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        if (foundNode) {
+          selectNode(foundNode);
+          log(`🔍 找到节点: ${foundNode.name} (ID: ${foundNode.id})`);
+        } else {
+          log(`❌ 未找到包含 "${searchTerm}" 的节点`);
+        }
+      }
+    }
+
+    // 删除节点
+    function deleteNode() {
+      if (selectedNode) {
+        // 删除所有子节点
+        function deleteChildren(node) {
+          node.children.forEach(child => {
+            deleteChildren(child);
+            const index = treeNodes.indexOf(child);
+            if (index > -1) {
+              treeNodes.splice(index, 1);
+              scene.remove(child.mesh);
+            }
+          });
+        }
+
+        deleteChildren(selectedNode);
+
+        // 从父节点中移除
+        if (selectedNode.parent) {
+          selectedNode.parent.removeChild(selectedNode);
+        }
+
+        // 从场景中移除
+        scene.remove(selectedNode.mesh);
+
+        // 从数组中移除
+        const index = treeNodes.indexOf(selectedNode);
+        if (index > -1) {
+          treeNodes.splice(index, 1);
+        }
+
+        log(`🗑️ 删除节点: ${selectedNode.name} (ID: ${selectedNode.id})`);
+        selectedNode = null;
+        updateTreePositions();
+        updateStats();
+      } else {
+        alert('请先选择一个节点');
+      }
+    }
+
+    // 重置树
+    function resetTree() {
+      treeNodes.forEach(node => {
+        if (node.mesh) {
+          scene.remove(node.mesh);
+        }
+      });
+      treeNodes = [];
+      selectedNode = null;
+      nodeIdCounter = 0;
+      updateStats();
+      log('🔄 树已重置');
+    }
+
+    // 导出树
+    function exportTree() {
+      const treeData = {
+        nodes: treeNodes.map(node => ({
+          id: node.id,
+          name: node.name,
+          level: node.level,
+          parentId: node.parent ? node.parent.id : null,
+          children: node.children.map(child => child.id)
+        })),
+        totalNodes: treeNodes.length,
+        maxLevel: Math.max(...treeNodes.map(node => node.level))
+      };
+
+      const dataStr = JSON.stringify(treeData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'tree-data.json';
+      link.click();
+
+      log('💾 树数据已导出');
+    }
+
+    // 选择节点
+    function selectNode(node) {
+      // 取消之前的选择
+      if (selectedNode && selectedNode.mesh) {
+        selectedNode.mesh.material.color.setHex(selectedNode.level === 0 ? 0x4ecdc4 : 0x45b7d1);
+      }
+
+      // 选择新节点
+      selectedNode = node;
+      if (node.mesh) {
+        node.mesh.material.color.setHex(0xff6b6b);
+      }
+
+      updateStats();
+    }
+
+    // 更新统计信息
+    function updateStats() {
+      document.getElementById('nodeCount').textContent = treeNodes.length;
+      document.getElementById('levelCount').textContent = treeNodes.length > 0 ? Math.max(...treeNodes.map(node => node.level)) : 0;
+      document.getElementById('selectedNode').textContent = selectedNode ? selectedNode.name : '-';
+    }
+
+    // 日志函数
+    function log(message, type = 'info') {
+      const logEntry = document.createElement('div');
+      logEntry.className = `log-entry log-${type}`;
+      logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logContainer.appendChild(logEntry);
+      logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    // 鼠标点击事件
+    function onMouseClick(event) {
+      const mouse = new THREE.Vector2();
+      mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+      mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(scene.children.filter(child => child.userData.node));
+
+      if (intersects.length > 0) {
+        const clickedNode = intersects[0].object.userData.node;
+        selectNode(clickedNode);
+        log(`👆 选中节点: ${clickedNode.name} (ID: ${clickedNode.id})`);
+      }
+    }
+
+    // 渲染循环
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // 初始化
+    function init() {
+      initThreeJS();
+
+      // 添加事件监听
+      renderer.domElement.addEventListener('click', onMouseClick);
+
+      // 添加初始节点
+      addNode('Root');
+      addNode('Child 1', treeNodes[0]);
+      addNode('Child 2', treeNodes[0]);
+      addNode('Grandchild 1', treeNodes[1]);
+
+      // 开始渲染循环
+      animate();
+
+      log('🎉 Tree.js Demo 初始化完成！');
+    }
+
+    // 页面加载完成后初始化
+    window.addEventListener('load', init);
+  </script>
+</body>
+
+</html>

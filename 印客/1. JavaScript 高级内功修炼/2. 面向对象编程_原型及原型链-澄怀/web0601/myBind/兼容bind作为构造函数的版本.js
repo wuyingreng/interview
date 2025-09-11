@@ -1,4 +1,4 @@
-/**---------------------- bind函数的普通使用 ----------------------*/
+/**---------------------- 兼容bind作为构造函数的版本 太复杂了，没有学会 ----------------------*/
 const foo = {
   val: 1
 }
@@ -15,6 +15,7 @@ const barBind = bar.myBind(foo, 'Emily2');
 const barObj = barBind(18);
 
 
+// 在上面的例子中foo-->ctx
 Function.prototype.myBind = function (ctx = window, ...args) {
 
   // 如果前面有Function.prototype 这个if可以不要

@@ -1,0 +1,27 @@
+{
+  "name": "service-worker-cache-demo",
+  "version": "1.0.0",
+  "description": "Service Worker 缓存策略演示项目",
+  "main": "demo/index.html",
+  "scripts": {
+    "start": "http-server . -p 8080 -c-1 --cors",
+    "dev": "http-server . -p 8080 -c-1 --cors -o",
+    "build": "echo 'No build step required for this demo'",
+    "clean": "rm -rf node_modules package-lock.json"
+  },
+  "keywords": [
+    "service-worker",
+    "cache",
+    "pwa",
+    "offline",
+    "performance"
+  ],
+  "author": "Service Worker Demo",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

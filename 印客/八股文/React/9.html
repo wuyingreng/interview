@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<head>
+	<title>stopImmediatePropagation</title>
+	<style>
+		.outer {
+			width: 50px;
+			height: 50px;
+			position: relative;
+			border: 1px black solid;
+		}
+
+		.inner {
+			width: 30px;
+			height: 30px;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+			border: 1px black solid;
+		}
+	</style>
+</head>
+
+<body>
+	<div class='outer'>
+		<div class='inner'>
+			click me
+		</div>
+	</div>
+	<script>
+		/*
+		* 当点击click me inner的时候，只会执行outer绑定的监听事件，不会向下传递到inner绑定的事件。
+		* 
+		*/
+		const testFunc1 = (event) => {
+			console.log('testFunc1 event.target==>', event.currentTarget);
+			event.stopImmediatePropagation()
+
+		}
+		const testFunc2 = (event) => {
+			console.log(' testFunc2 event.target==>', event.currentTarget);
+
+		}
+		document.getElementsByClassName('outer')[0].addEventListener('click', testFunc1, { capture: true });
+		document.getElementsByClassName('inner')[0].addEventListener('click', testFunc2, { capture: true });
+	</script>
+</body>
+
+
+</html>

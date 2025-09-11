@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<head>
+  <title>
+    左列浮动(定宽或不定宽都可以)，给右列开启 BFC。利用了特性：浮动盒的区域不会和 BFC 重叠
+  </title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .left {
+      float: left;
+      height: 200px;
+      margin-right: 10px;
+      background-color: red;
+    }
+
+    .right {
+      overflow: hidden;
+      height: 200px;
+      background-color: yellow;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div>
+    <!-- 164px是由文本的宽度决定的 -->
+    <div class="left">浮动元素 ，⽆固定宽度</div>
+    <div class="right"> ⾃适应</div>
+  </div>
+</body>
+
+
+
+
+</html>

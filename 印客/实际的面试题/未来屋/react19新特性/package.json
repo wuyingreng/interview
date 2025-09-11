@@ -1,0 +1,21 @@
+{
+  "name": "react-19-demo",
+  "version": "1.0.0",
+  "description": "React 19 新特性演示 - Actions 和 use() Hook",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "vite": "^5.4.0"
+  }
+}

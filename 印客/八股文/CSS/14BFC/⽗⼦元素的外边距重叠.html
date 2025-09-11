@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<head>
+  <title>
+    ⽗⼦元素的外边距重叠
+  </title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #parent {
+      width: 200px;
+      height: 200px;
+      background-color: green;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    #child {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div id="parent">
+    <div id="child"></div>
+  </div>
+</body>
+
+
+
+
+</html>
