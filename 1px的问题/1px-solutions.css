@@ -1,0 +1,288 @@
+/* 移动端1px问题解决方案 CSS 工具类 */
+
+/* ==================== 基础工具类 ==================== */
+
+/* 方案1：transform scale 方案 - 推荐用于复杂场景 */
+.border-1px {
+  position: relative;
+}
+
+.border-1px::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid #ddd;
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+  /* 关键：补偿缩放后的尺寸 */
+  width: 200%;
+  height: 200%;
+}
+
+/* 方案2：box-shadow 方案 - 推荐用于简单场景 */
+.border-1px-shadow {
+  box-shadow: 0 0 0 0.5px #ddd;
+}
+
+/* ==================== 单边框解决方案 ==================== */
+
+/* 上边框 */
+.border-top-1px {
+  position: relative;
+}
+
+.border-top-1px::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #ddd;
+  transform: scaleY(0.5);
+  transform-origin: 0 0;
+}
+
+/* 下边框 */
+.border-bottom-1px {
+  position: relative;
+}
+
+.border-bottom-1px::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #ddd;
+  transform: scaleY(0.5);
+  transform-origin: 0 100%;
+}
+
+/* 左边框 */
+.border-left-1px {
+  position: relative;
+}
+
+.border-left-1px::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  background: #ddd;
+  transform: scaleX(0.5);
+  transform-origin: 0 0;
+}
+
+/* 右边框 */
+.border-right-1px {
+  position: relative;
+}
+
+.border-right-1px::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: #ddd;
+  transform: scaleX(0.5);
+  transform-origin: 100% 0;
+}
+
+/* ==================== 媒体查询方案 ==================== */
+
+/* 根据设备像素比使用不同边框 */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  .border-1px-media {
+    border: 0.5px solid #ddd;
+  }
+}
+
+.border-1px-media {
+  border: 1px solid #ddd;
+}
+
+/* ==================== 颜色变体 ==================== */
+
+/* 不同颜色的1px边框 */
+.border-1px-primary::after {
+  border-color: #007bff;
+}
+
+.border-1px-success::after {
+  border-color: #28a745;
+}
+
+.border-1px-warning::after {
+  border-color: #ffc107;
+}
+
+.border-1px-danger::after {
+  border-color: #dc3545;
+}
+
+.border-1px-info::after {
+  border-color: #17a2b8;
+}
+
+/* ==================== 圆角边框 ==================== */
+
+.border-1px-rounded {
+  position: relative;
+  border-radius: 4px;
+}
+
+.border-1px-rounded::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+/* ==================== 虚线边框 ==================== */
+
+.border-1px-dashed {
+  position: relative;
+}
+
+.border-1px-dashed::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px dashed #ddd;
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+/* ==================== 渐变边框 ==================== */
+
+.border-1px-gradient {
+  position: relative;
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(45deg, #ff6b6b, #4ecdc4) border-box;
+  border: 1px solid transparent;
+}
+
+/* ==================== 动画边框 ==================== */
+
+.border-1px-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.border-1px-animated::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #007bff, transparent);
+  transition: left 0.5s;
+}
+
+.border-1px-animated:hover::before {
+  left: 100%;
+}
+
+/* ==================== 响应式边框 ==================== */
+
+/* 在小屏幕上使用更细的边框 */
+@media (max-width: 768px) {
+  .border-1px-responsive::after {
+    transform: scale(0.3);
+  }
+}
+
+.border-1px-responsive {
+  position: relative;
+}
+
+.border-1px-responsive::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid #ddd;
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+/* ==================== 工具函数 ==================== */
+
+/* 使用CSS变量自定义边框颜色和宽度 */
+.border-1px-custom {
+  --border-color: #ddd;
+  --border-width: 1px;
+  position: relative;
+}
+
+.border-1px-custom::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: var(--border-width) solid var(--border-color);
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+/* ==================== 兼容性处理 ==================== */
+
+/* 对于不支持transform的旧浏览器，使用普通边框 */
+@supports not (transform: scale(0.5)) {
+  .border-1px {
+    border: 1px solid #ddd;
+  }
+
+  .border-1px::after {
+    display: none;
+  }
+}
+
+/* ==================== 使用示例 ==================== */
+
+/*
+HTML 使用示例：
+
+<div class="border-1px">全边框</div>
+<div class="border-1px-shadow">阴影边框</div>
+<div class="border-top-1px">上边框</div>
+<div class="border-bottom-1px">下边框</div>
+<div class="border-1px-primary">主色边框</div>
+<div class="border-1px-rounded">圆角边框</div>
+<div class="border-1px-dashed">虚线边框</div>
+<div class="border-1px-gradient">渐变边框</div>
+<div class="border-1px-animated">动画边框</div>
+
+<div class="border-1px-custom" style="--border-color: #ff6b6b; --border-width: 2px;">
+    自定义边框
+</div>
+*/

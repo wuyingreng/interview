@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1px问题解决方案演示</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    .section {
+      background: white;
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .section h2 {
+      color: #e74c3c;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e74c3c;
+      padding-bottom: 10px;
+    }
+
+    .section h3 {
+      color: #3498db;
+      margin: 15px 0 10px 0;
+    }
+
+    .demo-box {
+      margin: 15px 0;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+
+    /* 问题演示：普通1px边框在高DPI屏幕上显示模糊 */
+    .normal-1px {
+      border: 1px solid #e74c3c;
+      padding: 10px;
+      margin: 10px 0;
+      background: white;
+    }
+
+    /* 解决方案1：使用transform: scale() */
+    .solution-1 {
+      position: relative;
+      padding: 10px;
+      margin: 10px 0;
+      background: white;
+    }
+
+    /* 解决方案1：使用transform: scale() */
+
+
+    /* .solution-1::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 1px solid #27ae60;
+      transform: scale(0.5);
+      transform-origin: 0 0;
+      pointer-events: none;
+      width: 200%;
+      height: 200%;
+    } */
+
+    .solution-1::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 1px solid #27ae60;
+      width: 200%;
+      height: 200%;
+      transform: scale(0.5);
+      transform-origin: 0 0;
+      pointer-events: none;
+
+
+    }
+
+    /* 解决方案2：使用box-shadow */
+    .solution-2 {
+      padding: 10px;
+      margin: 10px 0;
+      background: white;
+      box-shadow: 0 0 0 0.5px #8e44ad;
+    }
+
+    /* 解决方案3：使用伪元素 + transform */
+    .solution-3 {
+      position: relative;
+      padding: 10px;
+      margin: 10px 0;
+      background: white;
+    }
+
+    .solution-3::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #f39c12;
+      transform: scaleY(0.5);
+      transform-origin: 0 0;
+    }
+
+    .solution-3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #f39c12;
+      transform: scaleY(0.5);
+      transform-origin: 0 100%;
+    }
+
+    /* 解决方案4：使用border-image */
+    .solution-4 {
+      padding: 10px;
+      margin: 10px 0;
+      background: white;
+      border: 1px solid transparent;
+      border-image: linear-gradient(90deg, #e67e22, #e67e22) 1;
+    }
+
+    /* 解决方案5：使用SVG */
+    .solution-5 {
+      padding: 10px;
+      margin: 10px 0;
+      background: white;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect x='0' y='0' width='100%25' height='100%25' fill='none' stroke='%23e91e63' stroke-width='0.5'/%3E%3C/svg%3E");
+    }
+
+    /* 媒体查询方案 */
+    @media (-webkit-min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi) {
+      .media-query-1px {
+        border: 0.5px solid #9b59b6;
+      }
+    }
+
+    .media-query-1px {
+      padding: 10px;
+      margin: 10px 0;
+      background: white;
+      border: 1px solid #9b59b6;
+    }
+
+    /* 代码展示 */
+    .code {
+      background: #2c3e50;
+      color: #ecf0f1;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+
+    .highlight {
+      background: #34495e;
+      padding: 2px 4px;
+      border-radius: 2px;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .comparison-item {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .comparison-item h4 {
+      color: #e74c3c;
+      margin-bottom: 10px;
+    }
+
+    .comparison-item.good h4 {
+      color: #27ae60;
+    }
+
+    .device-info {
+      background: #3498db;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .note {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      color: #856404;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .warning {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>移动端1px问题解决方案演示</h1>
+
+    <div class="device-info">
+      <strong>当前设备像素比：</strong><span id="devicePixelRatio"></span>
+    </div>
+
+    <div class="section">
+      <h2>🔍 问题描述</h2>
+      <p>在移动端开发中，由于设备像素比（DPR）的存在，CSS中的1px在物理屏幕上可能显示为2px或3px，导致边框看起来过粗。</p>
+
+      <div class="demo-box">
+        <h3>问题演示：普通1px边框</h3>
+        <div class="normal-1px">
+          这是普通的1px边框，在高DPI屏幕上可能显示过粗
+        </div>
+        <div class="code">
+          border: 1px solid #e74c3c;
+        </div>
+      </div>
+
+      <div class="warning">
+        <strong>注意：</strong>在Retina屏幕（DPR=2）上，1px会显示为2个物理像素，在DPR=3的屏幕上会显示为3个物理像素。
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>💡 解决方案</h2>
+
+      <div class="demo-box">
+        <h3>方案1：transform: scale() 缩放</h3>
+        <div class="solution-1">
+          使用伪元素 + transform: scale(0.5) 实现真正的0.5px边框
+        </div>
+        <div class="code">
+          .solution-1::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          border: 1px solid #27ae60;
+          transform: scale(0.5);
+          transform-origin: 0 0;
+          pointer-events: none;
+          /* 关键：补偿缩放后的尺寸 */
+          width: 200%;
+          height: 200%;
+          }
+        </div>
+        <div class="note">
+          <strong>注意：</strong>transform: scale(0.5) 会缩放所有内容，包括尺寸。
+          所以需要设置 width: 200%; height: 200%; 来补偿缩放效果。
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <h3>方案2：box-shadow 阴影</h3>
+        <div class="solution-2">
+          使用box-shadow实现0.5px边框效果
+        </div>
+        <div class="code">
+          box-shadow: 0 0 0 0.5px #8e44ad;
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <h3>方案3：伪元素 + transform（单边框）</h3>
+        <div class="solution-3">
+          使用伪元素实现上下边框的0.5px效果
+        </div>
+        <div class="code">
+          .solution-3::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 1px;
+          background: #f39c12;
+          transform: scaleY(0.5);
+          transform-origin: 0 0;
+          }
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <h3>方案4：border-image</h3>
+        <div class="solution-4">
+          使用border-image实现渐变边框
+        </div>
+        <div class="code">
+          border: 1px solid transparent;
+          border-image: linear-gradient(90deg, #e67e22, #e67e22) 1;
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <h3>方案5：SVG边框</h3>
+        <div class="solution-5">
+          使用SVG作为背景实现精确的边框
+        </div>
+        <div class="code">
+          background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'
+          width='100%25' height='100%25'%3E%3Crect x='0' y='0' width='100%25' height='100%25' fill='none'
+          stroke='%23e91e63' stroke-width='0.5'/%3E%3C/svg%3E");
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <h3>方案6：媒体查询</h3>
+        <div class="media-query-1px">
+          根据设备像素比使用不同的边框宽度
+        </div>
+        <div class="code">
+          /* 普通屏幕 */
+          .media-query-1px {
+          border: 1px solid #9b59b6;
+          }
+
+          /* 高DPI屏幕 */
+          @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+          .media-query-1px {
+          border: 0.5px solid #9b59b6;
+          }
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>📊 方案对比</h2>
+      <div class="comparison">
+        <div class="comparison-item">
+          <h4>❌ 普通1px</h4>
+          <ul>
+            <li>简单易用</li>
+            <li>在高DPI屏幕上显示过粗</li>
+            <li>视觉效果不佳</li>
+          </ul>
+        </div>
+        <div class="comparison-item good">
+          <h4>✅ transform方案</h4>
+          <ul>
+            <li>真正的0.5px效果</li>
+            <li>兼容性好</li>
+            <li>需要额外元素</li>
+          </ul>
+        </div>
+        <div class="comparison-item good">
+          <h4>✅ box-shadow方案</h4>
+          <ul>
+            <li>简单易用</li>
+            <li>不需要额外元素</li>
+            <li>性能较好</li>
+          </ul>
+        </div>
+        <div class="comparison-item">
+          <h4>⚠️ 媒体查询方案</h4>
+          <ul>
+            <li>简单直接</li>
+            <li>兼容性问题</li>
+            <li>0.5px在某些设备上不显示</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🎯 推荐方案</h2>
+      <div class="note">
+        <strong>推荐使用顺序：</strong><br>
+        1. <strong>box-shadow方案</strong> - 简单易用，兼容性好<br>
+        2. <strong>transform方案</strong> - 效果最佳，适合复杂场景<br>
+        3. <strong>媒体查询方案</strong> - 作为降级方案
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🔧 实际应用示例</h2>
+      <div class="code">
+        /* 通用1px边框类 */
+        .border-1px {
+        position: relative;
+        }
+
+        .border-1px::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 1px solid #ddd;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+        pointer-events: none;
+        }
+
+        /* 或者使用box-shadow */
+        .border-1px-shadow {
+        box-shadow: 0 0 0 0.5px #ddd;
+        }
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 显示当前设备的像素比
+    document.getElementById('devicePixelRatio').textContent = window.devicePixelRatio || 1;
+
+    // 添加一些交互效果
+    document.querySelectorAll('.demo-box').forEach(box => {
+      box.addEventListener('mouseenter', function () {
+        this.style.transform = 'scale(1.02)';
+        this.style.transition = 'transform 0.2s ease';
+      });
+
+      box.addEventListener('mouseleave', function () {
+        this.style.transform = 'scale(1)';
+      });
+    });
+  </script>
+</body>
+
+</html>

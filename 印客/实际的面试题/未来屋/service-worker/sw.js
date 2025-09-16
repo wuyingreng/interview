@@ -206,6 +206,8 @@ async function handleRequest(request, strategy) {
  * 强缓存策略 - Cache First
  * 适用于：静态资源、版本化资源、不经常变化的资源
  * 逻辑：先查缓存，缓存命中直接返回，否则请求网络并缓存
+ *  caches 是 Service Worker 环境中的全局对象
+ * 等同于 self.caches 或 window.caches（在 Service Worker 中不可用）
  */
 async function cacheFirstStrategy(request) {
   console.log('[SW] 使用强缓存策略 (Cache First)');

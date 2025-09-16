@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<head></head>
+
+<body>
+
+
+
+  <script type="module">
+   const cdnList = [ ... ]; // 同上
+
+// 将一个脚本加载包装成一个Promise
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = () => resolve(src);
+    script.onerror = () => reject(new Error(`Script load failed for: ${src}`));
+    document.head.appendChild(script);
+  });
+}
+
+// 核心容灾函数：按顺序尝试CDN列表，直到一个成功为止
+async function loadScriptWithHighAvailability() {
+  let lastError;
+  
+  for (const cdnUrl of cdnList) {
+    try {
+      await loadScript(cdnUrl);
+      console.log(`✅ Loaded successfully from: ${cdnUrl}`);
+      return true; // 成功，跳出函数
+    } catch (error) {
+      console.warn(`❌ Failed to load from ${cdnUrl}`, error);
+      lastError = error;
+      // 继续尝试下一个
+    }
+  }
+  
+  // 如果循环结束都没有成功，抛出最后一个错误
+  throw new Error('All CDN attempts failed.', { cause: lastError });
+}
+
+// 使用方式
+(async function initApp() {
+  try {
+    await loadScriptWithHighAvailability();
+    console.log('SDK is ready, starting application...');
+    // 初始化你的应用
+  } catch (error) {
+    console.error('Critical failure: Could not load required SDK.', error);
+    // 显示错误界面
+  }
+})();
+  </script>
+</body>
+
+</html>

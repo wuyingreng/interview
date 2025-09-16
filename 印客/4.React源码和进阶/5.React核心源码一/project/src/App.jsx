@@ -40,29 +40,43 @@ const ReactSchedulerDemo = () => {
   const [filter, setFilter] = useState('');
   const [mode, setMode] = useState('normal');
   const [isPending, startTransition] = React.useTransition();
-  
+
   // 使用useDeferredValue来延迟filter值
   const deferredFilter = useDeferredValue(filter);
-  
+
   // 根据模式选择使用哪个filter
   const displayFilter = mode === 'concurrent' ? deferredFilter : filter;
-  
+
+
+
   // 过滤项目
   const filteredItems = useMemo(() => {
     return generateItems(defaultCount, displayFilter);
   }, [displayFilter]);
-  
+
   const handleFilterChange = (e) => {
     const value = e.target.value;
-    setFilter(value);
-    
-    // 在并发模式下使用startTransition
+
+    if (mode === 'concurrent') {
+      // 在并发模式下使用startTransition
+      console.log('开始过渡前 isPending:', isPending); // 应该是 false
+
+      startTransition(() => {
+        console.log('startTransition 内部执行时 isPending:', isPending); // 应该是 true
+        setFilter(value);
+      });
+
+
+    } else {
+      // 普通模式下直接更新
+      setFilter(value);
+    }
   };
-  
+
   return (
     <div className="demo-container">
       <h1>React调度器任务拆分性能演示</h1>
-      
+
       <div className="controls">
         <div className="input-group">
           <label>搜索过滤: </label>
@@ -73,15 +87,15 @@ const ReactSchedulerDemo = () => {
             placeholder="输入数字过滤..."
           />
         </div>
-        
+
         <div className="mode-selector">
-          <button 
+          <button
             className={mode === 'normal' ? 'active' : ''}
             onClick={() => setMode('normal')}
           >
             普通模式
           </button>
-          <button 
+          <button
             className={mode === 'concurrent' ? 'active' : ''}
             onClick={() => setMode('concurrent')}
           >
@@ -89,12 +103,12 @@ const ReactSchedulerDemo = () => {
           </button>
         </div>
       </div>
-      
+
       <div className="status">
         当前模式: <strong>{mode === 'concurrent' ? '并发模式 (自动拆分任务)' : '普通模式 (同步渲染)'}</strong>
         {mode === 'concurrent' && isPending && <span className="loading"> 渲染中...</span>}
       </div>
-      
+
       <div className="results">
         <p>显示项目: {filteredItems.length} / {defaultCount}</p>
         <ItemList items={filteredItems} />
