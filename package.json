@@ -1,0 +1,5 @@
+{
+	"devDependencies": {
+		"vite-plugin-vue-setup-extend": "^0.4.0"
+	}
+}
