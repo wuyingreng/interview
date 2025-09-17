@@ -1,7 +1,8 @@
-<script lang="ts" setup name="Person33">
-  let name = '张三'
+<script lang="ts" setup name="Person34">
+  import { ref } from 'vue'
+  let name = ref('张三')
   let changeName = () => {
-    name = '李四'
+    name.value = '李四'
   }
 </script>
 <template>

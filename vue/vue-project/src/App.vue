@@ -1,11 +1,7 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
   import HelloWorld from './components/HelloWorld.vue'
-  import Person from './components/Person.vue';
-  import PersonVue3 from './components/setUp/Person写法1.vue';
-  import PersonVue32 from './components/setUp/Person写法2.vue';
-  import PersonVue33 from './components/setUp/Person写法3.vue';
-  import PersonVue34 from './components/响应式/PersonRef.vue';
+  import Person from './components/Person.vue'
 </script>
 
 <template>
@@ -14,14 +10,12 @@
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-      <Person/>
-      <PersonVue3/>
-      <PersonVue32/>
-      <PersonVue33/>
-      <PersonVue34/>
+      <Person />
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/setup">SetUp相关</RouterLink>
+        <RouterLink to="/responsive">Responsive相关</RouterLink>
       </nav>
     </div>
   </header>
