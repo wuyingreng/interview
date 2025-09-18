@@ -1,5 +1,13 @@
 <script setup lang="ts">
-  import { defineProps } from 'vue'
+  import {
+    defineProps,
+    onBeforeMount,
+    onMounted,
+    onBeforeUpdate,
+    onUpdated,
+    onBeforeUnmount,
+    onUnmounted,
+  } from 'vue'
   import type { PersonType } from '@/types'
 
   // 1.  接收list并且保存起来以方便后续做判断
@@ -22,6 +30,27 @@
       personList: () => [{ name: '测试名字', age: 99 }],
     },
   )
+
+  console.log('生命周期--子组件创建')
+
+  onBeforeMount(() => {
+    console.log('生命周期--子组件挂载前')
+  })
+  onMounted(() => {
+    console.log('生命周期--子组件挂载')
+  })
+  onBeforeUpdate(() => {
+    console.log('生命周期--子组件更新前')
+  })
+  onUpdated(() => {
+    console.log('生命周期--子组件更新后')
+  })
+  onBeforeUnmount(() => {
+    console.log('生命周期--子组件卸载前')
+  })
+  onUnmounted(() => {
+    console.log('生命周期--子组件卸载后')
+  })
 </script>
 
 <template>

@@ -13,7 +13,7 @@
       <Person />
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/hooks">自定义Hooks相关</RouterLink>
         <RouterLink to="/setup">SetUp相关</RouterLink>
         <RouterLink to="/responsive">Responsive相关</RouterLink>
       </nav>
