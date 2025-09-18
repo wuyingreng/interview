@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import TheWelcome from '../components/TheWelcome.vue'
+  import UseTemplateRef from '../components/UseTemplateRef.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <UseTemplateRef />
   </main>
 </template>

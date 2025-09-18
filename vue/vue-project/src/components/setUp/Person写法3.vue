@@ -1,4 +1,4 @@
-<script lang="ts" setup name="Person33">
+<script lang="ts" setup name="Person3">
   let name = '张三'
   let changeName = () => {
     name = '李四'

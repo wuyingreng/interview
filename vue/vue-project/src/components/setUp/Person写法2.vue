@@ -1,6 +1,6 @@
 <script lang="ts">
   export default {
-    name: 'Person',
+    name: 'Person2',
     // 在beforeCreate 之前
   }
 </script>
