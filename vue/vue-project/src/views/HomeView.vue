@@ -4,6 +4,8 @@
 
 <template>
   <main>
+    <div>dom 相关</div>
     <UseTemplateRef />
+    <div>props相关</div>
   </main>
 </template>

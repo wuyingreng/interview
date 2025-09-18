@@ -7,7 +7,7 @@
     ToolingIcon,
     EcosystemIcon,
     CommunityIcon,
-    SupportIcon
+    SupportIcon,
   } from './TheWelcome/script'
 </script>
 

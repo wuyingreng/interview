@@ -7,11 +7,4 @@ import SupportIcon from '../icons/IconSupport.vue'
 
 export const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
 
-export {
-  WelcomeItem,
-  DocumentationIcon,
-  ToolingIcon,
-  EcosystemIcon,
-  CommunityIcon,
-  SupportIcon
-}
+export { WelcomeItem, DocumentationIcon, ToolingIcon, EcosystemIcon, CommunityIcon, SupportIcon }
