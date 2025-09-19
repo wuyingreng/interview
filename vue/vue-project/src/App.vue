@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
-  import HelloWorld from './components/HelloWorld.vue'
   import Person from './components/Person.vue'
 </script>
 
@@ -13,6 +12,7 @@
         <RouterLink to="/hooks">自定义Hooks相关</RouterLink>
         <RouterLink to="/setup">SetUp相关</RouterLink>
         <RouterLink to="/responsive">Responsive相关</RouterLink>
+        <RouterLink to="/news">路由相关</RouterLink>
       </nav>
     </el-header>
     <el-main><RouterView /></el-main>
