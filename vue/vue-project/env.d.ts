@@ -7,12 +7,12 @@ declare module '*.vue' {
 }
 
 // 支持文件夹导入
-// declare module '@/components/*' {
-//   const component: any
-//   export default component
-// }
+declare module '@/components/*' {
+  const component: any
+  export default component
+}
 
-// declare module '../components/*' {
-//   const component: any
-//   export default component
-// }
+declare module '../components/*' {
+  const component: any
+  export default component
+}

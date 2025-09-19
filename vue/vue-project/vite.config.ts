@@ -14,6 +14,8 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
-    extensions: ['.ts', '.tsx', '.json', '.vue']
+    extensions: ['.ts', '.tsx', '.json', '.vue'],
+    mainFields: ['module', 'jsnext:main', 'jsnext'],
+    conditions: ['import', 'module', 'browser', 'default']
   },
 })
