@@ -20,10 +20,12 @@
    *
    */
   const { query } = toRefs(useRoute())
+  console.log('query333==>', query.value)
 </script>
 
 <template>
+  <div>新闻详情query形式</div>
   <div>{{ query.title }}</div>
   <div>{{ query.id }}</div>
-  <div>{{ query.name }}</div>
+  <div>{{ query.content }}</div>
 </template>

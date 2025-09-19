@@ -12,6 +12,7 @@
               query: {
                 title: item.title,
                 content: item.content,
+                id: item.id,
               },
               // 方式二：params参数
               // name: 'news-detail-params',
