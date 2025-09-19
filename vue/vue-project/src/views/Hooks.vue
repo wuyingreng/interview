@@ -1,6 +1,6 @@
 <template>
   <div class="hooks">
-    <h1>This is an about page</h1>
+    <h1>This is an hooks page</h1>
     <HooksDog />
   </div>
 </template>
