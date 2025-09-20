@@ -13,6 +13,7 @@
         <RouterLink to="/setup">SetUp相关</RouterLink>
         <RouterLink to="/responsive">Responsive相关</RouterLink>
         <RouterLink to="/news">路由相关</RouterLink>
+        <RouterLink to="/pinia">pinia相关</RouterLink>
       </nav>
     </el-header>
     <el-main><RouterView /></el-main>
