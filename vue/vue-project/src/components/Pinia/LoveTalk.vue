@@ -10,6 +10,9 @@
 <script setup lang="ts" name="LoveTalk">
   import { useLoveTalkStore } from '@/store/loveTalk'
   const loveTalkStore = useLoveTalkStore()
+  loveTalkStore.$subscribe((mutation, state) => {
+    localStorage.setItem('talkList', JSON.stringify(state.talkList))
+  })
 </script>
 
 <style scoped>
