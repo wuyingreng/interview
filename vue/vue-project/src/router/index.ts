@@ -1,5 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Props from '@/components/ComCommunication/01_props/Father.vue'
+import Event from '@/components/ComCommunication/02_custom-event/Father.vue'
+import Bus from '@/components/ComCommunication/03_mitt/Father.vue'
+import Model from '@/components/ComCommunication/04_v-model/Father.vue'
+import AttrsListeners from '@/components/ComCommunication/05_$attrs/Father.vue'
+import RefChildrenParent from '@/components/ComCommunication/06_$refs-$parent/Father.vue'
+import ProvideInject from '@/components/ComCommunication/07_provide-inject/Father.vue'
+import Pinia from '@/components/ComCommunication/08_pinia/Father.vue'
+import Slot from '@/components/ComCommunication/09_slot/Father.vue'
+
 
 
 const router = createRouter({
@@ -64,8 +74,55 @@ const router = createRouter({
       component: () => import('../views/Pinia.vue'),
     },
     {
+      path: '/pagination-demo',
+      name: 'pagination-demo',
+      component: () => import('../views/PaginationDemo.vue'),
+    },
+    {
       path:'/',
       redirect:'/home'
+    },
+    {
+      path:'/communication',
+      component:()=>import('../views/Communication.vue'),
+      children: [
+		{
+			path: 'props',
+			component: Props
+		},
+		{
+			path: 'event',
+			component: Event
+		},
+		{
+			path: 'mitt',
+			component: Bus
+		},
+		{
+			path: 'model',
+			component: Model
+		},
+		{
+			path: 'attrs',
+			component: AttrsListeners
+		},
+		{
+			path: 'ref-parent',
+			component: RefChildrenParent
+		},
+		{
+			path: 'provide-inject',
+			component: ProvideInject
+		},
+		{
+			path: 'pinia',
+			component: Pinia
+		},
+		{
+			path: 'slot',
+			component: Slot
+		},
+	]
     }
   ],
 })
