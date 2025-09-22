@@ -20,6 +20,15 @@
             custom-ref
           </RouterLink>
         </li>
+        <li>
+          <RouterLink
+            :to="{
+              path: '/other-api/teleport',
+            }"
+          >
+            Teleport
+          </RouterLink>
+        </li>
       </ul>
     </el-aside>
     <el-main>

@@ -12,6 +12,8 @@ import Slot from '@/components/ComCommunication/09_slot_作用域插槽/Father.v
 import OtherAPI from '@/views/OtherAPI.vue'
 import Shadow from '@/components/OtherAPI/045_shallowRef与shallowReactive'
 import CustomRef from '@/components/OtherAPI/048_customRef'
+import Teleport from '@/components/OtherAPI/049_Teleport'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -139,6 +141,10 @@ const router = createRouter({
         {
           path:'custom-ref',
           component: CustomRef,
+        },
+        {
+          path:'teleport',
+          component: Teleport,
         }
       ]
 		},
