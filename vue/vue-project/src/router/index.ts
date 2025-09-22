@@ -11,8 +11,7 @@ import Pinia from '@/components/ComCommunication/08_pinia/Father.vue'
 import Slot from '@/components/ComCommunication/09_slot_作用域插槽/Father.vue'
 import OtherAPI from '@/views/OtherAPI.vue'
 import Shadow from '@/components/OtherAPI/045_shallowRef与shallowReactive'
-
-
+import CustomRef from '@/components/OtherAPI/048_customRef'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -136,6 +135,10 @@ const router = createRouter({
         {
           path:'shadow',
           component: Shadow,
+        },
+        {
+          path:'custom-ref',
+          component: CustomRef,
         }
       ]
 		},

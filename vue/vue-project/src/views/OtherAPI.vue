@@ -11,6 +11,15 @@
             shadowRef和shadowReactive
           </RouterLink>
         </li>
+        <li>
+          <RouterLink
+            :to="{
+              path: '/other-api/custom-ref',
+            }"
+          >
+            custom-ref
+          </RouterLink>
+        </li>
       </ul>
     </el-aside>
     <el-main>

@@ -7,12 +7,13 @@
 </script>
 <template>
   <div class="person">
+    <h1>ref的基本用法</h1>
     <h2>{{ name }}</h2>
     <button @click="changeName">修改名字</button>
   </div>
 </template>
 <style scoped>
   .person {
-    color: red;
+    margin-bottom: 20px;
   }
 </style>

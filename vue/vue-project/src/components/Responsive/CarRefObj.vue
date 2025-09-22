@@ -23,6 +23,7 @@
 </script>
 <template>
   <div class="person">
+    <h1>用ref封装对象类型</h1>
     <h2>游戏列表</h2>
     <ul>
       <li v-for="game in gameList" :key="game.id">{{ game.name }}</li>
@@ -33,6 +34,5 @@
 </template>
 <style scoped>
   .person {
-    color: red;
   }
 </style>
