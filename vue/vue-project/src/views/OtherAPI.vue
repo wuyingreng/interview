@@ -1,0 +1,21 @@
+<template>
+  <el-container>
+    <el-aside width="200px">
+      <ul>
+        <li>
+          <RouterLink
+            :to="{
+              path: '/other-api/shadow',
+            }"
+          >
+            shadowRef和shadowReactive
+          </RouterLink>
+        </li>
+      </ul>
+    </el-aside>
+    <el-main>
+      <RouterView />
+    </el-main>
+  </el-container>
+</template>
+<script setup lang="ts" name="OtherAPI"></script>

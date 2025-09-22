@@ -8,8 +8,9 @@ import AttrsListeners from '@/components/ComCommunication/05_$attrs/Father.vue'
 import RefChildrenParent from '@/components/ComCommunication/06_$refs-$parent/Father.vue'
 import ProvideInject from '@/components/ComCommunication/07_provide-inject/Father.vue'
 import Pinia from '@/components/ComCommunication/08_pinia/Father.vue'
-import Slot from '@/components/ComCommunication/09_slot/Father.vue'
-
+import Slot from '@/components/ComCommunication/09_slot_作用域插槽/Father.vue'
+import OtherAPI from '@/views/OtherAPI.vue'
+import Shadow from '@/components/OtherAPI/045_shallowRef与shallowReactive'
 
 
 const router = createRouter({
@@ -121,9 +122,23 @@ const router = createRouter({
 		{
 			path: 'slot',
 			component: Slot
+		},	{
+			path: 'slot',
+			component: Slot
 		},
+    	
 	]
-    }
+    },
+    {
+			path: '/other-api',
+			component: OtherAPI,
+      children:[
+        {
+          path:'shadow',
+          component: Shadow,
+        }
+      ]
+		},
   ],
 })
 

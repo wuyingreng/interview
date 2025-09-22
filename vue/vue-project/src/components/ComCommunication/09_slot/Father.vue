@@ -3,6 +3,7 @@
     <h3>父组件</h3>
     <div class="content">
       <Game>
+        <!-- v-slot="params" 这个是插槽的参数 -->
         <template v-slot="params">
           <ul>
             <li v-for="y in params.youxi" :key="y.id">
@@ -23,11 +24,10 @@
       </Game>
 
       <Game>
-        <template #default="{youxi}">
+        <template #default="{ youxi }">
           <h3 v-for="g in youxi" :key="g.id">{{ g.name }}</h3>
         </template>
       </Game>
-
     </div>
   </div>
 </template>
@@ -46,7 +46,8 @@
     display: flex;
     justify-content: space-evenly;
   }
-  img,video {
+  img,
+  video {
     width: 100%;
   }
 </style>

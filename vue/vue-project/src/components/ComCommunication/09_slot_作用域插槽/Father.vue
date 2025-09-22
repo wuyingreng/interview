@@ -3,11 +3,16 @@
     <h3>父组件</h3>
     <div class="content">
       <Game>
-        <template v-slot="params">
+        <!-- <template v-slot="params">
           <ul>
             <li v-for="y in params.youxi" :key="y.id">
               {{ y.name }}
             </li>
+          </ul>
+        </template> -->
+        <template #youxi="{ youxi, x }">
+          <ul>
+            <li v-for="y in youxi" :key="y.id">{{ y.name }}{{ x }}</li>
           </ul>
         </template>
       </Game>
@@ -23,11 +28,10 @@
       </Game>
 
       <Game>
-        <template #default="{youxi}">
+        <template #default="{ youxi }">
           <h3 v-for="g in youxi" :key="g.id">{{ g.name }}</h3>
         </template>
       </Game>
-
     </div>
   </div>
 </template>
@@ -46,7 +50,8 @@
     display: flex;
     justify-content: space-evenly;
   }
-  img,video {
+  img,
+  video {
     width: 100%;
   }
 </style>
