@@ -14,6 +14,9 @@ import Shadow from '@/components/OtherAPI/045_shallowRef与shallowReactive'
 import CustomRef from '@/components/OtherAPI/048_customRef'
 import Teleport from '@/components/OtherAPI/049_Teleport'
 
+import Requirements from '@/views/Requirements.vue'
+import RefDom from '@/components/Requirements/RefDom.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -74,11 +77,6 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/Pinia.vue'),
-    },
-    {
-      path: '/pagination-demo',
-      name: 'pagination-demo',
-      component: () => import('../views/PaginationDemo.vue'),
     },
     {
       path:'/',
@@ -146,6 +144,26 @@ const router = createRouter({
           path:'teleport',
           component: Teleport,
         }
+      ]
+		},
+     {
+			path: '/requirements',
+			component: Requirements,
+      children:[
+        {
+          path:'ref-dom',
+          component: RefDom,
+        },
+          {
+          path: 'pagination-demo',
+          name: 'pagination-demo',
+          component: () => import('@/components/Requirements/PaginationDemo.vue'),
+    },
+     {
+          path: 'icon',
+          name: 'icon',
+          component: () => import('@/components/Requirements/Icon.vue'),
+    },
       ]
 		},
   ],

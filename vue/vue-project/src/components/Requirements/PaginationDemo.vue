@@ -1,7 +1,7 @@
 <template>
   <div class="pagination-demo">
     <h2>分页表格示例</h2>
-    
+
     <!-- 方法选择 -->
     <div class="method-selector">
       <el-radio-group v-model="currentMethod" @change="resetData">
@@ -22,12 +22,15 @@
     </el-table>
 
     <!-- 分页 -->
+    <!-- 可以v-model多个，子组件里面定义多个defineModal 参考:vue/vue-project/src/components/ComCommunication/04_v-model
+    @size-change 是自定义事件，参考：
+    子组件可以：const emit =  defineEmits(['send-toy'])vue/vue-project/src/components/ComCommunication/02_custom-event/Father.vue
+    -->
     <el-pagination
       v-model:current-page="currentPage"
       v-model:page-size="pageSize"
       :page-sizes="[5, 10, 20, 50]"
       :total="total"
-      layout="total, sizes, prev, pager, next, jumper"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
@@ -50,19 +53,32 @@
 
   // 当前使用的方法
   const currentMethod = ref('reactive')
-  
+
   // 分页参数
   const currentPage = ref(1)
   const pageSize = ref(10)
   const total = ref(0)
 
-  // 方法1: reactive - 直接操作数组
+  /**
+   * 方法1: reactive - 直接操作数组
+      优点： 响应式，性能好
+    缺点： 调试时不够直观，需要操作原数组
+   * 
+   * */
   const reactiveList = reactive<any[]>([])
-  
-  // 方法2: ref - 整体替换
+
+  /**
+   * 方法2: ref - 整体替换
+   *优点： 代码简洁，调试方便
+   *缺点： 每次都是新对象，可能影响性能
+   * */
   const refList = ref<any[]>([])
-  
-  // 方法3: reactive + splice
+
+  /**
+   * 方法3: reactive + splice
+   * 优点： 保持响应式，相对直观
+缺点： 语法稍复杂
+   * */
   const spliceList = reactive<any[]>([])
 
   // 当前显示的表格数据
@@ -71,10 +87,10 @@
   // 模拟API请求
   const fetchData = async (page: number, size: number) => {
     console.log(`请求第${page}页，每页${size}条`)
-    
+
     // 模拟网络延迟
-    await new Promise(resolve => setTimeout(resolve, 500))
-    
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
     // 模拟数据
     const mockData = []
     const start = (page - 1) * size
@@ -83,50 +99,63 @@
         id: start + i + 1,
         name: `用户${start + i + 1}`,
         email: `user${start + i + 1}@example.com`,
-        age: 20 + (start + i) % 50,
+        age: 20 + ((start + i) % 50),
         city: ['北京', '上海', '广州', '深圳', '杭州'][(start + i) % 5],
-        createTime: new Date(Date.now() - Math.random() * 10000000000).toLocaleString()
+        createTime: new Date(Date.now() - Math.random() * 10000000000).toLocaleString(),
       })
     }
-    
+
     return {
       data: mockData,
-      total: 100 // 模拟总数
+      total: 100, // 模拟总数
     }
   }
 
   // 方法1: reactive 直接操作
   const loadDataWithReactive = async () => {
+    /***
+     * before和after前后的结果都是一样的。无法调试
+     * 外面显示不一样。打开都是一样的。因为内存地址没有变
+     * const test=()=>{
+    let a=[];
+    console.log('before a==>',a);
+    a.push('99');
+     console.log('after a==>',a);
+}
+     * */
+    console.log(' loadDataWithReactive before ==>', reactiveList)
     const result = await fetchData(currentPage.value, pageSize.value)
-    
+
     // 清空数组
     reactiveList.length = 0
-    
+
     // 添加新数据
     reactiveList.push(...result.data)
-    
+    console.log('loadDataWithReactive after ==>', reactiveList)
     total.value = result.total
     tableData.value = reactiveList
   }
 
   // 方法2: ref 整体替换
   const loadDataWithRef = async () => {
+    console.log('before ==>', refList.value)
     const result = await fetchData(currentPage.value, pageSize.value)
-    
+
     // 直接替换整个数组
     refList.value = result.data
-    
+    console.log('after ==>', refList.value)
     total.value = result.total
+
     tableData.value = refList.value
   }
 
   // 方法3: reactive + splice
   const loadDataWithSplice = async () => {
     const result = await fetchData(currentPage.value, pageSize.value)
-    
+
     // 使用 splice 替换所有元素
     spliceList.splice(0, spliceList.length, ...result.data)
-    
+
     total.value = result.total
     tableData.value = spliceList
   }
