@@ -17,6 +17,9 @@ import Teleport from '@/components/OtherAPI/049_Teleport'
 import Requirements from '@/views/Requirements.vue'
 import RefDom from '@/components/Requirements/RefDom.vue'
 
+
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -163,6 +166,11 @@ const router = createRouter({
           path: 'icon',
           name: 'icon',
           component: () => import('@/components/Requirements/Icon.vue'),
+    },
+       {
+          path: 'modal',
+          name: 'modal',
+          component: () => import('@/components/Requirements/ModalDemo.vue'),
     },
       ]
 		},

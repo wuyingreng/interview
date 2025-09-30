@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+  <style>
+    /* position:fixed就可以阻止事件穿透 */
+.modal{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: aliceblue;
+}
+.content{
+  width: 50%;
+  height: 400px;
+  position: fixed;
+  z-index: 1;
+  top: 50%;
+  left: 0;
+  background-color: aliceblue;
+}
+  </style>
+</head>
+<body>
+  <button onclick="outerBtn()">outter buttone</button>
+<div class="modal">
+  <div class="content">
+<button onclick="innerBtn()" class="innerBtn">inner button</button>
+  </div>
+
+</div>
+</body>
+<script>
+  const outerbtn=()=>{
+    console.log('outerbtn')
+  }
+  const innerBtn=()=>{
+     console.log('innerBtn')
+  }
+</script>
+
+<html

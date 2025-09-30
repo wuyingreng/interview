@@ -29,6 +29,15 @@
             Icon
           </RouterLink>
         </li>
+        <li>
+          <RouterLink
+            :to="{
+              path: '/requirements/modal',
+            }"
+          >
+            modal
+          </RouterLink>
+        </li>
       </ul>
     </el-aside>
     <el-main>
