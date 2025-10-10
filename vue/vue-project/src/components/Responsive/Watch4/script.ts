@@ -40,7 +40,10 @@ export const watchPerson = watch(
   { deep: false },
 )
 
-// 这么写只能监视car里面的属性变化，比如点击更改第一台车，第二台车。整个car被替换了触发不了
+/**
+ * 这么写只能监视car里面的属性变化，比如点击更改第一台车，第二台车。整个car被替换了触发不了
+ * 因为person.car是一个对象，整个car被替换了,watch监听的原来的对象内存地址改变了，监听失效了。
+ * */ 
 export const watchCar = watch(person.car, (preVal, newVal) => {
   console.log(' watchCar preVal==>', preVal, 'newVal==>', newVal)
 })
