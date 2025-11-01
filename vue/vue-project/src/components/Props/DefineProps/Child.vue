@@ -7,6 +7,7 @@
     onUpdated,
     onBeforeUnmount,
     onUnmounted,
+    watch,
   } from 'vue'
   import type { PersonType } from '@/types'
 
@@ -15,20 +16,24 @@
   // console.log('allProps==>', allProps.personList)
 
   // 2. 接收list+类型限制
-  // let props = defineProps<{
-  //   personList: PersonType[]
-  //   a: string
-  // }>()
+  let { personList } = defineProps<{
+    personList: PersonType[]
+    a: string
+  }>()
 
   // 2. 接收list+类型限制+默认值
-  let props = withDefaults(
-    defineProps<{
-      personList?: PersonType[]
-      a: string
-    }>(),
-    {
-      personList: () => [{ name: '测试名字', age: 99 }],
-    },
+  // let { personList } = withDefaults(
+  //   defineProps<{
+  //     personList?: PersonType[]
+  //     a: string
+  //   }>(),
+  //   {
+  //     personList: () => [{ name: '测试名字', age: 99 }],
+  //   },
+  // )
+  watch(
+    () => personList,
+    () => {},
   )
 
   console.log('生命周期--子组件创建')

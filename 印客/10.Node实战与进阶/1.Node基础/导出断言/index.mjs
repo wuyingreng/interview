@@ -5,3 +5,4 @@
  * */
 import animal from './animal.json' assert {type:'json'};
 console.log('animal', animal);
+
