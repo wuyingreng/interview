@@ -17,6 +17,7 @@
         <RouterLink to="/communication">组件之间相互通信</RouterLink>
         <RouterLink to="/other-api">其他API</RouterLink>
         <RouterLink to="/requirements">需求</RouterLink>
+        <RouterLink to="/global">global api</RouterLink>
       </nav>
     </el-header>
     <el-main><RouterView /></el-main>

@@ -174,6 +174,10 @@ const router = createRouter({
     },
       ]
 		},
+    {
+      path: '/global',
+       component:()=>import('../views/AppComponent.vue')
+    }
   ],
 })
 

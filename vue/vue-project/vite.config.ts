@@ -11,6 +11,7 @@ export default defineConfig({
     vueDevTools()
   ],
   server: {
+     host: '0.0.0.0',
     port: 8081, // 修改为新的端口号
     // 其他配置...
   },
