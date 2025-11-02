@@ -13,6 +13,7 @@ import OtherAPI from '@/views/OtherAPI.vue'
 import Shadow from '@/components/OtherAPI/045_shallowRef与shallowReactive'
 import CustomRef from '@/components/OtherAPI/048_customRef'
 import Teleport from '@/components/OtherAPI/049_Teleport'
+import VHtmlBindData from '@/components/OtherAPI/050_v-html-demo/bindData.vue'
 
 import Requirements from '@/views/Requirements.vue'
 import RefDom from '@/components/Requirements/RefDom.vue'
@@ -146,6 +147,10 @@ const router = createRouter({
         {
           path:'teleport',
           component: Teleport,
+        },
+        {
+          path:'v-html-bind-data',
+          component: VHtmlBindData,
         }
       ]
 		},

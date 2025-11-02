@@ -29,6 +29,15 @@
             Teleport
           </RouterLink>
         </li>
+        <li>
+          <RouterLink
+            :to="{
+              path: '/other-api/v-html-bind-data',
+            }"
+          >
+            v-html
+          </RouterLink>
+        </li>
       </ul>
     </el-aside>
     <el-main>
