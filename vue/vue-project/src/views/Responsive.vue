@@ -4,6 +4,7 @@
   import CarRefObj from '../components/Responsive/CarRefObj.vue'
   import CarToRefs from '../components/Responsive/CarToRefs.vue'
   import Computed from '../components/Responsive/Computed/index.vue'
+  import Unpacking from '../components/Responsive/Unpacking.vue'
   import Watch1 from '../components/Responsive/Watch1'
   import Watch2 from '../components/Responsive/Watch2'
   import Watch3 from '../components/Responsive/Watch3'
@@ -22,6 +23,7 @@
       <CarToRefs />
       <el-divider />
       <Computed />
+      <Unpacking />
     </div>
     <div>
       <span>watch相关</span>

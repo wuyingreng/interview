@@ -1,5 +1,11 @@
 <script lang="ts" setup name="Computed">
-  import { firstName, lastName, fullName } from './script'
+  import { computed } from 'vue'
+  import { firstName, lastName, fullName, alwasySmall, count } from './script'
+
+  const now = computed(() => Date.now())
+  const changeAlwasySmall = () => {
+    alwasySmall.value = count.value
+  }
 </script>
 
 <template>
@@ -13,6 +19,10 @@
       <el-text type="info">全名: {{ fullName }}</el-text>
     </div>
   </div>
+  <div>{{ now }}</div>
+
+  <div>alwasySmall{{ alwasySmall }}</div>
+  <button @click="changeAlwasySmall">更改alwaysSmall</button>
 </template>
 
 <style scoped>
