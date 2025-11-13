@@ -38,6 +38,15 @@
             v-html
           </RouterLink>
         </li>
+        <li>
+          <RouterLink
+            :to="{
+              path: '/other-api/list-key-demo',
+            }"
+          >
+            list-key-demo
+          </RouterLink>
+        </li>
       </ul>
     </el-aside>
     <el-main>

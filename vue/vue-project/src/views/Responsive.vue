@@ -9,6 +9,7 @@
   import Watch2 from '../components/Responsive/Watch2'
   import Watch3 from '../components/Responsive/Watch3'
   import Watch4 from '../components/Responsive/Watch4'
+  import VModel from '../components/Responsive/VModel'
 </script>
 
 <template>
@@ -34,6 +35,9 @@
       <watch3 />
       <el-divider />
       <watch4 />
+      <el-divider />
+      <p>v-model</p>
+      <VModel />
     </div>
   </div>
 </template>

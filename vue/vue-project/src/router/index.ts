@@ -14,6 +14,7 @@ import Shadow from '@/components/OtherAPI/045_shallowRef与shallowReactive'
 import CustomRef from '@/components/OtherAPI/048_customRef'
 import Teleport from '@/components/OtherAPI/049_Teleport'
 import VHtmlBindData from '@/components/OtherAPI/050_v-html-demo/bindData.vue'
+import ListKeyDemo from '@/components/OtherAPI/051_list-key-demo/index.vue'
 
 import Requirements from '@/views/Requirements.vue'
 import RefDom from '@/components/Requirements/RefDom.vue'
@@ -151,6 +152,10 @@ const router = createRouter({
         {
           path:'v-html-bind-data',
           component: VHtmlBindData,
+        },
+        {
+          path:'list-key-demo',
+          component: ListKeyDemo,
         }
       ]
 		},

@@ -11,6 +11,7 @@
   } from 'vue'
   import Child from './Child.vue'
   import type { PersonType } from '@/types'
+  import Blog from './Blog.vue'
   let personList = reactive<PersonType[]>([
     {
       name: '张三',
@@ -46,12 +47,16 @@
     console.log('生命周期--父组件卸载后')
   })
   let show = ref(true)
+  const title = ref('父组件pass过来的title')
+  const fontSizeRef = ref(12)
 </script>
 
 <template>
   <Child a="哈哈" :personList="personList" v-if="show" />
   <div>{{ sum }}</div>
   <el-button type="success" @click="changeSum">Success</el-button>
+  <p>测试Blog</p>
+  <Blog :title="title" @enlarge-text="fontSizeRef + 1" />
 </template>
 
 <style scoped></style>

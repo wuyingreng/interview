@@ -4,6 +4,8 @@
     <h4>玩具：{{ toy }}</h4>
     <h4>父给的车：{{ car }}</h4>
     <button @click="sendToy(toy)">把玩具给父亲</button>
+    <Blog />
+    测试
   </div>
 </template>
 
