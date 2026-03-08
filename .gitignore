@@ -1,5 +1,6 @@
 **/node_modules
 *.mov
+*.pdf
 **/dist
 **/testgitstash.vue
 
